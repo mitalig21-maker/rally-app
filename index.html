@@ -1,0 +1,1465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Rally">
+<meta name="theme-color" content="#F5F0E8">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Rally</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #F5F0E8;
+  --cream-dark: #EDE7DA;
+  --green: #1B3A2D;
+  --green-light: #2C5A43;
+  --green-pale: #E8F0EC;
+  --text: #1A1A1A;
+  --text-muted: #6B6460;
+  --text-light: #A09890;
+  --border: #D9D3C7;
+  --border-dot: rgba(0,0,0,0.15);
+  --white: #FFFFFF;
+  --serif: 'Playfair Display', Georgia, serif;
+  --sans: 'DM Sans', system-ui, sans-serif;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: var(--sans);
+  background: var(--cream);
+  color: var(--text);
+  max-width: 430px;
+  margin: 0 auto;
+  min-height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ── SCREENS ── */
+.screen {
+  position: absolute;
+  inset: 0;
+  background: var(--cream);
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  animation: fadeIn .2s ease;
+}
+.screen.active { display: flex; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+/* ── TOP BAR ── */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 56px 24px 16px;
+  border-bottom: 1px dotted var(--border-dot);
+  flex-shrink: 0;
+}
+.topbar-logo {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--green);
+  letter-spacing: -0.5px;
+}
+.topbar-actions { display: flex; gap: 16px; align-items: center; }
+.icon-btn {
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  background: none; border: none; cursor: pointer; color: var(--text);
+}
+
+/* ── SCROLLABLE CONTENT ── */
+.scroll-content {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: calc(80px + var(--safe-bottom));
+}
+.scroll-content::-webkit-scrollbar { display: none; }
+
+/* ── BOTTOM NAV ── */
+.bottom-nav {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  background: var(--cream);
+  border-top: 1px dotted var(--border-dot);
+  display: flex;
+  padding: 12px 0 calc(12px + var(--safe-bottom));
+  z-index: 100;
+}
+.nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 0;
+  font-family: var(--sans);
+  font-size: 10px;
+  color: var(--text-light);
+  font-weight: 400;
+  transition: color .15s;
+}
+.nav-item.active { color: var(--green); font-weight: 500; }
+.nav-item svg { transition: transform .15s; }
+.nav-item.active svg { transform: scale(1.1); }
+
+/* ── START RALLY FAB ── */
+.fab {
+  position: absolute;
+  bottom: calc(72px + var(--safe-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--green);
+  color: var(--white);
+  border: none;
+  border-radius: 28px;
+  padding: 14px 28px;
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  z-index: 101;
+  letter-spacing: 0.2px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 20px rgba(27,58,45,0.25);
+}
+
+/* ── TYPOGRAPHY ── */
+.serif-title {
+  font-family: var(--serif);
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.2;
+}
+.serif-italic {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+}
+.section-eyebrow {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-light);
+}
+
+/* ── CARDS ── */
+.card {
+  background: var(--white);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.card-pad { padding: 20px; }
+
+/* ── BUTTONS ── */
+.btn-primary {
+  display: block;
+  width: 100%;
+  background: var(--green);
+  color: var(--white);
+  border: none;
+  border-radius: 50px;
+  padding: 16px;
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: center;
+  letter-spacing: 0.2px;
+}
+.btn-outline {
+  display: block;
+  width: 100%;
+  background: none;
+  color: var(--green);
+  border: 1.5px solid var(--green);
+  border-radius: 50px;
+  padding: 15px;
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: center;
+}
+.btn-ghost {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-family: var(--sans);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 12px;
+  text-decoration: underline;
+  text-decoration-color: var(--border);
+}
+.btn-sm {
+  background: var(--green);
+  color: var(--white);
+  border: none;
+  border-radius: 50px;
+  padding: 10px 20px;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+/* ── PILLS ── */
+.pill-group { display: flex; flex-wrap: wrap; gap: 8px; }
+.pill {
+  padding: 10px 18px;
+  border-radius: 50px;
+  border: 1.5px solid var(--border);
+  background: var(--white);
+  font-family: var(--sans);
+  font-size: 14px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all .15s;
+  font-weight: 400;
+}
+.pill.selected {
+  background: var(--green);
+  border-color: var(--green);
+  color: var(--white);
+  font-weight: 500;
+}
+
+/* ── AVATAR ── */
+.avatar {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: var(--green-pale);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--serif);
+  font-size: 16px;
+  color: var(--green);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.avatar-sm {
+  width: 28px; height: 28px;
+  font-size: 11px;
+}
+
+/* ── STATUS BADGE ── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 50px;
+  font-size: 11px;
+  font-weight: 500;
+}
+.badge-pending { background: #FEF3C7; color: #92400E; }
+.badge-voting { background: var(--green-pale); color: var(--green); }
+.badge-locked { background: #DCFCE7; color: #166534; }
+.badge-tonight { background: var(--green); color: var(--white); }
+
+/* ── DIVIDERS ── */
+.dot-divider {
+  border: none;
+  border-top: 1px dotted var(--border-dot);
+  margin: 0;
+}
+
+/* ── INPUT ── */
+.input-field {
+  width: 100%;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  font-family: var(--sans);
+  font-size: 15px;
+  color: var(--text);
+  background: var(--white);
+  outline: none;
+}
+.input-field:focus { border-color: var(--green); }
+.input-field::placeholder { color: var(--text-light); }
+
+/* ── PROGRESS DOTS ── */
+.progress-dots { display: flex; gap: 6px; justify-content: center; }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border); }
+.dot.active { background: var(--green); width: 18px; border-radius: 3px; }
+
+/* ────────────────────────────────────
+   SCREEN: HOME
+──────────────────────────────────── */
+.rally-card {
+  margin: 16px 20px;
+  cursor: pointer;
+}
+.rally-card .card-pad { display: flex; flex-direction: column; gap: 12px; }
+.rally-top { display: flex; align-items: flex-start; justify-content: space-between; }
+.rally-title { font-size: 17px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+.rally-meta { font-size: 13px; color: var(--text-muted); }
+.rally-avatars { display: flex; }
+.rally-avatars .avatar-sm { margin-left: -6px; border: 2px solid var(--white); }
+.rally-avatars .avatar-sm:first-child { margin-left: 0; }
+.rally-footer { display: flex; align-items: center; justify-content: space-between; }
+.rally-count { font-size: 13px; color: var(--text-muted); }
+
+.home-header { padding: 24px 20px 8px; }
+.home-greeting { font-size: 13px; color: var(--text-muted); margin-bottom: 4px; }
+.home-title { font-family: var(--serif); font-size: 26px; font-weight: 700; line-height: 1.2; }
+.home-title em { font-style: italic; color: var(--green); }
+
+/* ────────────────────────────────────
+   SCREEN: PLAN DETAIL
+──────────────────────────────────── */
+.detail-header {
+  padding: 56px 20px 20px;
+  border-bottom: 1px dotted var(--border-dot);
+}
+.detail-eyebrow { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+.detail-title { font-family: var(--serif); font-size: 28px; font-weight: 700; margin-bottom: 12px; line-height: 1.2; }
+.detail-who { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.detail-who-avatars { display: flex; }
+.detail-who-avatars .avatar-sm { margin-left: -6px; border: 2px solid var(--cream); }
+.detail-who-avatars .avatar-sm:first-child { margin-left: 0; }
+.detail-who-text { font-size: 13px; color: var(--text-muted); }
+
+.section-title { font-family: var(--serif); font-size: 18px; font-weight: 600; }
+
+.deadline-bar {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.deadline-label { font-size: 12px; color: var(--text-muted); margin-bottom: 2px; }
+.deadline-time { font-size: 18px; font-weight: 600; font-family: var(--serif); color: var(--green); }
+
+.responder-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px dotted var(--border-dot);
+}
+.responder-left { display: flex; align-items: center; gap: 10px; }
+.responder-name { font-size: 14px; font-weight: 500; }
+.responder-status { font-size: 12px; color: var(--text-muted); }
+.check-in { width: 22px; height: 22px; border-radius: 50%; background: var(--green-pale); display: flex; align-items: center; justify-content: center; }
+.check-pending { width: 22px; height: 22px; border-radius: 50%; border: 1.5px dashed var(--border); }
+
+/* ────────────────────────────────────
+   SCREEN: VOTE
+──────────────────────────────────── */
+.venue-card {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  margin: 0 20px 12px;
+  cursor: pointer;
+  transition: all .15s;
+  position: relative;
+}
+.venue-card.voted {
+  border-color: var(--green);
+  background: var(--green-pale);
+}
+.venue-name { font-family: var(--serif); font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+.venue-meta { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; }
+.venue-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+.venue-tag {
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 50px;
+  background: var(--cream-dark);
+  color: var(--text-muted);
+}
+.venue-footer { display: flex; align-items: center; justify-content: space-between; }
+.venue-votes { font-size: 13px; color: var(--text-muted); }
+.venue-votes strong { color: var(--green); font-weight: 600; }
+.venue-link { font-size: 12px; color: var(--green); text-decoration: underline; text-decoration-color: var(--border); cursor: pointer; }
+.vote-check {
+  position: absolute;
+  top: 16px; right: 16px;
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: var(--green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ────────────────────────────────────
+   SCREEN: START RALLY
+──────────────────────────────────── */
+.sheet-header {
+  padding: 56px 20px 20px;
+  border-bottom: 1px dotted var(--border-dot);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.sheet-title { font-family: var(--serif); font-size: 26px; font-weight: 700; }
+.sheet-subtitle { font-size: 14px; color: var(--text-muted); margin-top: 4px; }
+.close-btn {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--cream-dark);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.plan-type-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.plan-type-btn {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 16px;
+  cursor: pointer;
+  text-align: left;
+  transition: all .15s;
+  font-family: var(--sans);
+}
+.plan-type-btn.selected {
+  border-color: var(--green);
+  background: var(--green-pale);
+}
+.plan-type-icon { font-size: 24px; margin-bottom: 8px; }
+.plan-type-name { font-size: 15px; font-weight: 500; color: var(--text); display: block; }
+.plan-type-desc { font-size: 12px; color: var(--text-muted); display: block; margin-top: 2px; }
+
+.date-option {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  cursor: pointer;
+  transition: all .15s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.date-option.selected { border-color: var(--green); background: var(--green-pale); }
+.date-day { font-family: var(--serif); font-size: 17px; font-weight: 600; }
+.date-full { font-size: 13px; color: var(--text-muted); }
+.date-check { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--border); }
+.date-option.selected .date-check { background: var(--green); border-color: var(--green); display: flex; align-items: center; justify-content: center; }
+
+.deadline-option {
+  flex: 1;
+  padding: 14px 10px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--white);
+  cursor: pointer;
+  text-align: center;
+  font-family: var(--sans);
+  transition: all .15s;
+}
+.deadline-option.selected { border-color: var(--green); background: var(--green-pale); }
+.deadline-option .big { font-size: 20px; font-weight: 600; font-family: var(--serif); color: var(--text); }
+.deadline-option .small { font-size: 11px; color: var(--text-muted); }
+
+/* ────────────────────────────────────
+   SCREEN: RESPOND
+──────────────────────────────────── */
+.respond-hero {
+  padding: 32px 20px 24px;
+  text-align: center;
+  border-bottom: 1px dotted var(--border-dot);
+}
+.respond-from { font-size: 13px; color: var(--text-muted); margin-bottom: 8px; }
+.respond-title { font-family: var(--serif); font-size: 26px; font-weight: 700; margin-bottom: 4px; }
+.respond-type { font-family: var(--serif); font-style: italic; font-size: 18px; color: var(--green); }
+
+.rsvp-btn {
+  flex: 1;
+  padding: 18px;
+  border-radius: var(--radius);
+  border: 1.5px solid var(--border);
+  background: var(--white);
+  cursor: pointer;
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 500;
+  text-align: center;
+  transition: all .15s;
+}
+.rsvp-btn.in { border-color: var(--green); background: var(--green); color: var(--white); }
+.rsvp-btn.out { color: var(--text-muted); }
+
+/* ────────────────────────────────────
+   SCREEN: GROUPS
+──────────────────────────────────── */
+.group-card {
+  margin: 12px 20px;
+  cursor: pointer;
+}
+.group-card .card-pad {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.group-icon {
+  width: 52px; height: 52px;
+  border-radius: var(--radius-sm);
+  background: var(--green-pale);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+.group-name { font-size: 16px; font-weight: 500; margin-bottom: 2px; }
+.group-meta { font-size: 13px; color: var(--text-muted); }
+
+/* ────────────────────────────────────
+   SCREEN: PROFILE
+──────────────────────────────────── */
+.profile-hero {
+  padding: 40px 20px 28px;
+  text-align: center;
+  border-bottom: 1px dotted var(--border-dot);
+}
+.profile-avatar-lg {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: var(--green-pale);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--serif);
+  font-size: 32px;
+  color: var(--green);
+  font-weight: 700;
+  margin: 0 auto 14px;
+  border: 3px solid var(--white);
+  box-shadow: 0 0 0 2px var(--border);
+}
+.profile-name { font-family: var(--serif); font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+.profile-handle { font-size: 14px; color: var(--text-muted); }
+
+.stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); margin: 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.stat-cell { background: var(--white); padding: 18px 8px; text-align: center; }
+.stat-num { font-family: var(--serif); font-size: 24px; font-weight: 700; color: var(--green); }
+.stat-label { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px dotted var(--border-dot);
+  cursor: pointer;
+  background: none;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  width: 100%;
+  font-family: var(--sans);
+  text-align: left;
+}
+.menu-item-left { display: flex; align-items: center; gap: 12px; }
+.menu-item-icon { width: 36px; height: 36px; border-radius: var(--radius-sm); background: var(--green-pale); display: flex; align-items: center; justify-content: center; }
+.menu-item-label { font-size: 15px; color: var(--text); }
+.menu-item-sub { font-size: 12px; color: var(--text-muted); }
+
+/* ────────────────────────────────────
+   SCREEN: ONBOARDING
+──────────────────────────────────── */
+.onboard-screen {
+  padding: 60px 28px 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.onboard-logo {
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--green);
+  text-align: center;
+  margin-bottom: 48px;
+}
+.onboard-headline {
+  font-family: var(--serif);
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 12px;
+}
+.onboard-sub {
+  font-size: 16px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 40px;
+}
+.onboard-actions {
+  margin-top: auto;
+  padding-bottom: 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ────────────────────────────────────
+   LOCKED / TONIGHT SCREEN
+──────────────────────────────────── */
+.locked-venue {
+  background: var(--green);
+  margin: 16px 20px;
+  border-radius: var(--radius);
+  padding: 24px;
+  color: var(--white);
+  position: relative;
+  overflow: hidden;
+}
+.locked-venue::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+}
+.locked-eyebrow { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.7; margin-bottom: 8px; }
+.locked-name { font-family: var(--serif); font-size: 26px; font-weight: 700; margin-bottom: 4px; }
+.locked-meta { font-size: 14px; opacity: 0.8; margin-bottom: 20px; }
+.locked-actions { display: flex; gap: 10px; }
+.locked-btn {
+  padding: 10px 16px;
+  border-radius: 50px;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+}
+.locked-btn-white { background: var(--white); color: var(--green); }
+.locked-btn-outline { background: rgba(255,255,255,0.15); color: var(--white); }
+
+.attendee-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  border-bottom: 1px dotted var(--border-dot);
+}
+.attendee-left { display: flex; align-items: center; gap: 10px; }
+.attendee-name { font-size: 15px; font-weight: 500; }
+.attendee-eta { font-size: 13px; color: var(--text-muted); }
+.eta-chip { background: #FEF3C7; color: #92400E; font-size: 11px; padding: 3px 8px; border-radius: 50px; font-weight: 500; }
+.arrived-chip { background: #DCFCE7; color: #166534; font-size: 11px; padding: 3px 8px; border-radius: 50px; font-weight: 500; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════
+     SCREEN: WELCOME
+══════════════════════════════ -->
+<div class="screen active" id="screen-welcome">
+  <div class="onboard-screen">
+    <div class="onboard-logo">Rally</div>
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center">
+      <p class="section-eyebrow" style="margin-bottom:12px">Group plans that actually happen</p>
+      <h1 class="onboard-headline">Stop talking.<br><em class="serif-italic" style="color:var(--green)">Start doing.</em></h1>
+      <p class="onboard-sub">Rally decides where, finds a date everyone can do, and holds your group accountable — so one person stops carrying it all.</p>
+    </div>
+    <div class="onboard-actions">
+      <button class="btn-primary" onclick="go('screen-signup')">Get started</button>
+      <button class="btn-outline" onclick="go('screen-home')">Log in</button>
+      <button class="btn-ghost" onclick="go('screen-home')" style="text-align:center">Skip for now</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     SCREEN: SIGN UP
+══════════════════════════════ -->
+<div class="screen" id="screen-signup">
+  <div class="onboard-screen">
+    <div class="onboard-logo">Rally</div>
+    <div class="progress-dots" style="margin-bottom:40px">
+      <div class="dot active"></div><div class="dot"></div><div class="dot"></div>
+    </div>
+    <h2 class="onboard-headline" style="font-size:28px">What should we<br>call you?</h2>
+    <p class="onboard-sub" style="margin-bottom:24px">Your friends will see this when you start or join a Rally.</p>
+    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px">
+      <input class="input-field" type="text" placeholder="Your first name" id="user-name">
+      <input class="input-field" type="tel" placeholder="Phone number">
+    </div>
+    <div class="onboard-actions">
+      <button class="btn-primary" onclick="saveNameAndGo()">Continue</button>
+      <button class="btn-ghost" style="text-align:center" onclick="go('screen-welcome')">← Back</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     SCREEN: HOME
+══════════════════════════════ -->
+<div class="screen" id="screen-home">
+  <div class="topbar">
+    <span class="topbar-logo">Rally</span>
+    <div class="topbar-actions">
+      <button class="icon-btn">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="scroll-content">
+    <div class="home-header">
+      <p class="home-greeting">Hey <span id="display-name">Mita</span> 👋</p>
+      <h2 class="home-title">Your <em>plans</em><br>this week</h2>
+    </div>
+
+    <!-- Tonight -->
+    <div style="padding:16px 20px 0">
+      <p class="section-eyebrow" style="margin-bottom:10px">Tonight</p>
+    </div>
+    <div class="rally-card" onclick="go('screen-locked')">
+      <div class="card card-pad">
+        <div class="rally-top">
+          <div>
+            <p class="rally-title">Dinner in the West Village</p>
+            <p class="rally-meta">Saturday · Lilia · 7:30pm</p>
+          </div>
+          <span class="badge badge-tonight">Tonight</span>
+        </div>
+        <hr class="dot-divider">
+        <div class="rally-footer">
+          <div class="rally-avatars">
+            <div class="avatar avatar-sm" style="background:#E8F0EC;color:var(--green)">M</div>
+            <div class="avatar avatar-sm" style="background:#FEF3C7;color:#92400E">J</div>
+            <div class="avatar avatar-sm" style="background:#FCE7F3;color:#9D174D">S</div>
+            <div class="avatar avatar-sm" style="background:#EDE9FE;color:#5B21B6">R</div>
+          </div>
+          <p class="rally-count">4 going</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Voting open -->
+    <div style="padding:8px 20px 0">
+      <p class="section-eyebrow" style="margin-bottom:10px">Needs your vote</p>
+    </div>
+    <div class="rally-card" onclick="go('screen-vote')">
+      <div class="card card-pad">
+        <div class="rally-top">
+          <div>
+            <p class="rally-title">Brunch Sunday</p>
+            <p class="rally-meta">Started by Jess · 5 responded</p>
+          </div>
+          <span class="badge badge-voting">Vote now</span>
+        </div>
+        <hr class="dot-divider">
+        <div class="rally-footer">
+          <div class="rally-avatars">
+            <div class="avatar avatar-sm" style="background:#E8F0EC;color:var(--green)">M</div>
+            <div class="avatar avatar-sm" style="background:#FEF3C7;color:#92400E">J</div>
+            <div class="avatar avatar-sm" style="background:#FCE7F3;color:#9D174D">S</div>
+            <div class="avatar avatar-sm" style="background:#EDE9FE;color:#5B21B6">R</div>
+            <div class="avatar avatar-sm" style="background:#FEE2E2;color:#991B1B">K</div>
+          </div>
+          <p class="rally-count">3 hrs left</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pending -->
+    <div style="padding:8px 20px 0">
+      <p class="section-eyebrow" style="margin-bottom:10px">Waiting on responses</p>
+    </div>
+    <div class="rally-card" onclick="go('screen-detail')">
+      <div class="card card-pad">
+        <div class="rally-top">
+          <div>
+            <p class="rally-title">Bars this Friday</p>
+            <p class="rally-meta">You started · 3 of 6 responded</p>
+          </div>
+          <span class="badge badge-pending">Pending</span>
+        </div>
+        <hr class="dot-divider">
+        <div class="rally-footer">
+          <div class="rally-avatars">
+            <div class="avatar avatar-sm" style="background:#E8F0EC;color:var(--green)">M</div>
+            <div class="avatar avatar-sm" style="background:#FEF3C7;color:#92400E">J</div>
+            <div class="avatar avatar-sm" style="background:#FCE7F3;color:#9D174D">S</div>
+          </div>
+          <p class="rally-count">12h remaining</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="height:16px"></div>
+  </div>
+
+  <button class="fab" onclick="go('screen-start')">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+    Start a Rally
+  </button>
+
+  <nav class="bottom-nav">
+    <button class="nav-item active" onclick="go('screen-home')">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Plans
+    </button>
+    <button class="nav-item" onclick="go('screen-groups')">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Groups
+    </button>
+    <button class="nav-item" onclick="go('screen-profile')">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Profile
+    </button>
+  </nav>
+</div>
+
+<!-- ══════════════════════════════
+     SCREEN: PLAN DETAIL
+══════════════════════════════ -->
+<div class="screen" id="screen-detail">
+  <div class="detail-header">
+    <div class="detail-eyebrow">
+      <button onclick="go('screen-home')" style="background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:13px;padding:0;font-family:var(--sans)">← Back</button>
+      <span class="badge badge-pending">Pending</span>
+    </div>
+    <h2 class="detail-title">Bars this Friday</h2>
+    <div class="detail-who">
+      <div class="detail-who-avatars">
+        <div class="avatar avatar-sm" style="background:#E8F0EC;color:var(--green)">M</div>
+        <div class="avatar avatar-sm" style="background:#FEF3C7;color:#92400E">J</div>
+        <div class="avatar avatar-sm" style="background:#FCE7F3;color:#9D174D">S</div>
+        <div class="avatar avatar-sm" style="background:#EDE9FE;color:#5B21B6">R</div>
+        <div class="avatar avatar-sm" style="background:#FEE2E2;color:#991B1B">K</div>
+        <div class="avatar avatar-sm" style="background:#F0FDF4;color:#166534">A</div>
+      </div>
+      <span class="detail-who-text">6 invited</span>
+    </div>
+    <div class="deadline-bar">
+      <div>
+        <p class="deadline-label">Deadline to respond</p>
+        <p class="deadline-time">12 hrs 24 min</p>
+      </div>
+      <svg width="20" height="20" fill="none" stroke="var(--green)" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    </div>
+  </div>
+
+  <div class="scroll-content">
+    <div style="padding:20px">
+      <p class="section-title" style="margin-bottom:14px">Who's in</p>
+      <div class="responder-row">
+        <div class="responder-left">
+          <div class="avatar avatar-sm" style="background:#E8F0EC;color:var(--green)">M</div>
+          <div><p class="responder-name">You</p><p class="responder-status">Fri & Sat work · Likes Lower East Side</p></div>
+        </div>
+        <div class="check-in"><svg width="12" height="12" fill="none" stroke="var(--green)" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      </div>
+      <div class="responder-row">
+        <div class="responder-left">
+          <div class="avatar avatar-sm" style="background:#FEF3C7;color:#92400E">J</div>
+          <div><p class="responder-name">Jess</p><p class="responder-status">Friday only · Open to any neighborhood</p></div>
+        </div>
+        <div class="check-in"><svg width="12" height="12" fill="none" stroke="var(--green)" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      </div>
+      <div class="responder-row">
+        <div class="responder-left">
+          <div class="avatar avatar-sm" style="background:#FCE7F3;color:#9D174D">S</div>
+          <div><p class="responder-name">Sofia</p><p class="responder-status">Fri & Sat · Likes cocktail bars</p></div>
+        </div>
+        <div class="check-in"><svg width="12" height="12" fill="none" stroke="var(--green)" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      </div>
+      <div class="responder-row">
+        <div class="responder-left">
+          <div class="avatar avatar-sm" style="background:#EDE9FE;color:#5B21B6">R</div>
+          <div><p class="responder-name">Ryan</p><p class="responder-status" style="color:var(--text-light)">Hasn't responded yet</p></div>
+        </div>
+        <div class="check-pending"></div>
+      </div>
+      <div class="responder-row">
+        <div class="responder-left">
+          <div class="avatar avatar-sm" style="background:#FEE2E2;color:#991B1B">K</div>
+          <div><p class="responder-name">Kate</p><p class="responder-status" style="color:var(--text-light)">Hasn't responded yet</p></div>
+        </div>
+        <div class="check-pending"></div>
+      </div>
+      <div class="responder-row" style="border:none">
+        <div class="responder-left">
+          <div class="avatar avatar-sm" style="background:#F0FDF4;color:#166534">A</div>
+          <div><p class="responder-name">Alex</p><p class="responder-status" style="color:var(--text-light)">Hasn't responded yet</p></div>
+        </div>
+        <div class="check-pending"></div>
+      </div>
+    </div>
+
+    <hr class="dot-divider" style="margin:0 20px">
+    <div style="padding:20px">
+      <p style="font-size:13px;color:var(--text-muted);line-height:1.6">Venue suggestions will be generated when the deadline hits. Rally will match bars to everyone's preferences.</p>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <button class="nav-item active" onclick="go('screen-home')">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Plans
+    </button>
+    <button class="nav-item" onclick="go('screen-groups')">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Groups
+    </button>
+    <button class="nav-item" onclick="go('screen-profile')">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Profile
+    </button>
+  </nav>
+</div>
+
+<!-- ══════════════════════════════
+     SCREEN: VOTE
+══════════════════════════════ -->
+<div class="screen" id="screen-vote">
+  <div class="detail-header">
+    <div class="detail-eyebrow">
+      <button onclick="go('screen-home')" style="background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:13px;padding:0;font-family:var(--sans)">← Back</button>
+      <span class="badge badge-voting">3 hrs left</span>
+    </div>
+    <h2 class="detail-title">Brunch Sunday</h2>
+    <p style="font-size:14px;color:var(--text-muted)">Sunday Apr 13 · Rally matched these to everyone's preferences</p>
+  </div>
+
+  <div class="scroll-content" style="padding-top:16px">
+    <div class="venue-card voted" id="venue-1" onclick="selectVenue(1)">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div>
+          <p class="venue-name">Buvette</p>
+          <p class="venue-meta">West Village · $$ · French bistro</p>
+        </div>
+        <div class="vote-check" id="check-1">
+          <svg width="12" height="12" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+      </div>
+      <div class="venue-tags">
+        <span class="venue-tag">French</span>
+        <span class="venue-tag">Cozy</span>
+        <span class="venue-tag">No reservations</span>
+      </div>
+      <div class="venue-footer">
+        <p class="venue-votes"><strong>3 votes</strong> · Jess, Sofia, you</p>
+        <span class="venue-link">View on Yelp →</span>
+      </div>
+    </div>
+
+    <div class="venue-card" id="venue-2" onclick="selectVenue(2)">
+      <p class="venue-name">Via Carota</p>
+      <p class="venue-meta">West Village · $$$ · Italian</p>
+      <div class="venue-tags">
+        <span class="venue-tag">Italian</span>
+        <span class="venue-tag">Romantic</span>
+        <span class="venue-tag">Resy</span>
+      </div>
+      <div class="venue-footer">
+        <p class="venue-votes"><strong>1 vote</strong> · Ryan</p>
+        <span class="venue-link">View on Yelp →</span>
+      </div>
+    </div>
+
+    <div class="venue-card" id="venue-3" onclick="selectVenue(3)">
+      <p class="venue-name">Café Mogador</p>
+      <p class="venue-meta">East Village · $ · Moroccan</p>
+      <div class="venue-tags">
+        <span class="venue-tag">Moroccan</span>
+        <span class="venue-tag">Casual</span>
+        <span class="venue-tag">Walk-in</span>
+      </div>
+      <div class="venue-footer">
+        <p class="venue-votes"><strong>1 vote</strong> · Kate</p>
+        <span class="venue-link">View on Yelp →</span>
+      </div>
+    </div>
+
+    <div style="padding:4px 20px 16px">
+      <p style="font-size:12px;color:var(--text-muted);text-align:center;line-height:1.6">Tap a venue to vote. The winner locks in automatically when voting closes.</p>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <button class="nav-item active" onclick="go('screen-home')">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Plans
+    </button>
+    <button class="nav-item" onclick="go('screen-groups')">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Groups
+    </button>
+    <button class="nav-item" onclick="go('screen-profile')">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Profile
+    </button>
+  </nav>
+</div>
+
+<!-- ══════════════════════════════
+     SCREEN: LOCKED / TONIGHT
+══════════════════════════════ -->
+<div class="screen" id="screen-locked">
+  <div class="detail-header">
+    <div class="detail-eyebrow">
+      <button onclick="go('screen-home')" style="background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:13px;padding:0;font-family:var(--sans)">← Back</button>
+      <span class="badge badge-tonight">Tonight</span>
+    </div>
+    <h2 class="detail-title">Dinner in the<br>West Village</h2>
+    <p style="font-size:14px;color:var(--text-muted)">Saturday · 4 people going</p>
+  </div>
+
+  <div class="scroll-content">
+    <div class="locked-venue">
+      <p class="locked-eyebrow">You're going to</p>
+      <p class="locked-name">Lilia</p>
+      <p class="locked-meta">Williamsburg · $$$ · Italian · 7:30pm</p>
+      <div class="locked-actions">
+        <button class="locked-btn locked-btn-white">Get directions</button>
+        <button class="locked-btn locked-btn-outline">View on Yelp</button>
+      </div>
+    </div>
+
+    <div style="padding:20px 20px 10px">
+      <p class="section-title" style="margin-bottom:14px">Who's coming</p>
+    </div>
+
+    <div class="attendee-row">
+      <div class="attendee-left">
+        <div class="avatar avatar-sm" style="background:#E8F0EC;color:var(--green)">M</div>
+        <div><p class="attendee-name">You</p></div>
+      </div>
+      <span class="arrived-chip">Arrived</span>
+    </div>
+    <div class="attendee-row">
+      <div class="attendee-left">
+        <div class="avatar avatar-sm" style="background:#FEF3C7;color:#92400E">J</div>
+        <div><p class="attendee-name">Jess</p></div>
+      </div>
+      <span class="eta-chip">12 min away</span>
+    </div>
+    <div class="attendee-row">
+      <div class="attendee-left">
+        <div class="avatar avatar-sm" style="background:#FCE7F3;color:#9D174D">S</div>
+        <div><p class="attendee-name">Sofia</p></div>
+      </div>
+      <span class="eta-chip">8 min away</span>
+    </div>
+    <div class="attendee-row" style="border:none">
+      <div class="attendee-left">
+        <div class="avatar avatar-sm" style="background:#EDE9FE;color:#5B21B6">R</div>
+        <div><p class="attendee-name">Ryan</p></div>
+      </div>
+      <span class="arrived-chip">Arrived</span>
+    </div>
+
+    <div style="padding:20px">
+      <button class="btn-outline" style="font-size:14px">Share my live location</button>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <button class="nav-item active" onclick="go('screen-home')">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Plans
+    </button>
+    <button class="nav-item" onclick="go('screen-groups')">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Groups
+    </button>
+    <button class="nav-item" onclick="go('screen-profile')">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Profile
+    </button>
+  </nav>
+</div>
+
+<!-- ══════════════════════════════
+     SCREEN: START RALLY
+══════════════════════════════ -->
+<div class="screen" id="screen-start">
+  <div class="sheet-header">
+    <div>
+      <h2 class="sheet-title">Start a Rally</h2>
+      <p class="sheet-subtitle">What are you planning?</p>
+    </div>
+    <button class="close-btn" onclick="go('screen-home')">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+
+  <div class="scroll-content" style="padding:20px">
+    <p class="section-eyebrow" style="margin-bottom:12px">Plan type</p>
+    <div class="plan-type-grid" style="margin-bottom:24px">
+      <button class="plan-type-btn selected" onclick="selectPlanType(this)">
+        <div class="plan-type-icon">🍽</div>
+        <span class="plan-type-name">Dinner</span>
+        <span class="plan-type-desc">Restaurants, date night</span>
+      </button>
+      <button class="plan-type-btn" onclick="selectPlanType(this)">
+        <div class="plan-type-icon">🍸</div>
+        <span class="plan-type-name">Bars</span>
+        <span class="plan-type-desc">Drinks, nightlife</span>
+      </button>
+      <button class="plan-type-btn" onclick="selectPlanType(this)">
+        <div class="plan-type-icon">🥂</div>
+        <span class="plan-type-name">Brunch</span>
+        <span class="plan-type-desc">Weekend morning</span>
+      </button>
+      <button class="plan-type-btn" onclick="selectPlanType(this)">
+        <div class="plan-type-icon">🎉</div>
+        <span class="plan-type-name">Activity</span>
+        <span class="plan-type-desc">Bowling, movies, etc</span>
+      </button>
+      <button class="plan-type-btn" onclick="selectPlanType(this)">
+        <div class="plan-type-icon">✈️</div>
+        <span class="plan-type-name">Trip</span>
+        <span class="plan-type-desc">Weekend getaway</span>
+      </button>
+      <button class="plan-type-btn" onclick="selectPlanType(this)">
+        <div class="plan-type-icon">💬</div>
+        <span class="plan-type-name">Other</span>
+        <span class="plan-type-desc">Something else</span>
+      </button>
+    </div>
+
+    <p class="section-eyebrow" style="margin-bottom:12px">Propose dates</p>
+    <div style="margin-bottom:24px">
+      <div class="date-option selected" onclick="toggleDate(this)">
+        <div><p class="date-day">Friday</p><p class="date-full">April 11</p></div>
+        <div class="date-check"><svg width="10" height="10" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      </div>
+      <div class="date-option selected" onclick="toggleDate(this)">
+        <div><p class="date-day">Saturday</p><p class="date-full">April 12</p></div>
+        <div class="date-check"><svg width="10" height="10" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      </div>
+      <div class="date-option" onclick="toggleDate(this)">
+        <div><p class="date-day">Sunday</p><p class="date-full">April 13</p></div>
+        <div class="date-check"></div>
+      </div>
+    </div>
+
+    <p class="section-eyebrow" style="margin-bottom:12px">Response deadline</p>
+    <div style="display:flex;gap:8px;margin-bottom:28px">
+      <button class="deadline-option" onclick="selectDeadline(this)">
+        <div class="big">12</div><div class="small">hours</div>
+      </button>
+      <button class="deadline-option selected" onclick="selectDeadline(this)">
+        <div class="big">24</div><div class="small">hours</div>
+      </button>
+      <button class="deadline-option" onclick="selectDeadline(this)">
+        <div class="big">48</div><div class="small">hours</div>
+      </button>
+    </div>
+
+    <button class="btn-primary" onclick="go('screen-respond')">Send Rally →</button>
+    <div style="height:8px"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     SCREEN: RESPOND TO RALLY
+══════════════════════════════ -->
+<div class="screen" id="screen-respond">
+  <div class="scroll-content">
+    <div class="respond-hero">
+      <p class="respond-from">Jess started a Rally</p>
+      <h2 class="respond-title">Brunch</h2>
+      <p class="respond-type">Sunday · 6 invited</p>
+    </div>
+
+    <div style="padding:24px 20px">
+      <p class="section-eyebrow" style="margin-bottom:16px">Are you in?</p>
+      <div style="display:flex;gap:10px;margin-bottom:28px">
+        <button class="rsvp-btn in" onclick="selectRsvp(this,'in')">I'm in ✓</button>
+        <button class="rsvp-btn" onclick="selectRsvp(this,'out')">Can't make it</button>
+      </div>
+
+      <p class="section-eyebrow" style="margin-bottom:12px">Which dates work?</p>
+      <div style="margin-bottom:24px">
+        <div class="date-option selected" onclick="toggleDate(this)">
+          <div><p class="date-day">Saturday</p><p class="date-full">April 12</p></div>
+          <div class="date-check"><svg width="10" height="10" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        </div>
+        <div class="date-option" onclick="toggleDate(this)">
+          <div><p class="date-day">Sunday</p><p class="date-full">April 13</p></div>
+          <div class="date-check"></div>
+        </div>
+      </div>
+
+      <p class="section-eyebrow" style="margin-bottom:8px">What are you feeling?</p>
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px">These update every time — what sounds good right now?</p>
+
+      <p style="font-size:13px;font-weight:500;margin-bottom:8px;color:var(--text)">Vibe</p>
+      <div class="pill-group" style="margin-bottom:16px">
+        <button class="pill selected" onclick="togglePill(this)">Italian</button>
+        <button class="pill" onclick="togglePill(this)">French</button>
+        <button class="pill" onclick="togglePill(this)">American</button>
+        <button class="pill" onclick="togglePill(this)">Asian</button>
+        <button class="pill" onclick="togglePill(this)">Whatever</button>
+      </div>
+
+      <p style="font-size:13px;font-weight:500;margin-bottom:8px;color:var(--text)">Price</p>
+      <div class="pill-group" style="margin-bottom:16px">
+        <button class="pill" onclick="togglePill(this)">$</button>
+        <button class="pill selected" onclick="togglePill(this)">$$</button>
+        <button class="pill" onclick="togglePill(this)">$$$</button>
+        <button class="pill" onclick="togglePill(this)">Whatever</button>
+      </div>
+
+      <p style="font-size:13px;font-weight:500;margin-bottom:8px;color:var(--text)">Neighborhood</p>
+      <div class="pill-group" style="margin-bottom:28px">
+        <button class="pill selected" onclick="togglePill(this)">West Village</button>
+        <button class="pill" onclick="togglePill(this)">East Village</button>
+        <button class="pill" onclick="togglePill(this)">Williamsburg</button>
+        <button class="pill" onclick="togglePill(this)">Wherever</button>
+      </div>
+
+      <button class="btn-primary" onclick="go('screen-home')">Submit →</button>
+      <div style="height:8px"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     SCREEN: GROUPS
+══════════════════════════════ -->
+<div class="screen" id="screen-groups">
+  <div class="topbar">
+    <span class="topbar-logo">Groups</span>
+    <button class="btn-sm" onclick="go('screen-start')">+ New Rally</button>
+  </div>
+
+  <div class="scroll-content">
+    <div style="padding:16px 20px 8px">
+      <p class="section-eyebrow" style="margin-bottom:0">Your crews</p>
+    </div>
+
+    <div class="group-card">
+      <div class="card card-pad">
+        <div class="group-icon">🌙</div>
+        <div style="flex:1">
+          <p class="group-name">Friday Night Crew</p>
+          <p class="group-meta">6 people · 12 rallies</p>
+        </div>
+        <svg width="16" height="16" fill="none" stroke="var(--text-light)" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+    </div>
+
+    <div class="group-card">
+      <div class="card card-pad">
+        <div class="group-icon">🏠</div>
+        <div style="flex:1">
+          <p class="group-name">Roommates</p>
+          <p class="group-meta">3 people · 8 rallies</p>
+        </div>
+        <svg width="16" height="16" fill="none" stroke="var(--text-light)" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+    </div>
+
+    <div class="group-card">
+      <div class="card card-pad">
+        <div class="group-icon">💼</div>
+        <div style="flex:1">
+          <p class="group-name">Work Squad</p>
+          <p class="group-meta">5 people · 4 rallies</p>
+        </div>
+        <svg width="16" height="16" fill="none" stroke="var(--text-light)" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+    </div>
+
+    <div style="padding:20px">
+      <button class="btn-outline">+ Create a new group</button>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <button class="nav-item" onclick="go('screen-home')">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Plans
+    </button>
+    <button class="nav-item active" onclick="go('screen-groups')">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Groups
+    </button>
+    <button class="nav-item" onclick="go('screen-profile')">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Profile
+    </button>
+  </nav>
+</div>
+
+<!-- ══════════════════════════════
+     SCREEN: PROFILE
+══════════════════════════════ -->
+<div class="screen" id="screen-profile">
+  <div class="scroll-content">
+    <div class="profile-hero">
+      <div class="profile-avatar-lg" id="profile-avatar-lg">M</div>
+      <p class="profile-name" id="profile-name-display">Mita</p>
+      <p class="profile-handle">+1 (917) 555-0142</p>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-cell"><p class="stat-num">24</p><p class="stat-label">Rallies</p></div>
+      <div class="stat-cell"><p class="stat-num">19</p><p class="stat-label">Attended</p></div>
+      <div class="stat-cell"><p class="stat-num">92%</p><p class="stat-label">Reliability</p></div>
+    </div>
+
+    <div style="padding-top:8px">
+      <button class="menu-item" onclick="">
+        <div class="menu-item-left">
+          <div class="menu-item-icon"><svg width="16" height="16" fill="none" stroke="var(--green)" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div>
+          <div><p class="menu-item-label">Your preferences</p><p class="menu-item-sub">Cuisine, price, neighborhood</p></div>
+        </div>
+        <svg width="14" height="14" fill="none" stroke="var(--text-light)" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+      <button class="menu-item">
+        <div class="menu-item-left">
+          <div class="menu-item-icon"><svg width="16" height="16" fill="none" stroke="var(--green)" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+          <div><p class="menu-item-label">Friends</p><p class="menu-item-sub">Invite or manage contacts</p></div>
+        </div>
+        <svg width="14" height="14" fill="none" stroke="var(--text-light)" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+      <button class="menu-item">
+        <div class="menu-item-left">
+          <div class="menu-item-icon"><svg width="16" height="16" fill="none" stroke="var(--green)" stroke-width="1.8" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+          <div><p class="menu-item-label">Notifications</p><p class="menu-item-sub">Rally invites, reminders</p></div>
+        </div>
+        <svg width="14" height="14" fill="none" stroke="var(--text-light)" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+      <button class="menu-item" style="border:none">
+        <div class="menu-item-left">
+          <div class="menu-item-icon"><svg width="16" height="16" fill="none" stroke="var(--green)" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg></div>
+          <div><p class="menu-item-label">Help & feedback</p><p class="menu-item-sub">Report an issue</p></div>
+        </div>
+        <svg width="14" height="14" fill="none" stroke="var(--text-light)" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <button class="nav-item" onclick="go('screen-home')">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Plans
+    </button>
+    <button class="nav-item" onclick="go('screen-groups')">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Groups
+    </button>
+    <button class="nav-item active" onclick="go('screen-profile')">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Profile
+    </button>
+  </nav>
+</div>
+
+<script>
+function go(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function saveNameAndGo() {
+  const name = document.getElementById('user-name').value.trim();
+  if (name) {
+    document.getElementById('display-name').textContent = name;
+    document.getElementById('profile-name-display').textContent = name;
+    document.getElementById('profile-avatar-lg').textContent = name[0].toUpperCase();
+  }
+  go('screen-home');
+}
+
+function selectPlanType(btn) {
+  document.querySelectorAll('.plan-type-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+function toggleDate(el) {
+  el.classList.toggle('selected');
+  const check = el.querySelector('.date-check');
+  if (el.classList.contains('selected')) {
+    check.innerHTML = '<svg width="10" height="10" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
+    check.style.background = 'var(--green)';
+    check.style.borderColor = 'var(--green)';
+  } else {
+    check.innerHTML = '';
+    check.style.background = '';
+    check.style.borderColor = '';
+  }
+}
+
+function selectDeadline(btn) {
+  document.querySelectorAll('.deadline-option').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+function selectVenue(n) {
+  [1,2,3].forEach(i => {
+    const card = document.getElementById('venue-'+i);
+    const check = document.getElementById('check-'+i);
+    card.classList.remove('voted');
+    if (check) check.remove();
+  });
+  const card = document.getElementById('venue-'+n);
+  card.classList.add('voted');
+  const check = document.createElement('div');
+  check.className = 'vote-check';
+  check.id = 'check-'+n;
+  check.innerHTML = '<svg width="12" height="12" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
+  card.querySelector('.venue-name').parentElement.appendChild(check);
+}
+
+function togglePill(btn) {
+  btn.classList.toggle('selected');
+}
+
+function selectRsvp(btn, type) {
+  document.querySelectorAll('.rsvp-btn').forEach(b => { b.classList.remove('in'); });
+  if (type === 'in') btn.classList.add('in');
+}
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js').catch(() => {});
+}
+</script>
+</body>
+</html>
