@@ -28,59 +28,63 @@ html,body{width:100%;height:100%;overflow:hidden;position:fixed}
 }
 body{font-family:var(--body);background:var(--cream);color:var(--text);max-width:430px;margin:0 auto;height:100%;overflow:hidden}
 
-/* SCREENS */
 .screen{position:absolute;inset:0;background:var(--cream);display:none;flex-direction:column;overflow:hidden;animation:fadeIn .18s ease}
 .screen.active{display:flex}
 @keyframes fadeIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
-
-/* SCROLL */
 .scroll-content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:calc(80px + var(--safe-bottom))}
 .scroll-content::-webkit-scrollbar{display:none}
 
-/* TOPBAR */
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:calc(14px + var(--safe-top)) 20px 14px;border-bottom:1px dotted var(--border-dot);flex-shrink:0;background:var(--cream)}
 .topbar-logo{font-family:var(--headline);font-size:20px;font-weight:700;color:var(--green);letter-spacing:2px;text-transform:uppercase}
-
-/* BOTTOM NAV */
 .bottom-nav{position:absolute;bottom:0;left:0;right:0;background:var(--cream);border-top:1px dotted var(--border-dot);display:flex;padding:10px 0 calc(10px + var(--safe-bottom));z-index:100}
 .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;padding:4px 0;font-family:var(--body);font-size:10px;color:var(--text-light)}
 .nav-item.active{color:var(--green);font-weight:500}
-
-/* FAB */
 .fab{position:absolute;bottom:calc(70px + var(--safe-bottom));left:50%;transform:translateX(-50%);background:var(--green);color:var(--white);border:none;border-radius:28px;padding:13px 24px;font-family:var(--headline);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;z-index:101;display:flex;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(27,58,45,0.22)}
 
-/* TYPOGRAPHY */
 .headline-lg{font-family:var(--headline);font-size:26px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;line-height:1.15}
 .section-label{font-family:var(--headline);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-light)}
 
-/* CARDS */
 .card{background:var(--white);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden}
 .card-pad{padding:16px}
 
-/* BUTTONS */
 .btn-primary{display:block;width:100%;background:var(--green);color:var(--white);border:none;border-radius:50px;padding:15px;font-family:var(--headline);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;text-align:center}
 .btn-outline{display:block;width:100%;background:none;color:var(--green);border:1.5px solid var(--green);border-radius:50px;padding:14px;font-family:var(--headline);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;text-align:center}
 .btn-sm{background:var(--green);color:var(--white);border:none;border-radius:50px;padding:9px 18px;font-family:var(--headline);font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer}
 .btn-back{background:none;border:none;color:var(--text-muted);font-family:var(--body);font-size:13px;cursor:pointer;padding:0;display:flex;align-items:center;gap:5px}
+.btn-ghost-sm{background:none;border:none;color:var(--green);font-family:var(--body);font-size:13px;cursor:pointer;text-decoration:underline;text-decoration-color:var(--border)}
 
-/* BADGES */
 .badge{display:inline-flex;align-items:center;padding:4px 10px;border-radius:50px;font-size:11px;font-weight:500;font-family:var(--body)}
 .badge-pending{background:#FEF3C7;color:#92400E}
 .badge-voting{background:var(--green-pale);color:var(--green)}
-.badge-locked{background:#DCFCE7;color:#166534}
 .badge-tonight{background:var(--green);color:var(--white)}
+.badge-trip{background:#EDE9FE;color:#5B21B6}
+.badge-ticket{background:#FEE2E2;color:#991B1B}
 
-/* DIVIDER */
 .dot-divider{border:none;border-top:1px dotted var(--border-dot)}
 
-/* INPUTS */
+/* INPUTS & SELECTS */
 .input-field{width:100%;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:13px 15px;font-family:var(--body);font-size:15px;color:var(--text);background:var(--white);outline:none}
 .input-field:focus{border-color:var(--green)}
 .input-field::placeholder{color:var(--text-light)}
 .select-field{width:100%;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:13px 40px 13px 15px;font-family:var(--body);font-size:14px;color:var(--text);background:var(--white);outline:none;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B6460' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;cursor:pointer}
 .select-field:focus{border-color:var(--green)}
 
-/* PILLS */
+/* MULTI-SELECT CUSTOM */
+.multi-select-wrap{position:relative;margin-bottom:12px}
+.multi-select-display{width:100%;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:12px 40px 12px 15px;font-family:var(--body);font-size:14px;color:var(--text);background:var(--white);cursor:pointer;text-align:left;min-height:48px;display:flex;align-items:center;flex-wrap:wrap;gap:5px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B6460' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+.multi-select-display.open{border-color:var(--green)}
+.ms-tag{background:var(--green);color:var(--white);border-radius:50px;padding:3px 10px;font-size:12px;font-weight:500;display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.ms-tag-x{cursor:pointer;opacity:.7;font-size:14px;line-height:1}
+.ms-placeholder{color:var(--text-light);font-size:14px}
+.ms-dropdown{position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--white);border:1.5px solid var(--green);border-radius:var(--radius-sm);z-index:200;max-height:200px;overflow-y:auto;box-shadow:0 4px 16px rgba(0,0,0,0.1)}
+.ms-dropdown::-webkit-scrollbar{display:none}
+.ms-option{padding:11px 15px;font-family:var(--body);font-size:14px;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px dotted var(--border-dot)}
+.ms-option:last-child{border-bottom:none}
+.ms-option:hover{background:var(--cream)}
+.ms-option.selected{color:var(--green);font-weight:500}
+.ms-option.selected::after{content:'✓';font-size:13px;color:var(--green)}
+
+/* PILLS (price only) */
 .pill-group{display:flex;flex-wrap:wrap;gap:7px}
 .pill{padding:9px 16px;border-radius:50px;border:1.5px solid var(--border);background:var(--white);font-family:var(--body);font-size:13px;color:var(--text-muted);cursor:pointer;transition:all .15s}
 .pill.selected{background:var(--green);border-color:var(--green);color:var(--white);font-weight:500}
@@ -91,20 +95,18 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 
 /* ONBOARDING */
 .onboard-wrap{padding:calc(44px + var(--safe-top)) 24px 0;display:flex;flex-direction:column;height:100%}
-.onboard-logo{font-family:var(--headline);font-size:20px;font-weight:700;color:var(--green);text-align:center;letter-spacing:2px;text-transform:uppercase;margin-bottom:32px}
+.onboard-logo{font-family:var(--headline);font-size:20px;font-weight:700;color:var(--green);text-align:center;letter-spacing:2px;text-transform:uppercase;margin-bottom:28px}
 .onboard-headline{font-family:var(--headline);font-size:28px;font-weight:700;line-height:1.1;margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px}
-.onboard-sub{font-size:15px;color:var(--text-muted);line-height:1.6;margin-bottom:28px}
+.onboard-sub{font-size:15px;color:var(--text-muted);line-height:1.6;margin-bottom:24px}
 .onboard-actions{margin-top:auto;padding-bottom:calc(36px + var(--safe-bottom));display:flex;flex-direction:column;gap:10px}
-
-/* PROGRESS DOTS */
 .pdots{display:flex;gap:5px;justify-content:center}
 .pdot{width:6px;height:6px;border-radius:50%;background:var(--border);transition:all .2s}
 .pdot.active{background:var(--green);width:18px;border-radius:3px}
-
-/* STEP INDICATOR */
 .step-indicator{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;background:var(--cream);flex-shrink:0;border-bottom:1px dotted var(--border-dot)}
 .step-count{font-family:var(--headline);font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-light)}
 .step-skip{background:none;border:none;cursor:pointer;color:var(--text-muted);font-family:var(--body);font-size:13px}
+.form-label{font-size:12px;font-weight:500;color:var(--text);margin-bottom:7px;margin-top:14px;display:block}
+.form-hint{font-size:11px;color:var(--text-muted);margin-bottom:8px;display:block}
 
 /* HOME */
 .home-header{padding:20px 20px 8px}
@@ -119,7 +121,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .rally-avatars .avatar-sm:first-child{margin-left:0}
 
 /* SHEET */
-.sheet-header{padding:16px 20px;border-bottom:1px dotted var(--border-dot);flex-shrink:0}
+.sheet-header{padding:14px 20px;border-bottom:1px dotted var(--border-dot);flex-shrink:0}
 .sheet-title{font-family:var(--headline);font-size:22px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px}
 .sheet-sub{font-size:13px;color:var(--text-muted);margin-top:3px}
 
@@ -133,28 +135,29 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .pt-desc{font-size:11px;color:var(--text-muted);display:block;margin-top:1px}
 
 /* ACTIVITY SUBTYPE */
-.activity-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:12px}
+.activity-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}
 .act-btn{padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--white);cursor:pointer;font-family:var(--body);font-size:13px;color:var(--text-muted);text-align:left;transition:all .15s;position:relative}
 .act-btn.selected{border-color:var(--green);background:var(--green-pale);color:var(--green)}
 
 /* CALENDAR */
-.calendar{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:18px}
+.calendar{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px}
 .cal-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px dotted var(--border-dot)}
 .cal-month{font-family:var(--headline);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px}
-.cal-nav{background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:18px;padding:2px 8px;border-radius:6px}
+.cal-nav{background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:18px;padding:2px 8px}
 .cal-days-header{display:grid;grid-template-columns:repeat(7,1fr);padding:6px 10px 2px}
 .cal-day-label{font-family:var(--headline);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-light);text-align:center;padding:3px 0}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);padding:0 10px 10px;gap:2px}
 .cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-family:var(--body);font-size:13px;color:var(--text);border-radius:50%;cursor:pointer;border:none;background:none;transition:all .12s}
 .cal-day:hover:not(.empty):not(.past){background:var(--cream-dark)}
 .cal-day.selected{background:var(--green);color:var(--white);font-weight:500}
+.cal-day.in-range{background:var(--green-pale)}
 .cal-day.today:not(.selected){border:1.5px solid var(--green);font-weight:700;color:var(--green)}
 .cal-day.empty,.cal-day.past{cursor:default;color:var(--text-light)}
 .cal-selected{padding:8px 12px;background:var(--green-pale);border-top:1px dotted var(--border-dot)}
 .cal-selected-text{font-size:11px;color:var(--green)}
 
 /* DEADLINE */
-.deadline-options{display:flex;gap:8px;margin-bottom:20px}
+.deadline-options{display:flex;gap:8px;margin-bottom:16px}
 .deadline-opt{flex:1;padding:12px 8px;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--white);cursor:pointer;text-align:center;font-family:var(--body);transition:all .15s}
 .deadline-opt.selected{border-color:var(--green);background:var(--green-pale)}
 .deadline-opt .big{font-family:var(--headline);font-size:18px;font-weight:700;color:var(--text)}
@@ -169,15 +172,9 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .date-opt.selected .date-check{background:var(--green);border-color:var(--green);display:flex;align-items:center;justify-content:center}
 .none-dates-btn{width:100%;padding:12px;border:1.5px dashed var(--border);border-radius:var(--radius-sm);background:none;font-family:var(--body);font-size:13px;color:var(--text-muted);cursor:pointer;text-align:center;margin-top:4px}
 
-/* SUGGEST PLACE */
-.suggest-place-btn{width:100%;padding:12px;border:1.5px dashed var(--border);border-radius:var(--radius-sm);background:none;font-family:var(--body);font-size:13px;color:var(--text-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
-.suggest-wrap{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:12px;display:none}
-.suggest-wrap.show{display:block}
-
 /* VENUE CARD */
 .venue-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:14px;margin:0 20px 10px;cursor:pointer;transition:all .15s;position:relative}
 .venue-card.voted{border-color:var(--green);background:var(--green-pale)}
-.venue-card.suggested{border-color:#92400E;background:#FEF3C7}
 .venue-name{font-family:var(--headline);font-size:16px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px}
 .venue-meta{font-size:12px;color:var(--text-muted);margin-bottom:8px}
 .venue-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
@@ -188,7 +185,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .venue-link{font-size:11px;color:var(--green);text-decoration:underline;cursor:pointer}
 .vote-check{position:absolute;top:12px;right:12px;width:22px;height:22px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center}
 
-/* LOCKED PLAN */
+/* LOCKED */
 .locked-venue{background:var(--green);margin:14px 20px;border-radius:var(--radius);padding:20px;color:var(--white);position:relative;overflow:hidden}
 .locked-venue::before{content:'';position:absolute;top:-30px;right:-30px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,0.06)}
 .locked-eyebrow{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;opacity:.7;margin-bottom:5px;font-family:var(--headline)}
@@ -204,16 +201,23 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .attendee-name{font-size:14px;font-weight:500}
 .eta-chip{background:#FEF3C7;color:#92400E;font-size:11px;padding:3px 8px;border-radius:50px;font-weight:500}
 .arrived-chip{background:#DCFCE7;color:#166534;font-size:11px;padding:3px 8px;border-radius:50px;font-weight:500}
+.ticket-chip{background:#FEE2E2;color:#991B1B;font-size:11px;padding:3px 8px;border-radius:50px;font-weight:500}
+.ticket-chip-got{background:#DCFCE7;color:#166534;font-size:11px;padding:3px 8px;border-radius:50px;font-weight:500}
 
 /* GROUPS */
 .group-card{margin:0 20px 10px;cursor:pointer}
 .group-icon{width:46px;height:46px;border-radius:var(--radius-sm);background:var(--green-pale);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;overflow:hidden}
-.group-icon img{width:100%;height:100%;object-fit:cover}
 .group-name{font-size:15px;font-weight:500;margin-bottom:2px}
 .group-meta{font-size:12px;color:var(--text-muted)}
 .member-row{display:flex;align-items:center;gap:12px;padding:11px 20px;border-bottom:1px dotted var(--border-dot)}
 .member-name{font-size:14px;font-weight:500}
 .member-sub{font-size:12px;color:var(--text-muted)}
+
+/* GROUP SELECT */
+.group-select-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;margin-bottom:8px;transition:all .15s}
+.group-select-card.selected{border-color:var(--green);background:var(--green-pale)}
+.group-select-check{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--border);flex-shrink:0;margin-left:auto}
+.group-select-card.selected .group-select-check{background:var(--green);border-color:var(--green);display:flex;align-items:center;justify-content:center}
 
 /* PROFILE */
 .profile-hero{padding:calc(28px + var(--safe-top)) 20px 20px;text-align:center;border-bottom:1px dotted var(--border-dot)}
@@ -224,57 +228,41 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .stat-cell{background:var(--white);padding:14px 8px;text-align:center}
 .stat-num{font-family:var(--headline);font-size:20px;font-weight:700;color:var(--green)}
 .stat-label{font-size:10px;color:var(--text-muted);margin-top:2px}
-
-/* FUN STAT CARDS - REDESIGNED */
 .stat-cards-section{padding:16px 20px}
 .stat-cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .stat-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:14px;display:flex;flex-direction:column;gap:6px}
-.stat-card-top{display:flex;align-items:center;justify-content:space-between}
 .stat-card-icon{font-size:18px}
 .stat-card-value{font-family:var(--headline);font-size:17px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.3px;line-height:1.1}
 .stat-card-label{font-size:11px;font-weight:500;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;font-family:var(--headline)}
 .stat-card-desc{font-size:11px;color:var(--text-light);line-height:1.4}
-.stat-card-wide{grid-column:span 2}
 
-/* PROFILE MENU */
 .menu-item{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px dotted var(--border-dot);cursor:pointer;background:none;border-left:none;border-right:none;border-top:none;width:100%;font-family:var(--body);text-align:left}
 .menu-item-left{display:flex;align-items:center;gap:12px}
 .menu-item-icon{width:32px;height:32px;border-radius:var(--radius-sm);background:var(--green-pale);display:flex;align-items:center;justify-content:center}
 .menu-item-label{font-size:14px;color:var(--text)}
 .menu-item-sub{font-size:11px;color:var(--text-muted)}
 
-/* PREFERENCES SCREEN */
-.prefs-screen-title{font-family:var(--headline);font-size:20px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
-.prefs-section{padding:16px 20px 0}
-.form-label{font-size:12px;font-weight:500;color:var(--text);margin-bottom:7px;margin-top:14px;display:block;font-family:var(--body)}
-.form-hint{font-size:11px;color:var(--text-muted);margin-bottom:8px;margin-top:-4px;display:block}
-
-/* RESPONDER ROW */
+/* RESPONDER */
 .responder-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px dotted var(--border-dot)}
 .responder-left{display:flex;align-items:center;gap:10px}
 .responder-name{font-size:14px;font-weight:500}
 .responder-status{font-size:11px;color:var(--text-muted)}
 .check-in{width:20px;height:20px;border-radius:50%;background:var(--green-pale);display:flex;align-items:center;justify-content:center}
 .check-pending{width:20px;height:20px;border-radius:50%;border:1.5px dashed var(--border)}
-
-/* DEADLINE BAR */
 .deadline-bar{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;display:flex;align-items:center;justify-content:space-between}
 .deadline-label{font-size:11px;color:var(--text-muted);margin-bottom:2px}
 .deadline-time{font-family:var(--headline);font-size:17px;font-weight:700;color:var(--green)}
 
-/* RSVP */
 .rsvp-btn{flex:1;padding:14px;border-radius:var(--radius);border:1.5px solid var(--border);background:var(--white);cursor:pointer;font-family:var(--headline);font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-align:center;transition:all .15s}
 .rsvp-btn.in{border-color:var(--green);background:var(--green);color:var(--white)}
 .rsvp-btn.out{color:var(--text-muted)}
 
-/* GROUP SELECTION */
-.group-select-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;margin-bottom:8px;transition:all .15s}
-.group-select-card.selected{border-color:var(--green);background:var(--green-pale)}
-.group-select-check{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--border);flex-shrink:0;margin-left:auto;transition:all .15s}
-.group-select-card.selected .group-select-check{background:var(--green);border-color:var(--green);display:flex;align-items:center;justify-content:center}
+/* SUGGEST PLACE */
+.suggest-place-btn{width:100%;padding:12px;border:1.5px dashed var(--border);border-radius:var(--radius-sm);background:none;font-family:var(--body);font-size:13px;color:var(--text-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+.suggest-wrap{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:12px;display:none}
+.suggest-wrap.show{display:block}
 
 /* CHAT */
-.chat-wrap{display:flex;flex-direction:column;height:100%}
 .chat-messages{flex:1;overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column;gap:10px;-webkit-overflow-scrolling:touch}
 .chat-messages::-webkit-scrollbar{display:none}
 .chat-bubble{max-width:75%;padding:10px 14px;border-radius:16px;font-size:14px;line-height:1.45}
@@ -286,7 +274,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .chat-input{flex:1;border:1.5px solid var(--border);border-radius:50px;padding:10px 16px;font-family:var(--body);font-size:14px;outline:none;background:var(--white)}
 .chat-send{background:var(--green);color:var(--white);border:none;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
 
-/* NOTIFICATIONS SCREEN */
+/* NOTIFICATIONS */
 .toggle-row{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px dotted var(--border-dot)}
 .toggle-label{font-size:14px;color:var(--text)}
 .toggle-sub{font-size:11px;color:var(--text-muted)}
@@ -295,18 +283,47 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .toggle::after{content:'';position:absolute;width:18px;height:18px;background:var(--white);border-radius:50%;top:3px;left:3px;transition:transform .2s;box-shadow:0 1px 4px rgba(0,0,0,0.2)}
 .toggle.on::after{transform:translateX(20px)}
 
-/* FRIENDS SCREEN */
+/* FRIENDS */
 .friend-row{display:flex;align-items:center;gap:12px;padding:11px 20px;border-bottom:1px dotted var(--border-dot)}
 .friend-name{font-size:14px;font-weight:500}
 .friend-sub{font-size:12px;color:var(--text-muted)}
 
-/* TOAST */
+/* TICKET CONFIRMATION */
+.ticket-confirm-card{background:var(--white);border:1.5px solid #FEE2E2;border-radius:var(--radius);padding:18px;margin:14px 20px}
+.ticket-confirm-title{font-family:var(--headline);font-size:16px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;color:var(--text)}
+.ticket-confirm-sub{font-size:13px;color:var(--text-muted);margin-bottom:14px;line-height:1.5}
+.ticket-btns{display:flex;gap:8px}
+.ticket-btn-yes{flex:1;padding:12px;border-radius:50px;background:var(--green);color:var(--white);border:none;font-family:var(--headline);font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer}
+.ticket-btn-no{flex:1;padding:12px;border-radius:50px;background:none;color:var(--text-muted);border:1.5px solid var(--border);font-family:var(--headline);font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer}
+
+/* TRIP FLOW */
+.trip-section{padding:14px 20px 0}
+.trip-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px}
+.trip-card-title{font-family:var(--headline);font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;color:var(--text)}
+.itinerary-day{background:var(--cream);border-radius:var(--radius-sm);padding:12px;margin-bottom:8px}
+.itinerary-day-header{font-family:var(--headline);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--green);margin-bottom:8px}
+.itinerary-item{display:flex;gap:10px;padding:6px 0;border-bottom:1px dotted var(--border-dot)}
+.itinerary-item:last-child{border:none}
+.itinerary-time{font-size:11px;color:var(--text-muted);width:45px;flex-shrink:0;padding-top:1px}
+.itinerary-text{font-size:13px;color:var(--text);line-height:1.4}
+.accommodation-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px;cursor:pointer;transition:all .15s}
+.accommodation-card.voted{border-color:var(--green);background:var(--green-pale)}
+.accom-name{font-family:var(--headline);font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px}
+.accom-meta{font-size:12px;color:var(--text-muted);margin-bottom:8px}
+.top3-input{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:10px}
+.top3-num{font-family:var(--headline);font-size:16px;font-weight:700;color:var(--green);width:20px;flex-shrink:0}
+.top3-field{flex:1;border:none;outline:none;font-family:var(--body);font-size:14px;color:var(--text);background:none}
+.top3-field::placeholder{color:var(--text-light)}
+.itinerary-mode-btn{flex:1;padding:14px;border-radius:var(--radius);border:1.5px solid var(--border);background:var(--white);cursor:pointer;font-family:var(--body);font-size:13px;font-weight:500;text-align:center;transition:all .15s}
+.itinerary-mode-btn.selected{border-color:var(--green);background:var(--green-pale);color:var(--green)}
+.ai-generating{background:var(--green-pale);border-radius:var(--radius-sm);padding:14px;text-align:center;display:none}
+.ai-generating.show{display:block}
+
 .toast{position:fixed;bottom:calc(90px + var(--safe-bottom));left:20px;right:20px;background:var(--text);color:var(--white);border-radius:var(--radius-sm);padding:12px 16px;font-size:13px;font-family:var(--body);z-index:999;display:none;text-align:center}
 .toast.show{display:block}
 </style>
 </head>
 <body>
-
 <div class="toast" id="toast"></div>
 
 <!-- ══ WELCOME ══ -->
@@ -330,124 +347,87 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 <div class="screen" id="screen-signup">
   <div class="onboard-wrap">
     <div class="onboard-logo">Rally</div>
-    <div class="pdots" style="margin-bottom:28px"><div class="pdot active"></div><div class="pdot"></div><div class="pdot"></div><div class="pdot"></div></div>
+    <div class="pdots" style="margin-bottom:24px"><div class="pdot active"></div><div class="pdot"></div><div class="pdot"></div><div class="pdot"></div><div class="pdot"></div></div>
     <h2 class="onboard-headline" style="font-size:24px">What should<br>we call you?</h2>
-    <p class="onboard-sub" style="margin-bottom:16px">Your friends will see this in every Rally.</p>
-    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">
+    <p class="onboard-sub" style="margin-bottom:14px">Your friends will see this in every Rally.</p>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px">
       <input class="input-field" type="text" placeholder="Your first name" id="user-name">
       <input class="input-field" type="tel" placeholder="Phone number">
     </div>
     <div class="onboard-actions">
-      <button class="btn-primary" onclick="saveNameAndGo('screen-onboard-prefs-1')">Continue</button>
+      <button class="btn-primary" onclick="saveNameAndGo('screen-onboard-cuisine')">Continue</button>
       <button class="btn-back" style="justify-content:center" onclick="go('screen-welcome')">← Back</button>
     </div>
   </div>
 </div>
 
-<!-- ══ ONBOARD PREFS 1 ══ -->
-<div class="screen" id="screen-onboard-prefs-1">
+<!-- ══ ONBOARD: CUISINE + DIETARY ══ -->
+<div class="screen" id="screen-onboard-cuisine">
   <div class="step-indicator">
     <button class="btn-back" onclick="go('screen-signup')">← Back</button>
-    <span class="step-count">Step 2 of 4</span>
-    <button class="step-skip" onclick="go('screen-onboard-prefs-2')">Skip</button>
+    <span class="step-count">Step 2 of 5</span>
+    <button class="step-skip" onclick="go('screen-onboard-vibe')">Skip</button>
   </div>
   <div class="scroll-content" style="padding-bottom:20px">
-    <div style="padding:16px 20px 0">
-      <div class="pdots" style="margin-bottom:16px"><div class="pdot"></div><div class="pdot active"></div><div class="pdot"></div><div class="pdot"></div></div>
-      <h2 class="onboard-headline" style="font-size:20px">Your default<br>preferences</h2>
-      <p style="font-size:13px;color:var(--text-muted);margin:8px 0 16px;line-height:1.5">Set your defaults — you'll update what you're feeling each Rally.</p>
+    <div style="padding:14px 20px 0">
+      <div class="pdots" style="margin-bottom:14px"><div class="pdot"></div><div class="pdot active"></div><div class="pdot"></div><div class="pdot"></div><div class="pdot"></div></div>
+      <h2 class="onboard-headline" style="font-size:20px">Food preferences</h2>
+      <p style="font-size:13px;color:var(--text-muted);margin:6px 0 14px;line-height:1.5">Set your defaults — you update what you're feeling each Rally.</p>
 
-      <label class="form-label">Favourite cuisines <span style="color:var(--text-light);font-weight:400">(select all that apply)</span></label>
-      <div class="pill-group" style="margin-bottom:16px">
-        <button class="pill" onclick="togglePill(this)">Italian</button>
-        <button class="pill" onclick="togglePill(this)">Japanese</button>
-        <button class="pill" onclick="togglePill(this)">Mexican</button>
-        <button class="pill" onclick="togglePill(this)">Chinese</button>
-        <button class="pill" onclick="togglePill(this)">Thai</button>
-        <button class="pill" onclick="togglePill(this)">Indian</button>
-        <button class="pill" onclick="togglePill(this)">French</button>
-        <button class="pill" onclick="togglePill(this)">Korean</button>
-        <button class="pill" onclick="togglePill(this)">Mediterranean</button>
-        <button class="pill" onclick="togglePill(this)">American</button>
-        <button class="pill" onclick="togglePill(this)">Middle Eastern</button>
-        <button class="pill" onclick="togglePill(this)">Vietnamese</button>
-        <button class="pill" onclick="togglePill(this)">Sushi</button>
-        <button class="pill" onclick="togglePill(this)">Pizza</button>
-        <button class="pill" onclick="togglePill(this)">Steakhouse</button>
-        <button class="pill" onclick="togglePill(this)">Seafood</button>
-        <button class="pill" onclick="togglePill(this)">Vegetarian / Vegan</button>
-      </div>
+      <label class="form-label" style="margin-top:0">Favourite cuisines</label>
+      <div id="ms-cuisine-onboard" class="multi-select-wrap"></div>
 
-      <label class="form-label">Preferred vibe <span style="color:var(--text-light);font-weight:400">(select all that apply)</span></label>
-      <div class="pill-group" style="margin-bottom:16px">
-        <button class="pill" onclick="togglePill(this)">Rooftop</button>
-        <button class="pill" onclick="togglePill(this)">Low key</button>
-        <button class="pill" onclick="togglePill(this)">Late night</button>
-        <button class="pill" onclick="togglePill(this)">Trendy</button>
-        <button class="pill" onclick="togglePill(this)">Cozy</button>
-        <button class="pill" onclick="togglePill(this)">Outdoor seating</button>
-        <button class="pill" onclick="togglePill(this)">Sports bar</button>
-        <button class="pill" onclick="togglePill(this)">Cocktail bar</button>
-        <button class="pill" onclick="togglePill(this)">Date night</button>
-        <button class="pill" onclick="togglePill(this)">Casual</button>
-        <button class="pill" onclick="togglePill(this)">Active / sporty</button>
-        <button class="pill" onclick="togglePill(this)">Outdoor adventure</button>
-        <button class="pill" onclick="togglePill(this)">Cultural</button>
-        <button class="pill" onclick="togglePill(this)">Live music</button>
-        <button class="pill" onclick="togglePill(this)">Chill hangout</button>
-        <button class="pill" onclick="togglePill(this)">Live sports</button>
-        <button class="pill" onclick="togglePill(this)">Comedy</button>
-        <button class="pill" onclick="togglePill(this)">Dive bar</button>
-        <button class="pill" onclick="togglePill(this)">Wine bar</button>
-      </div>
+      <label class="form-label">Not in the mood for (default)</label>
+      <div id="ms-avoid-onboard" class="multi-select-wrap"></div>
 
-      <button class="btn-primary" onclick="go('screen-onboard-prefs-2')" style="margin-bottom:8px">Continue</button>
+      <label class="form-label">Dietary restrictions</label>
+      <p class="form-hint">Applied silently to every Rally — never needs changing</p>
+      <div id="ms-dietary-onboard" class="multi-select-wrap"></div>
+
+      <button class="btn-primary" onclick="go('screen-onboard-vibe')" style="margin-top:8px;margin-bottom:8px">Continue</button>
     </div>
   </div>
 </div>
 
-<!-- ══ ONBOARD PREFS 2 ══ -->
-<div class="screen" id="screen-onboard-prefs-2">
+<!-- ══ ONBOARD: VIBE ══ -->
+<div class="screen" id="screen-onboard-vibe">
   <div class="step-indicator">
-    <button class="btn-back" onclick="go('screen-onboard-prefs-1')">← Back</button>
-    <span class="step-count">Step 3 of 4</span>
-    <button class="step-skip" onclick="go('screen-onboard-prefs-3')">Skip</button>
+    <button class="btn-back" onclick="go('screen-onboard-cuisine')">← Back</button>
+    <span class="step-count">Step 3 of 5</span>
+    <button class="step-skip" onclick="go('screen-onboard-location')">Skip</button>
   </div>
   <div class="scroll-content" style="padding-bottom:20px">
-    <div style="padding:16px 20px 0">
-      <div class="pdots" style="margin-bottom:16px"><div class="pdot"></div><div class="pdot"></div><div class="pdot active"></div><div class="pdot"></div></div>
-      <h2 class="onboard-headline" style="font-size:20px">Where + how much?</h2>
-      <p style="font-size:13px;color:var(--text-muted);margin:8px 0 16px;line-height:1.5">Used to match venues when you join a Rally.</p>
+    <div style="padding:14px 20px 0">
+      <div class="pdots" style="margin-bottom:14px"><div class="pdot"></div><div class="pdot"></div><div class="pdot active"></div><div class="pdot"></div><div class="pdot"></div></div>
+      <h2 class="onboard-headline" style="font-size:20px">What's your vibe?</h2>
+      <p style="font-size:13px;color:var(--text-muted);margin:6px 0 14px;line-height:1.5">Covers all plan types — food, bars, activities, and more.</p>
 
-      <label class="form-label">Preferred neighborhoods <span style="color:var(--text-light);font-weight:400">(select all that apply)</span></label>
-      <div class="pill-group" style="margin-bottom:16px">
-        <button class="pill" onclick="togglePill(this)">West Village</button>
-        <button class="pill" onclick="togglePill(this)">East Village</button>
-        <button class="pill" onclick="togglePill(this)">Lower East Side</button>
-        <button class="pill" onclick="togglePill(this)">SoHo</button>
-        <button class="pill" onclick="togglePill(this)">Tribeca</button>
-        <button class="pill" onclick="togglePill(this)">Nolita</button>
-        <button class="pill" onclick="togglePill(this)">Chinatown</button>
-        <button class="pill" onclick="togglePill(this)">Financial District</button>
-        <button class="pill" onclick="togglePill(this)">Midtown</button>
-        <button class="pill" onclick="togglePill(this)">Hell's Kitchen</button>
-        <button class="pill" onclick="togglePill(this)">Chelsea</button>
-        <button class="pill" onclick="togglePill(this)">Flatiron</button>
-        <button class="pill" onclick="togglePill(this)">Gramercy</button>
-        <button class="pill" onclick="togglePill(this)">Upper East Side</button>
-        <button class="pill" onclick="togglePill(this)">Upper West Side</button>
-        <button class="pill" onclick="togglePill(this)">Harlem</button>
-        <button class="pill" onclick="togglePill(this)">Williamsburg</button>
-        <button class="pill" onclick="togglePill(this)">Greenpoint</button>
-        <button class="pill" onclick="togglePill(this)">Bushwick</button>
-        <button class="pill" onclick="togglePill(this)">Park Slope</button>
-        <button class="pill" onclick="togglePill(this)">Cobble Hill</button>
-        <button class="pill" onclick="togglePill(this)">Brooklyn Heights</button>
-        <button class="pill" onclick="togglePill(this)">Dumbo</button>
-        <button class="pill" onclick="togglePill(this)">Bed-Stuy</button>
-        <button class="pill" onclick="togglePill(this)">Astoria</button>
-        <button class="pill" onclick="togglePill(this)">Long Island City</button>
-      </div>
+      <label class="form-label" style="margin-top:0">Preferred vibes</label>
+      <div id="ms-vibe-onboard" class="multi-select-wrap"></div>
+
+      <label class="form-label">Activities I'd rather skip</label>
+      <p class="form-hint">Applied whenever the plan type is Activity</p>
+      <div id="ms-skip-activities-onboard" class="multi-select-wrap"></div>
+
+      <button class="btn-primary" onclick="go('screen-onboard-location')" style="margin-top:8px;margin-bottom:8px">Continue</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ONBOARD: LOCATION + PRICE ══ -->
+<div class="screen" id="screen-onboard-location">
+  <div class="step-indicator">
+    <button class="btn-back" onclick="go('screen-onboard-vibe')">← Back</button>
+    <span class="step-count">Step 4 of 5</span>
+    <button class="step-skip" onclick="go('screen-onboard-friends')">Skip</button>
+  </div>
+  <div class="scroll-content" style="padding-bottom:20px">
+    <div style="padding:14px 20px 0">
+      <div class="pdots" style="margin-bottom:14px"><div class="pdot"></div><div class="pdot"></div><div class="pdot"></div><div class="pdot active"></div><div class="pdot"></div></div>
+      <h2 class="onboard-headline" style="font-size:20px">Where + how much?</h2>
+
+      <label class="form-label" style="margin-top:8px">Preferred neighborhoods</label>
+      <div id="ms-hood-onboard" class="multi-select-wrap"></div>
 
       <label class="form-label">Price range</label>
       <div class="pill-group" style="margin-bottom:20px">
@@ -457,23 +437,23 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         <button class="pill" onclick="togglePill(this)">Whatever</button>
       </div>
 
-      <button class="btn-primary" onclick="go('screen-onboard-prefs-3')" style="margin-bottom:8px">Continue</button>
+      <button class="btn-primary" onclick="go('screen-onboard-friends')" style="margin-bottom:8px">Continue</button>
     </div>
   </div>
 </div>
 
-<!-- ══ ONBOARD PREFS 3 — Find friends ══ -->
-<div class="screen" id="screen-onboard-prefs-3">
+<!-- ══ ONBOARD: FRIENDS ══ -->
+<div class="screen" id="screen-onboard-friends">
   <div class="step-indicator">
-    <button class="btn-back" onclick="go('screen-onboard-prefs-2')">← Back</button>
-    <span class="step-count">Step 4 of 4</span>
+    <button class="btn-back" onclick="go('screen-onboard-location')">← Back</button>
+    <span class="step-count">Step 5 of 5</span>
     <button class="step-skip" onclick="go('screen-home')">Skip</button>
   </div>
-  <div class="onboard-wrap" style="padding-top:16px">
-    <div class="pdots" style="margin-bottom:20px"><div class="pdot"></div><div class="pdot"></div><div class="pdot"></div><div class="pdot active"></div></div>
+  <div class="onboard-wrap" style="padding-top:14px">
+    <div class="pdots" style="margin-bottom:20px"><div class="pdot"></div><div class="pdot"></div><div class="pdot"></div><div class="pdot"></div><div class="pdot active"></div></div>
     <h2 class="onboard-headline" style="font-size:22px">Find your people</h2>
-    <p class="onboard-sub" style="margin-bottom:16px">Sync contacts to find friends on Rally or invite them via text.</p>
-    <input class="input-field" type="text" placeholder="Search by name or phone" style="margin-bottom:16px">
+    <p class="onboard-sub" style="margin-bottom:14px">Sync contacts to find friends on Rally or invite them.</p>
+    <input class="input-field" type="text" placeholder="Search by name or phone" style="margin-bottom:14px">
     <div class="onboard-actions">
       <button class="btn-primary" onclick="go('screen-home')">Sync contacts</button>
       <button class="btn-outline" onclick="go('screen-home')">Skip for now</button>
@@ -485,9 +465,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 <div class="screen" id="screen-home">
   <div class="topbar">
     <span class="topbar-logo">Rally</span>
-    <button style="background:none;border:none;cursor:pointer;color:var(--text)">
-      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-    </button>
+    <button style="background:none;border:none;cursor:pointer;color:var(--text)"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></button>
   </div>
   <div class="scroll-content">
     <div class="home-header">
@@ -499,10 +477,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     <div class="rally-card" onclick="go('screen-locked')">
       <div class="card card-pad">
         <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
-          <div>
-            <p class="rally-title-text">Dinner in the West Village</p>
-            <p class="rally-meta">Saturday, Apr 12 · 7:30pm · Lilia</p>
-          </div>
+          <div><p class="rally-title-text">Dinner in the West Village</p><p class="rally-meta">Saturday, Apr 12 · 7:30pm · Lilia</p></div>
           <span class="badge badge-tonight">Tonight</span>
         </div>
         <hr class="dot-divider">
@@ -522,11 +497,27 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     <div class="rally-card" onclick="go('screen-vote')">
       <div class="card card-pad">
         <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
-          <div>
-            <p class="rally-title-text">Brunch Sunday</p>
-            <p class="rally-meta">Sunday, Apr 13 · Started by Jess</p>
-          </div>
+          <div><p class="rally-title-text">Brunch Sunday</p><p class="rally-meta">Sunday, Apr 13 · Started by Jess</p></div>
           <span class="badge badge-voting">Vote now</span>
+        </div>
+        <hr class="dot-divider">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px">
+          <div class="rally-avatars">
+            <div class="avatar avatar-sm" style="background:#E8F0EC;color:var(--green)">M</div>
+            <div class="avatar avatar-sm" style="background:#FEF3C7;color:#92400E">J</div>
+            <div class="avatar avatar-sm" style="background:#FCE7F3;color:#9D174D">S</div>
+          </div>
+          <p style="font-size:12px;color:var(--text-muted)">3 hrs left</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="padding:6px 20px 0"><p class="section-label" style="margin-bottom:10px">Trip planning</p></div>
+    <div class="rally-card" onclick="go('screen-trip-plan')">
+      <div class="card card-pad">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
+          <div><p class="rally-title-text">Weekend in Montreal</p><p class="rally-meta">May 2–4 · 5 people · AI itinerary ready</p></div>
+          <span class="badge badge-trip">Trip</span>
         </div>
         <hr class="dot-divider">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px">
@@ -537,20 +528,17 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
             <div class="avatar avatar-sm" style="background:#EDE9FE;color:#5B21B6">R</div>
             <div class="avatar avatar-sm" style="background:#FEE2E2;color:#991B1B">K</div>
           </div>
-          <p style="font-size:12px;color:var(--text-muted)">3 hrs left</p>
+          <p style="font-size:12px;color:var(--text-muted)">View itinerary</p>
         </div>
       </div>
     </div>
 
-    <div style="padding:6px 20px 0"><p class="section-label" style="margin-bottom:10px">Waiting on responses</p></div>
-    <div class="rally-card" onclick="go('screen-detail')">
+    <div style="padding:6px 20px 0"><p class="section-label" style="margin-bottom:10px">Concert — get your ticket</p></div>
+    <div class="rally-card" onclick="go('screen-ticket-confirm')">
       <div class="card card-pad">
         <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
-          <div>
-            <p class="rally-title-text">Bars this Friday</p>
-            <p class="rally-meta">Friday, Apr 11 · 9:00pm · You started</p>
-          </div>
-          <span class="badge badge-pending">Pending</span>
+          <div><p class="rally-title-text">Sabrina Carpenter · MSG</p><p class="rally-meta">Friday, Apr 18 · 8:00pm</p></div>
+          <span class="badge badge-ticket">Get ticket</span>
         </div>
         <hr class="dot-divider">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px">
@@ -559,7 +547,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
             <div class="avatar avatar-sm" style="background:#FEF3C7;color:#92400E">J</div>
             <div class="avatar avatar-sm" style="background:#FCE7F3;color:#9D174D">S</div>
           </div>
-          <p style="font-size:12px;color:var(--text-muted)">12h remaining</p>
+          <p style="font-size:12px;color:#991B1B;font-weight:500">You haven't confirmed</p>
         </div>
       </div>
     </div>
@@ -576,30 +564,26 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
   </nav>
 </div>
 
-<!-- ══ START RALLY 1 — Plan type ══ -->
+<!-- ══ START RALLY 1 ══ -->
 <div class="screen" id="screen-start-1">
   <div class="step-indicator">
     <button class="btn-back" onclick="go('screen-home')">← Back</button>
     <span class="step-count">Step 1 of 3</span>
     <div style="width:44px"></div>
   </div>
-  <div class="sheet-header">
-    <p class="sheet-title">Start a Rally</p>
-    <p class="sheet-sub">Pick all that apply</p>
-  </div>
+  <div class="sheet-header"><p class="sheet-title">Start a Rally</p><p class="sheet-sub">Pick all that apply</p></div>
   <div class="scroll-content" style="padding:14px 20px">
-    <div class="plan-type-grid" id="plan-type-grid" style="margin-bottom:16px">
-      <button class="plan-type-btn" onclick="togglePlanType(this)"><div class="pt-icon">🍽</div><span class="pt-name">Dinner</span><span class="pt-desc">Restaurants</span></button>
-      <button class="plan-type-btn" onclick="togglePlanType(this)"><div class="pt-icon">🍸</div><span class="pt-name">Bars</span><span class="pt-desc">Drinks & nightlife</span></button>
-      <button class="plan-type-btn" onclick="togglePlanType(this)"><div class="pt-icon">🥂</div><span class="pt-name">Brunch</span><span class="pt-desc">Weekend morning</span></button>
-      <button class="plan-type-btn" onclick="togglePlanType(this)" id="btn-activity"><div class="pt-icon">🎉</div><span class="pt-name">Activity</span><span class="pt-desc">Bowling, shows...</span></button>
-      <button class="plan-type-btn" onclick="togglePlanType(this)"><div class="pt-icon">✈️</div><span class="pt-name">Trip</span><span class="pt-desc">Weekend getaway</span></button>
-      <button class="plan-type-btn" onclick="togglePlanType(this)" id="btn-other"><div class="pt-icon">💬</div><span class="pt-name">Other</span><span class="pt-desc">Something else</span></button>
+    <div class="plan-type-grid" id="plan-type-grid" style="margin-bottom:14px">
+      <button class="plan-type-btn" onclick="togglePlanType(this,'dinner')"><div class="pt-icon">🍽</div><span class="pt-name">Dinner</span><span class="pt-desc">Restaurants</span></button>
+      <button class="plan-type-btn" onclick="togglePlanType(this,'bars')"><div class="pt-icon">🍸</div><span class="pt-name">Bars</span><span class="pt-desc">Drinks & nightlife</span></button>
+      <button class="plan-type-btn" onclick="togglePlanType(this,'brunch')"><div class="pt-icon">🥂</div><span class="pt-name">Brunch</span><span class="pt-desc">Weekend morning</span></button>
+      <button class="plan-type-btn" onclick="togglePlanType(this,'activity')" id="btn-activity"><div class="pt-icon">🎉</div><span class="pt-name">Activity</span><span class="pt-desc">Bowling, shows...</span></button>
+      <button class="plan-type-btn" onclick="togglePlanType(this,'trip')" id="btn-trip"><div class="pt-icon">✈️</div><span class="pt-name">Trip</span><span class="pt-desc">Weekend getaway</span></button>
+      <button class="plan-type-btn" onclick="togglePlanType(this,'other')" id="btn-other"><div class="pt-icon">💬</div><span class="pt-name">Other</span><span class="pt-desc">Something else</span></button>
     </div>
 
-    <!-- Activity sub-types -->
-    <div id="activity-subtypes" style="display:none;margin-bottom:16px">
-      <p class="section-label" style="margin-bottom:8px">What kind of activity? <span style="color:var(--text-light);font-weight:400;text-transform:none;letter-spacing:0">(pick all that apply)</span></p>
+    <div id="activity-subtypes" style="display:none;margin-bottom:14px">
+      <p class="section-label" style="margin-bottom:8px">What kind of activity?</p>
       <div class="activity-grid">
         <button class="act-btn" onclick="toggleAct(this)">🎳 Bowling</button>
         <button class="act-btn" onclick="toggleAct(this)">⛳ Mini golf</button>
@@ -617,15 +601,17 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
       <input class="input-field" type="text" placeholder="Describe the activity..." style="margin-top:10px">
     </div>
 
-    <!-- Other free text -->
-    <div id="other-freetext" style="display:none;margin-bottom:16px">
+    <div id="trip-note" style="display:none;margin-bottom:14px;background:var(--green-pale);border-radius:var(--radius-sm);padding:12px 14px">
+      <p style="font-size:13px;color:var(--green);line-height:1.5">Trip mode unlocks a full planning flow — destination, dates, accommodation voting, and an AI-powered itinerary built from everyone's top 3.</p>
+    </div>
+
+    <div id="other-freetext" style="display:none;margin-bottom:14px">
       <p class="section-label" style="margin-bottom:8px">What's the plan?</p>
       <input class="input-field" type="text" placeholder="e.g. Birthday dinner, pottery class, rooftop hangout...">
     </div>
 
-    <!-- Suggest a place from the start -->
     <p class="section-label" style="margin-bottom:8px">Have a place in mind?</p>
-    <div style="margin-bottom:16px">
+    <div style="margin-bottom:14px">
       <button class="suggest-place-btn" id="start-suggest-btn" onclick="toggleStartSuggest()">
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
         Add a specific venue
@@ -636,12 +622,11 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         <button class="btn-sm" onclick="showToast('Venue added!');toggleStartSuggest()">Add venue</button>
       </div>
     </div>
-
-    <button class="btn-primary" onclick="go('screen-start-2')">Continue →</button>
+    <button class="btn-primary" onclick="handleStartContinue()">Continue →</button>
   </div>
 </div>
 
-<!-- ══ START RALLY 2 — Calendar + Deadline ══ -->
+<!-- ══ START RALLY 2 — Calendar ══ -->
 <div class="screen" id="screen-start-2">
   <div class="step-indicator">
     <button class="btn-back" onclick="go('screen-start-1')">← Back</button>
@@ -649,7 +634,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     <div style="width:44px"></div>
   </div>
   <div class="scroll-content" style="padding:14px 20px">
-    <p class="section-label" style="margin-bottom:10px">Propose dates</p>
+    <p class="section-label" style="margin-bottom:10px" id="date-label">Propose dates</p>
     <div class="calendar">
       <div class="cal-header">
         <button class="cal-nav" onclick="prevMonth()">‹</button>
@@ -692,47 +677,185 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
       <div style="flex:1"><p style="font-size:14px;font-weight:500">Roommates</p><p style="font-size:12px;color:var(--text-muted)">3 people</p></div>
       <div class="group-select-check"></div>
     </div>
-    <div class="group-select-card" onclick="toggleGroupSelect(this)">
-      <div class="group-icon" style="width:38px;height:38px;font-size:17px">💼</div>
-      <div style="flex:1"><p style="font-size:14px;font-weight:500">Work Squad</p><p style="font-size:12px;color:var(--text-muted)">5 people</p></div>
-      <div class="group-select-check"></div>
-    </div>
-    <p class="section-label" style="margin:14px 0 10px">Or add individuals</p>
+    <p class="section-label" style="margin:12px 0 10px">Or add individuals</p>
     <input class="input-field" type="text" placeholder="Search by name or phone" style="margin-bottom:20px">
     <button class="btn-primary" onclick="go('screen-home');showToast('Rally sent! 🎉')">Send Rally →</button>
   </div>
 </div>
 
-<!-- ══ PLAN DETAIL ══ -->
-<div class="screen" id="screen-detail">
-  <div class="topbar">
-    <button class="btn-back" onclick="go('screen-home')">← Back</button>
-    <span class="badge badge-pending">Pending</span>
-    <div style="width:60px"></div>
+<!-- ══ TRIP PLANNING FLOW ══ -->
+<div class="screen" id="screen-trip-start">
+  <div class="step-indicator">
+    <button class="btn-back" onclick="go('screen-start-1')">← Back</button>
+    <span class="step-count">Trip details</span>
+    <div style="width:44px"></div>
   </div>
-  <div style="padding:14px 20px;border-bottom:1px dotted var(--border-dot);flex-shrink:0">
-    <h2 class="headline-lg" style="font-size:22px">Bars this Friday</h2>
-    <p style="font-size:12px;color:var(--text-muted);margin-top:4px">Friday, Apr 11 · 9:00pm · 3 of 6 responded</p>
-    <div style="margin-top:12px">
-      <div class="deadline-bar">
-        <div><p class="deadline-label">Deadline to respond</p><p class="deadline-time">12 hrs 24 min</p></div>
-        <svg width="18" height="18" fill="none" stroke="var(--green)" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+  <div class="scroll-content" style="padding:14px 20px">
+    <h2 class="headline-lg" style="font-size:20px;margin-bottom:14px">Plan the trip</h2>
+
+    <label class="form-label" style="margin-top:0">Where are you going?</label>
+    <input class="input-field" type="text" placeholder="e.g. Montreal, Mexico City, Miami..." style="margin-bottom:12px">
+
+    <label class="form-label">Date range</label>
+    <div class="calendar">
+      <div class="cal-header">
+        <button class="cal-nav" onclick="prevMonth()">‹</button>
+        <span class="cal-month" id="cal-month-label-trip">May 2026</span>
+        <button class="cal-nav" onclick="nextMonth()">›</button>
+      </div>
+      <div class="cal-days-header">
+        <div class="cal-day-label">Su</div><div class="cal-day-label">Mo</div><div class="cal-day-label">Tu</div><div class="cal-day-label">We</div><div class="cal-day-label">Th</div><div class="cal-day-label">Fr</div><div class="cal-day-label">Sa</div>
+      </div>
+      <div class="cal-grid" id="cal-grid-trip"></div>
+      <div class="cal-selected" id="cal-selected-trip" style="display:none"><p class="cal-selected-text" id="cal-selected-text-trip"></p></div>
+    </div>
+
+    <label class="form-label">Budget per person</label>
+    <div class="pill-group" style="margin-bottom:16px">
+      <button class="pill" onclick="togglePill(this)">Under $200</button>
+      <button class="pill selected" onclick="togglePill(this)">$200–500</button>
+      <button class="pill" onclick="togglePill(this)">$500–1000</button>
+      <button class="pill" onclick="togglePill(this)">$1000+</button>
+    </div>
+
+    <label class="form-label">Your top 3 things to do</label>
+    <p class="form-hint">Everyone submits theirs — Rally builds the itinerary from all inputs</p>
+    <div class="top3-input"><span class="top3-num">1</span><input class="top3-field" type="text" placeholder="e.g. Try smoked meat at Schwartz's"></div>
+    <div class="top3-input"><span class="top3-num">2</span><input class="top3-field" type="text" placeholder="e.g. Old Port walking tour"></div>
+    <div class="top3-input"><span class="top3-num">3</span><input class="top3-field" type="text" placeholder="e.g. Rooftop bar at sunset"></div>
+
+    <div style="margin:14px 0">
+      <p class="form-label" style="margin-top:0">How do you want to build the itinerary?</p>
+      <div style="display:flex;gap:8px">
+        <button class="itinerary-mode-btn selected" id="mode-ai" onclick="selectMode('ai')">🤖 AI builds it</button>
+        <button class="itinerary-mode-btn" id="mode-manual" onclick="selectMode('manual')">✍️ Build manually</button>
       </div>
     </div>
+
+    <button class="btn-primary" onclick="go('screen-trip-accommodation');showToast('Sending to your crew...')">Send to group →</button>
+    <div style="height:8px"></div>
+  </div>
+</div>
+
+<!-- ══ TRIP: ACCOMMODATION VOTE ══ -->
+<div class="screen" id="screen-trip-accommodation">
+  <div class="topbar">
+    <button class="btn-back" onclick="go('screen-trip-start')">← Back</button>
+    <span class="topbar-logo" style="font-size:15px">Where to stay</span>
+    <div style="width:60px"></div>
   </div>
   <div class="scroll-content">
-    <div style="padding:14px 20px">
-      <p class="section-label" style="margin-bottom:10px">Who's in</p>
-      <div class="responder-row"><div class="responder-left"><div class="avatar avatar-sm" style="background:#E8F0EC;color:var(--green)">M</div><div><p class="responder-name">You</p><p class="responder-status">Fri & Sat · LES</p></div></div><div class="check-in"><svg width="10" height="10" fill="none" stroke="var(--green)" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div></div>
-      <div class="responder-row"><div class="responder-left"><div class="avatar avatar-sm" style="background:#FEF3C7;color:#92400E">J</div><div><p class="responder-name">Jess</p><p class="responder-status">Friday only · Anywhere</p></div></div><div class="check-in"><svg width="10" height="10" fill="none" stroke="var(--green)" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div></div>
-      <div class="responder-row"><div class="responder-left"><div class="avatar avatar-sm" style="background:#FCE7F3;color:#9D174D">S</div><div><p class="responder-name">Sofia</p><p class="responder-status">Fri & Sat · Cocktail bars</p></div></div><div class="check-in"><svg width="10" height="10" fill="none" stroke="var(--green)" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div></div>
-      <div class="responder-row"><div class="responder-left"><div class="avatar avatar-sm" style="background:#EDE9FE;color:#5B21B6">R</div><div><p class="responder-name">Ryan</p><p class="responder-status" style="color:var(--text-light)">Hasn't responded</p></div></div><div class="check-pending"></div></div>
-      <div class="responder-row"><div class="responder-left"><div class="avatar avatar-sm" style="background:#FEE2E2;color:#991B1B">K</div><div><p class="responder-name">Kate</p><p class="responder-status" style="color:var(--text-light)">Hasn't responded</p></div></div><div class="check-pending"></div></div>
-      <div class="responder-row" style="border:none"><div class="responder-left"><div class="avatar avatar-sm" style="background:#F0FDF4;color:#166534">A</div><div><p class="responder-name">Alex</p><p class="responder-status" style="color:var(--text-light)">Hasn't responded</p></div></div><div class="check-pending"></div></div>
+    <div style="padding:12px 20px 14px;border-bottom:1px dotted var(--border-dot)">
+      <h2 class="headline-lg" style="font-size:20px">Weekend in Montreal</h2>
+      <p style="font-size:12px;color:var(--text-muted);margin-top:3px">May 2–4 · Vote on where to stay</p>
     </div>
-    <hr class="dot-divider" style="margin:0 20px">
+    <div style="padding:14px 20px 6px"><p class="section-label">Top picks for the group</p></div>
+    <div style="padding:0 20px">
+      <div class="accommodation-card voted" onclick="this.classList.toggle('voted')">
+        <p class="accom-name">Le Mount Stephen</p>
+        <p class="accom-meta">Old Montreal · $$$ · Boutique hotel · 4.8★</p>
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <p style="font-size:12px;color:var(--text-muted)"><strong style="color:var(--green)">3 votes</strong> · Mita, Jess, Sofia</p>
+          <span style="font-size:11px;color:var(--green);text-decoration:underline;cursor:pointer">View →</span>
+        </div>
+      </div>
+      <div class="accommodation-card" onclick="this.classList.toggle('voted')">
+        <p class="accom-name">Hotel Nelligan</p>
+        <p class="accom-meta">Old Port · $$ · Historic building · 4.6★</p>
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <p style="font-size:12px;color:var(--text-muted)"><strong style="color:var(--green)">1 vote</strong> · Ryan</p>
+          <span style="font-size:11px;color:var(--green);text-decoration:underline;cursor:pointer">View →</span>
+        </div>
+      </div>
+      <div class="accommodation-card" onclick="this.classList.toggle('voted')">
+        <p class="accom-name">Airbnb · Le Plateau</p>
+        <p class="accom-meta">Plateau-Mont-Royal · $ · Entire apartment</p>
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <p style="font-size:12px;color:var(--text-muted)"><strong style="color:var(--green)">1 vote</strong> · Kate</p>
+          <span style="font-size:11px;color:var(--green);text-decoration:underline;cursor:pointer">View →</span>
+        </div>
+      </div>
+    </div>
     <div style="padding:14px 20px">
-      <button class="btn-outline" style="font-size:12px" onclick="go('screen-chat')">💬 Open group chat</button>
+      <button class="btn-outline" onclick="go('screen-trip-plan')">View full itinerary →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TRIP: ITINERARY VIEW ══ -->
+<div class="screen" id="screen-trip-plan">
+  <div class="topbar">
+    <button class="btn-back" onclick="go('screen-home')">← Back</button>
+    <span class="topbar-logo" style="font-size:14px">Montreal · May 2–4</span>
+    <div style="width:60px"></div>
+  </div>
+  <div class="scroll-content">
+    <div style="padding:12px 20px 12px;border-bottom:1px dotted var(--border-dot)">
+      <h2 class="headline-lg" style="font-size:20px">Weekend in Montreal</h2>
+      <p style="font-size:12px;color:var(--text-muted);margin-top:3px">5 people · Le Mount Stephen · AI itinerary</p>
+    </div>
+
+    <div style="padding:14px 20px 0"><p class="section-label" style="margin-bottom:10px">Itinerary</p></div>
+    <div style="padding:0 20px">
+      <div class="itinerary-day">
+        <p class="itinerary-day-header">Friday May 2 — Arrival day</p>
+        <div class="itinerary-item"><span class="itinerary-time">4:00pm</span><p class="itinerary-text">Check in to Le Mount Stephen, Old Montreal</p></div>
+        <div class="itinerary-item"><span class="itinerary-time">6:30pm</span><p class="itinerary-text">Smoked meat at Schwartz's Deli (Mita's top pick)</p></div>
+        <div class="itinerary-item"><span class="itinerary-time">9:00pm</span><p class="itinerary-text">Rooftop drinks at Bar Le Lab, Plateau</p></div>
+      </div>
+      <div class="itinerary-day">
+        <p class="itinerary-day-header">Saturday May 3 — Full day</p>
+        <div class="itinerary-item"><span class="itinerary-time">10:00am</span><p class="itinerary-text">Bagels at St-Viateur Bagel, Mile End</p></div>
+        <div class="itinerary-item"><span class="itinerary-time">12:00pm</span><p class="itinerary-text">Old Port walking tour (Jess's top pick)</p></div>
+        <div class="itinerary-item"><span class="itinerary-time">3:00pm</span><p class="itinerary-text">Museum of Fine Arts — Impressionist exhibit</p></div>
+        <div class="itinerary-item"><span class="itinerary-time">7:00pm</span><p class="itinerary-text">Dinner at Joe Beef, Little Burgundy</p></div>
+        <div class="itinerary-item"><span class="itinerary-time">9:30pm</span><p class="itinerary-text">Rooftop bar at sunset at Terrasse William Gray (Sofia's top pick)</p></div>
+      </div>
+      <div class="itinerary-day" style="margin-bottom:4px">
+        <p class="itinerary-day-header">Sunday May 4 — Departure</p>
+        <div class="itinerary-item"><span class="itinerary-time">10:00am</span><p class="itinerary-text">Brunch at Lemeac Cafe Bistro</p></div>
+        <div class="itinerary-item"><span class="itinerary-time">12:00pm</span><p class="itinerary-text">Last walk through Old Montreal</p></div>
+        <div class="itinerary-item"><span class="itinerary-time">2:00pm</span><p class="itinerary-text">Head to airport</p></div>
+      </div>
+    </div>
+    <div style="padding:14px 20px;display:flex;gap:8px">
+      <button class="btn-outline" style="font-size:12px;flex:1" onclick="showToast('Itinerary saved!')">Save itinerary</button>
+      <button class="btn-sm" onclick="go('screen-chat')">💬 Chat</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TICKET CONFIRMATION ══ -->
+<div class="screen" id="screen-ticket-confirm">
+  <div class="topbar">
+    <button class="btn-back" onclick="go('screen-home')">← Back</button>
+    <span class="badge badge-ticket">Concert</span>
+    <div style="width:60px"></div>
+  </div>
+  <div class="scroll-content">
+    <div style="padding:14px 20px 14px;border-bottom:1px dotted var(--border-dot)">
+      <h2 class="headline-lg" style="font-size:20px">Sabrina Carpenter<br>· MSG</h2>
+      <p style="font-size:12px;color:var(--text-muted);margin-top:4px">Friday, Apr 18 · 8:00pm · 5 invited</p>
+    </div>
+
+    <div class="ticket-confirm-card">
+      <p class="ticket-confirm-title">🎟 Did you get your ticket?</p>
+      <p class="ticket-confirm-sub">The group needs to know who's confirmed before the show. Tickets are selling fast — don't wait!</p>
+      <div class="ticket-btns">
+        <button class="ticket-btn-yes" onclick="confirmTicket(true)">Yes, I'm in ✓</button>
+        <button class="ticket-btn-no" onclick="confirmTicket(false)">Not yet</button>
+      </div>
+    </div>
+
+    <div style="padding:14px 20px 6px"><p class="section-label">Who's confirmed</p></div>
+    <div class="attendee-row"><div style="display:flex;align-items:center;gap:10px"><div class="avatar avatar-sm" style="background:#FEF3C7;color:#92400E">J</div><p class="attendee-name">Jess</p></div><span class="ticket-chip-got">Got ticket ✓</span></div>
+    <div class="attendee-row"><div style="display:flex;align-items:center;gap:10px"><div class="avatar avatar-sm" style="background:#FCE7F3;color:#9D174D">S</div><p class="attendee-name">Sofia</p></div><span class="ticket-chip-got">Got ticket ✓</span></div>
+    <div class="attendee-row"><div style="display:flex;align-items:center;gap:10px"><div class="avatar avatar-sm" style="background:#EDE9FE;color:#5B21B6">R</div><p class="attendee-name">Ryan</p></div><span class="ticket-chip">Needs ticket</span></div>
+    <div class="attendee-row" id="my-ticket-row"><div style="display:flex;align-items:center;gap:10px"><div class="avatar avatar-sm" style="background:#E8F0EC;color:var(--green)">M</div><p class="attendee-name">You</p></div><span class="ticket-chip" id="my-ticket-status">Needs ticket</span></div>
+    <div class="attendee-row" style="border:none"><div style="display:flex;align-items:center;gap:10px"><div class="avatar avatar-sm" style="background:#FEE2E2;color:#991B1B">K</div><p class="attendee-name">Kate</p></div><span class="ticket-chip">Needs ticket</span></div>
+
+    <div style="padding:14px 20px">
+      <button class="btn-outline" style="font-size:12px" onclick="window.open('https://ticketmaster.com','_blank')">Buy ticket on Ticketmaster →</button>
     </div>
   </div>
   <nav class="bottom-nav">
@@ -742,55 +865,92 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
   </nav>
 </div>
 
-<!-- ══ GROUP CHAT ══ -->
-<div class="screen" id="screen-chat">
-  <div class="topbar">
-    <button class="btn-back" onclick="go('screen-detail')">← Back</button>
-    <span class="topbar-logo" style="font-size:15px">Bars this Friday</span>
-    <div style="width:40px"></div>
+<!-- ══ VOTE ══ -->
+<div class="screen" id="screen-vote">
+  <div class="topbar"><button class="btn-back" onclick="go('screen-home')">← Back</button><span class="badge badge-voting">3 hrs left</span><div style="width:60px"></div></div>
+  <div style="padding:12px 20px 12px;border-bottom:1px dotted var(--border-dot);flex-shrink:0">
+    <h2 class="headline-lg" style="font-size:20px">Brunch Sunday</h2>
+    <p style="font-size:12px;color:var(--text-muted);margin-top:3px">Rally matched these to everyone's preferences</p>
   </div>
-  <div class="chat-wrap">
-    <div class="chat-messages" id="chat-messages">
-      <div style="align-self:flex-start">
-        <p class="chat-sender">Jess</p>
-        <div class="chat-bubble theirs">Should we make a reservation somewhere?<p class="chat-time">6:42pm</p></div>
+  <div class="scroll-content" style="padding-top:12px">
+    <div class="venue-card voted" id="vc-1" onclick="selectVenue(1)">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div><p class="venue-name">Buvette</p><p class="venue-meta">West Village · $$ · French bistro</p></div>
+        <div class="vote-check" id="vcheck-1"><svg width="10" height="10" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
       </div>
-      <div style="align-self:flex-end">
-        <div class="chat-bubble mine">Yes def — somewhere on the LES? There are so many good spots<p class="chat-time" style="text-align:right">6:44pm</p></div>
-      </div>
-      <div style="align-self:flex-start">
-        <p class="chat-sender">Sofia</p>
-        <div class="chat-bubble theirs">I'm thinking cocktail bars over clubs tonight 🍹<p class="chat-time">6:45pm</p></div>
-      </div>
-      <div style="align-self:flex-start">
-        <p class="chat-sender">Jess</p>
-        <div class="chat-bubble theirs">Same! Let Rally decide 😂<p class="chat-time">6:46pm</p></div>
-      </div>
+      <div class="venue-tags"><span class="venue-tag">French</span><span class="venue-tag">Cozy</span><span class="venue-tag">Walk-in</span></div>
+      <div class="venue-footer"><p class="venue-votes"><strong>3 votes</strong> · Jess, Sofia, you</p><span class="venue-link" onclick="window.open('https://yelp.com','_blank')">View on Yelp →</span></div>
     </div>
-    <div class="chat-input-bar">
-      <input class="chat-input" type="text" placeholder="Message..." id="chat-input">
-      <button class="chat-send" onclick="sendMessage()">
-        <svg width="14" height="14" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+    <div class="venue-card" id="vc-2" onclick="selectVenue(2)">
+      <p class="venue-name">Via Carota</p><p class="venue-meta">West Village · $$$ · Italian</p>
+      <div class="venue-tags"><span class="venue-tag">Italian</span><span class="venue-tag">Romantic</span></div>
+      <div class="venue-footer"><p class="venue-votes"><strong>1 vote</strong> · Ryan</p><span class="venue-link" onclick="window.open('https://yelp.com','_blank')">View on Yelp →</span></div>
+    </div>
+    <div id="suggested-venues"></div>
+    <div style="padding:0 20px 16px">
+      <button class="suggest-place-btn" id="vote-suggest-btn" onclick="toggleVoteSuggest()">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+        Suggest a different place
       </button>
+      <div class="suggest-wrap" id="vote-suggest-wrap">
+        <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px">Paste a Google Maps or Yelp link</p>
+        <input class="input-field" type="url" placeholder="https://..." id="suggest-url" style="margin-bottom:10px">
+        <button class="btn-sm" onclick="addSuggestedVenue()">Add to vote</button>
+      </div>
     </div>
   </div>
+  <nav class="bottom-nav">
+    <button class="nav-item active" onclick="go('screen-home')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Plans</button>
+    <button class="nav-item" onclick="go('screen-groups')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Groups</button>
+    <button class="nav-item" onclick="go('screen-profile')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</button>
+  </nav>
+</div>
+
+<!-- ══ LOCKED ══ -->
+<div class="screen" id="screen-locked">
+  <div class="topbar"><button class="btn-back" onclick="go('screen-home')">← Back</button><span class="badge badge-tonight">Tonight</span><div style="width:60px"></div></div>
+  <div class="scroll-content">
+    <div style="padding:12px 20px 12px;border-bottom:1px dotted var(--border-dot)">
+      <h2 class="headline-lg" style="font-size:20px">Dinner West Village</h2>
+      <p style="font-size:12px;color:var(--text-muted);margin-top:3px">Saturday, Apr 12 · 7:30pm · 4 going</p>
+    </div>
+    <div class="locked-venue">
+      <p class="locked-eyebrow">You're going to</p>
+      <p class="locked-name">Lilia</p>
+      <p class="locked-meta">Williamsburg · $$$ · Italian · 7:30pm</p>
+      <div class="locked-actions">
+        <button class="locked-btn locked-btn-white" onclick="window.open('https://maps.google.com/?q=Lilia+Williamsburg+Brooklyn','_blank')">Get directions</button>
+        <button class="locked-btn locked-btn-outline" onclick="window.open('https://yelp.com/search?find_desc=Lilia&find_loc=Williamsburg','_blank')">View on Yelp</button>
+      </div>
+    </div>
+    <div style="padding:12px 20px 6px"><p class="section-label">Who's coming</p></div>
+    <div class="attendee-row"><div style="display:flex;align-items:center;gap:10px"><div class="avatar avatar-sm" style="background:#E8F0EC;color:var(--green)">M</div><p class="attendee-name">You</p></div><span class="arrived-chip">Arrived</span></div>
+    <div class="attendee-row"><div style="display:flex;align-items:center;gap:10px"><div class="avatar avatar-sm" style="background:#FEF3C7;color:#92400E">J</div><p class="attendee-name">Jess</p></div><span class="eta-chip">12 min away</span></div>
+    <div class="attendee-row" style="border:none"><div style="display:flex;align-items:center;gap:10px"><div class="avatar avatar-sm" style="background:#FCE7F3;color:#9D174D">S</div><p class="attendee-name">Sofia</p></div><span class="eta-chip">8 min away</span></div>
+    <div style="padding:14px 20px;display:flex;gap:8px">
+      <button class="btn-outline" style="font-size:12px;flex:1">Share live location</button>
+      <button class="btn-sm" onclick="go('screen-chat')">💬 Chat</button>
+    </div>
+  </div>
+  <nav class="bottom-nav">
+    <button class="nav-item active" onclick="go('screen-home')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Plans</button>
+    <button class="nav-item" onclick="go('screen-groups')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Groups</button>
+    <button class="nav-item" onclick="go('screen-profile')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</button>
+  </nav>
 </div>
 
 <!-- ══ RESPOND ══ -->
 <div class="screen" id="screen-respond">
-  <div class="topbar">
-    <button class="btn-back" onclick="go('screen-home')">← Back</button>
-    <div></div><div></div>
-  </div>
+  <div class="topbar"><button class="btn-back" onclick="go('screen-home')">← Back</button><div></div><div></div></div>
   <div class="scroll-content">
-    <div style="padding:18px 20px 16px;text-align:center;border-bottom:1px dotted var(--border-dot)">
+    <div style="padding:16px 20px;text-align:center;border-bottom:1px dotted var(--border-dot)">
       <p style="font-size:12px;color:var(--text-muted);margin-bottom:5px">Jess started a Rally</p>
       <h2 class="headline-lg" style="font-size:22px">Brunch</h2>
       <p style="font-size:13px;color:var(--green);margin-top:4px">Sunday, Apr 13 · 6 invited</p>
     </div>
     <div style="padding:16px 20px">
       <p class="section-label" style="margin-bottom:10px">Are you in?</p>
-      <div style="display:flex;gap:10px;margin-bottom:20px">
+      <div style="display:flex;gap:10px;margin-bottom:18px">
         <button class="rsvp-btn in" id="rsvp-in" onclick="selectRsvp('in')">I'm in ✓</button>
         <button class="rsvp-btn" id="rsvp-out" onclick="selectRsvp('out')">Can't make it</button>
       </div>
@@ -807,25 +967,25 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
       <label class="form-label" style="margin-top:0">I'm in the mood for</label>
       <select class="select-field" style="margin-bottom:10px">
         <option value="">Select cuisine...</option>
-        <option selected>Italian</option><option>Japanese</option><option>Mexican</option><option>Chinese</option><option>Thai</option><option>Indian</option><option>French</option><option>Korean</option><option>Mediterranean</option><option>American</option><option>Middle Eastern</option><option>Vietnamese</option><option>Sushi</option><option>Pizza</option><option>Steakhouse</option><option>Seafood</option><option>Vegetarian / Vegan</option><option>Whatever</option>
+        <option selected>Italian</option><option>Japanese</option><option>Mexican</option><option>French</option><option>Korean</option><option>Mediterranean</option><option>American</option><option>Sushi</option><option>Pizza</option><option>Seafood</option><option>Whatever</option>
       </select>
 
       <label class="form-label" style="margin-top:0">Not in the mood for</label>
       <select class="select-field" style="margin-bottom:10px">
         <option value="">Nothing to avoid</option>
-        <option>Italian</option><option>Japanese</option><option>Mexican</option><option>Chinese</option><option>Thai</option><option>Indian</option><option>Sushi</option><option>Pizza</option><option>Steakhouse</option><option>Seafood</option>
+        <option>Italian</option><option>Japanese</option><option>Mexican</option><option>Chinese</option><option>Thai</option><option>Sushi</option><option>Pizza</option><option>Seafood</option>
       </select>
 
       <label class="form-label" style="margin-top:0">Vibe</label>
       <select class="select-field" style="margin-bottom:10px">
         <option value="">Select vibe...</option>
-        <option>Rooftop</option><option>Low key</option><option>Late night</option><option>Trendy</option><option selected>Cozy</option><option>Outdoor seating</option><option>Sports bar</option><option>Cocktail bar</option><option>Date night</option><option>Casual</option><option>Active / sporty</option><option>Outdoor adventure</option><option>Cultural</option><option>Live music</option><option>Chill hangout</option><option>Dive bar</option><option>Wine bar</option><option>Whatever</option>
+        <option>Rooftop</option><option>Low key</option><option selected>Cozy</option><option>Cocktail bar</option><option>Live music</option><option>Chill hangout</option><option>Active / sporty</option><option>Cultural</option><option>Whatever</option>
       </select>
 
       <label class="form-label" style="margin-top:0">Neighborhood</label>
       <select class="select-field" style="margin-bottom:10px">
         <option value="">Select neighborhood...</option>
-        <option selected>West Village</option><option>East Village</option><option>Lower East Side</option><option>SoHo</option><option>Tribeca</option><option>Nolita</option><option>Chinatown</option><option>Financial District</option><option>Midtown</option><option>Hell's Kitchen</option><option>Chelsea</option><option>Flatiron</option><option>Gramercy</option><option>Upper East Side</option><option>Upper West Side</option><option>Harlem</option><option>Williamsburg</option><option>Greenpoint</option><option>Bushwick</option><option>Park Slope</option><option>Cobble Hill</option><option>Brooklyn Heights</option><option>Dumbo</option><option>Bed-Stuy</option><option>Astoria</option><option>Long Island City</option><option>Wherever</option>
+        <option selected>West Village</option><option>East Village</option><option>Lower East Side</option><option>SoHo</option><option>Williamsburg</option><option>Park Slope</option><option>Wherever</option>
       </select>
 
       <label class="form-label" style="margin-top:0">Price</label>
@@ -837,112 +997,31 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
       </div>
 
       <label class="form-label" style="margin-top:0">Have a specific place in mind?</label>
-      <p style="font-size:11px;color:var(--text-muted);margin-bottom:8px">Paste a Google Maps or Yelp link to add it to the voting pool</p>
       <input class="input-field" type="url" placeholder="https://maps.google.com/..." style="margin-bottom:20px">
-
       <button class="btn-primary" onclick="go('screen-home');showToast('You\'re in! 🎉')">Submit →</button>
-      <div style="height:8px"></div>
     </div>
   </div>
 </div>
 
-<!-- ══ VOTE ══ -->
-<div class="screen" id="screen-vote">
-  <div class="topbar">
-    <button class="btn-back" onclick="go('screen-home')">← Back</button>
-    <span class="badge badge-voting">3 hrs left</span>
-    <div style="width:60px"></div>
-  </div>
-  <div style="padding:12px 20px 12px;border-bottom:1px dotted var(--border-dot);flex-shrink:0">
-    <h2 class="headline-lg" style="font-size:20px">Brunch Sunday</h2>
-    <p style="font-size:12px;color:var(--text-muted);margin-top:3px">Rally matched these to everyone's preferences</p>
-  </div>
-  <div class="scroll-content" style="padding-top:12px">
-    <div class="venue-card voted" id="vc-1" onclick="selectVenue(1)">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start">
-        <div><p class="venue-name">Buvette</p><p class="venue-meta">West Village · $$ · French bistro</p></div>
-        <div class="vote-check" id="vcheck-1"><svg width="10" height="10" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-      </div>
-      <div class="venue-tags"><span class="venue-tag">French</span><span class="venue-tag">Cozy</span><span class="venue-tag">Walk-in</span></div>
-      <div class="venue-footer"><p class="venue-votes"><strong>3 votes</strong> · Jess, Sofia, you</p><span class="venue-link" onclick="window.open('https://yelp.com','_blank')">View on Yelp →</span></div>
+<!-- ══ CHAT ══ -->
+<div class="screen" id="screen-chat">
+  <div class="topbar"><button class="btn-back" onclick="go('screen-home')">← Back</button><span class="topbar-logo" style="font-size:14px">Group chat</span><div style="width:40px"></div></div>
+  <div style="display:flex;flex-direction:column;height:100%">
+    <div class="chat-messages" id="chat-messages">
+      <div style="align-self:flex-start"><p class="chat-sender">Jess</p><div class="chat-bubble theirs">Should we make a res?<p class="chat-time">6:42pm</p></div></div>
+      <div style="align-self:flex-end"><div class="chat-bubble mine">Yes! West Village works for everyone<p class="chat-time" style="text-align:right">6:44pm</p></div></div>
+      <div style="align-self:flex-start"><p class="chat-sender">Sofia</p><div class="chat-bubble theirs">Rooftop vibes tonight 🍹<p class="chat-time">6:45pm</p></div></div>
     </div>
-    <div class="venue-card" id="vc-2" onclick="selectVenue(2)">
-      <p class="venue-name">Via Carota</p><p class="venue-meta">West Village · $$$ · Italian</p>
-      <div class="venue-tags"><span class="venue-tag">Italian</span><span class="venue-tag">Romantic</span><span class="venue-tag">Resy</span></div>
-      <div class="venue-footer"><p class="venue-votes"><strong>1 vote</strong> · Ryan</p><span class="venue-link" onclick="window.open('https://yelp.com','_blank')">View on Yelp →</span></div>
-    </div>
-    <div class="venue-card" id="vc-3" onclick="selectVenue(3)">
-      <p class="venue-name">Café Mogador</p><p class="venue-meta">East Village · $ · Moroccan</p>
-      <div class="venue-tags"><span class="venue-tag">Moroccan</span><span class="venue-tag">Casual</span><span class="venue-tag">Walk-in</span></div>
-      <div class="venue-footer"><p class="venue-votes"><strong>1 vote</strong> · Kate</p><span class="venue-link" onclick="window.open('https://yelp.com','_blank')">View on Yelp →</span></div>
-    </div>
-    <!-- Suggested venues container -->
-    <div id="suggested-venues"></div>
-
-    <div style="padding:0 20px 16px">
-      <button class="suggest-place-btn" id="vote-suggest-btn" onclick="toggleVoteSuggest()">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-        Suggest a different place
-      </button>
-      <div class="suggest-wrap" id="vote-suggest-wrap">
-        <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px">Paste a Google Maps or Yelp link</p>
-        <input class="input-field" type="url" placeholder="https://..." id="suggest-url" style="margin-bottom:10px">
-        <button class="btn-sm" onclick="addSuggestedVenue()">Add to vote</button>
-      </div>
-      <p style="font-size:11px;color:var(--text-muted);text-align:center;line-height:1.5;margin-top:8px">Tap a venue to vote. Winner locks automatically when voting closes.</p>
+    <div class="chat-input-bar">
+      <input class="chat-input" type="text" placeholder="Message..." id="chat-input">
+      <button class="chat-send" onclick="sendMessage()"><svg width="14" height="14" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
     </div>
   </div>
-  <nav class="bottom-nav">
-    <button class="nav-item active" onclick="go('screen-home')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Plans</button>
-    <button class="nav-item" onclick="go('screen-groups')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Groups</button>
-    <button class="nav-item" onclick="go('screen-profile')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</button>
-  </nav>
-</div>
-
-<!-- ══ LOCKED ══ -->
-<div class="screen" id="screen-locked">
-  <div class="topbar">
-    <button class="btn-back" onclick="go('screen-home')">← Back</button>
-    <span class="badge badge-tonight">Tonight</span>
-    <div style="width:60px"></div>
-  </div>
-  <div class="scroll-content">
-    <div style="padding:12px 20px 12px;border-bottom:1px dotted var(--border-dot)">
-      <h2 class="headline-lg" style="font-size:20px">Dinner in the West Village</h2>
-      <p style="font-size:12px;color:var(--text-muted);margin-top:3px">Saturday, Apr 12 · 7:30pm · 4 going</p>
-    </div>
-    <div class="locked-venue">
-      <p class="locked-eyebrow">You're going to</p>
-      <p class="locked-name">Lilia</p>
-      <p class="locked-meta">Williamsburg · $$$ · Italian · 7:30pm</p>
-      <div class="locked-actions">
-        <button class="locked-btn locked-btn-white" onclick="window.open('https://maps.google.com/?q=Lilia+Williamsburg+Brooklyn','_blank')">Get directions</button>
-        <button class="locked-btn locked-btn-outline" onclick="window.open('https://yelp.com/search?find_desc=Lilia&find_loc=Williamsburg','_blank')">View on Yelp</button>
-      </div>
-    </div>
-    <div style="padding:12px 20px 6px"><p class="section-label">Who's coming</p></div>
-    <div class="attendee-row"><div style="display:flex;align-items:center;gap:10px"><div class="avatar avatar-sm" style="background:#E8F0EC;color:var(--green)">M</div><p class="attendee-name">You</p></div><span class="arrived-chip">Arrived</span></div>
-    <div class="attendee-row"><div style="display:flex;align-items:center;gap:10px"><div class="avatar avatar-sm" style="background:#FEF3C7;color:#92400E">J</div><p class="attendee-name">Jess</p></div><span class="eta-chip">12 min away</span></div>
-    <div class="attendee-row"><div style="display:flex;align-items:center;gap:10px"><div class="avatar avatar-sm" style="background:#FCE7F3;color:#9D174D">S</div><p class="attendee-name">Sofia</p></div><span class="eta-chip">8 min away</span></div>
-    <div class="attendee-row" style="border:none"><div style="display:flex;align-items:center;gap:10px"><div class="avatar avatar-sm" style="background:#EDE9FE;color:#5B21B6">R</div><p class="attendee-name">Ryan</p></div><span class="arrived-chip">Arrived</span></div>
-    <div style="padding:14px 20px;display:flex;gap:10px">
-      <button class="btn-outline" style="font-size:12px;flex:1">Share live location</button>
-      <button class="btn-outline" style="font-size:12px;flex:1" onclick="go('screen-chat')">💬 Group chat</button>
-    </div>
-  </div>
-  <nav class="bottom-nav">
-    <button class="nav-item active" onclick="go('screen-home')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Plans</button>
-    <button class="nav-item" onclick="go('screen-groups')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Groups</button>
-    <button class="nav-item" onclick="go('screen-profile')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</button>
-  </nav>
 </div>
 
 <!-- ══ GROUPS ══ -->
 <div class="screen" id="screen-groups">
-  <div class="topbar">
-    <span class="topbar-logo">Groups</span>
-    <button class="btn-sm" onclick="go('screen-start-1')">+ Rally</button>
-  </div>
+  <div class="topbar"><span class="topbar-logo">Groups</span><button class="btn-sm" onclick="go('screen-start-1')">+ Rally</button></div>
   <div class="scroll-content">
     <div style="padding:12px 20px 8px"><p class="section-label">Your crews</p></div>
     <div class="group-card" onclick="go('screen-group-detail')">
@@ -952,23 +1031,14 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         <svg width="13" height="13" fill="none" stroke="var(--text-light)" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
       </div>
     </div>
-    <div class="group-card" onclick="go('screen-group-detail-2')">
+    <div class="group-card" onclick="go('screen-group-detail')">
       <div class="card card-pad" style="display:flex;align-items:center;gap:12px">
         <div class="group-icon">🏠</div>
         <div style="flex:1"><p class="group-name">Roommates</p><p class="group-meta">3 people · 8 rallies</p></div>
         <svg width="13" height="13" fill="none" stroke="var(--text-light)" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
       </div>
     </div>
-    <div class="group-card" onclick="go('screen-group-detail-3')">
-      <div class="card card-pad" style="display:flex;align-items:center;gap:12px">
-        <div class="group-icon">💼</div>
-        <div style="flex:1"><p class="group-name">Work Squad</p><p class="group-meta">5 people · 4 rallies</p></div>
-        <svg width="13" height="13" fill="none" stroke="var(--text-light)" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-      </div>
-    </div>
-    <div style="padding:14px 20px">
-      <button class="btn-outline" onclick="go('screen-create-group')">+ Create a new group</button>
-    </div>
+    <div style="padding:14px 20px"><button class="btn-outline" onclick="go('screen-create-group')">+ Create a new group</button></div>
   </div>
   <nav class="bottom-nav">
     <button class="nav-item" onclick="go('screen-home')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Plans</button>
@@ -982,51 +1052,14 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
   <div class="topbar"><button class="btn-back" onclick="go('screen-groups')">← Back</button><button class="btn-sm" onclick="go('screen-start-1')">+ Rally</button></div>
   <div style="padding:12px 20px 14px;border-bottom:1px dotted var(--border-dot);flex-shrink:0">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px"><div style="font-size:26px">🌙</div><h2 class="headline-lg" style="font-size:18px">Friday Night Crew</h2></div>
-    <p style="font-size:12px;color:var(--text-muted)">6 members · 12 rallies · Since March 2026</p>
+    <p style="font-size:12px;color:var(--text-muted)">6 members · 12 rallies</p>
   </div>
-  <div class="scroll-content">
-    <div style="padding:12px 20px 6px"><p class="section-label">Members</p></div>
-    <div class="member-row"><div class="avatar avatar-sm" style="background:#E8F0EC;color:var(--green)">M</div><div><p class="member-name">You</p><p class="member-sub">92% reliability</p></div></div>
-    <div class="member-row"><div class="avatar avatar-sm" style="background:#FEF3C7;color:#92400E">J</div><div><p class="member-name">Jess</p><p class="member-sub">88% reliability</p></div></div>
-    <div class="member-row"><div class="avatar avatar-sm" style="background:#FCE7F3;color:#9D174D">S</div><div><p class="member-name">Sofia</p><p class="member-sub">95% reliability</p></div></div>
-    <div class="member-row"><div class="avatar avatar-sm" style="background:#EDE9FE;color:#5B21B6">R</div><div><p class="member-name">Ryan</p><p class="member-sub">71% reliability</p></div></div>
-    <div class="member-row"><div class="avatar avatar-sm" style="background:#FEE2E2;color:#991B1B">K</div><div><p class="member-name">Kate</p><p class="member-sub">84% reliability</p></div></div>
-    <div class="member-row" style="border:none"><div class="avatar avatar-sm" style="background:#F0FDF4;color:#166534">A</div><div><p class="member-name">Alex</p><p class="member-sub">90% reliability</p></div></div>
-    <hr class="dot-divider" style="margin:0 20px">
-    <div style="padding:12px 20px 6px"><p class="section-label">Past rallies</p></div>
-    <div style="padding:0 20px">
-      <div class="card card-pad" style="margin-bottom:8px"><p style="font-size:14px;font-weight:500;margin-bottom:2px">Dinner · Lilia</p><p style="font-size:12px;color:var(--text-muted)">Apr 8 · 4 attended</p></div>
-      <div class="card card-pad" style="margin-bottom:8px"><p style="font-size:14px;font-weight:500;margin-bottom:2px">Bars · The Wren</p><p style="font-size:12px;color:var(--text-muted)">Mar 29 · 5 attended</p></div>
-      <div class="card card-pad" style="margin-bottom:14px"><p style="font-size:14px;font-weight:500;margin-bottom:2px">Brunch · Buvette</p><p style="font-size:12px;color:var(--text-muted)">Mar 15 · 6 attended</p></div>
-    </div>
-  </div>
-</div>
-
-<!-- ══ GROUP DETAIL 2 ══ -->
-<div class="screen" id="screen-group-detail-2">
-  <div class="topbar"><button class="btn-back" onclick="go('screen-groups')">← Back</button><button class="btn-sm" onclick="go('screen-start-1')">+ Rally</button></div>
-  <div style="padding:12px 20px 14px;border-bottom:1px dotted var(--border-dot);flex-shrink:0"><div style="display:flex;align-items:center;gap:12px;margin-bottom:6px"><div style="font-size:26px">🏠</div><h2 class="headline-lg" style="font-size:18px">Roommates</h2></div><p style="font-size:12px;color:var(--text-muted)">3 members · 8 rallies</p></div>
   <div class="scroll-content">
     <div style="padding:12px 20px 6px"><p class="section-label">Members</p></div>
     <div class="member-row"><div class="avatar avatar-sm" style="background:#E8F0EC;color:var(--green)">M</div><div><p class="member-name">You</p><p class="member-sub">92% reliability</p></div></div>
     <div class="member-row"><div class="avatar avatar-sm" style="background:#FEF3C7;color:#92400E">J</div><div><p class="member-name">Jess</p><p class="member-sub">88% reliability</p></div></div>
     <div class="member-row" style="border:none"><div class="avatar avatar-sm" style="background:#FCE7F3;color:#9D174D">S</div><div><p class="member-name">Sofia</p><p class="member-sub">95% reliability</p></div></div>
-    <div style="padding:14px 20px"><button class="btn-outline" onclick="go('screen-start-1')">Start a Rally for this group</button></div>
-  </div>
-</div>
-
-<!-- ══ GROUP DETAIL 3 ══ -->
-<div class="screen" id="screen-group-detail-3">
-  <div class="topbar"><button class="btn-back" onclick="go('screen-groups')">← Back</button><button class="btn-sm" onclick="go('screen-start-1')">+ Rally</button></div>
-  <div style="padding:12px 20px 14px;border-bottom:1px dotted var(--border-dot);flex-shrink:0"><div style="display:flex;align-items:center;gap:12px;margin-bottom:6px"><div style="font-size:26px">💼</div><h2 class="headline-lg" style="font-size:18px">Work Squad</h2></div><p style="font-size:12px;color:var(--text-muted)">5 members · 4 rallies</p></div>
-  <div class="scroll-content">
-    <div style="padding:12px 20px 6px"><p class="section-label">Members</p></div>
-    <div class="member-row"><div class="avatar avatar-sm" style="background:#E8F0EC;color:var(--green)">M</div><div><p class="member-name">You</p></div></div>
-    <div class="member-row"><div class="avatar avatar-sm" style="background:#EDE9FE;color:#5B21B6">R</div><div><p class="member-name">Ryan</p></div></div>
-    <div class="member-row"><div class="avatar avatar-sm" style="background:#FEE2E2;color:#991B1B">K</div><div><p class="member-name">Kate</p></div></div>
-    <div class="member-row"><div class="avatar avatar-sm" style="background:#F0FDF4;color:#166534">A</div><div><p class="member-name">Alex</p></div></div>
-    <div class="member-row" style="border:none"><div class="avatar avatar-sm" style="background:#FEF3C7;color:#92400E">J</div><div><p class="member-name">Jess</p></div></div>
-    <div style="padding:14px 20px"><button class="btn-outline" onclick="go('screen-start-1')">Start a Rally for this group</button></div>
+    <div style="padding:14px 20px"><button class="btn-outline" onclick="go('screen-start-1')">Start a Rally</button></div>
   </div>
 </div>
 
@@ -1034,32 +1067,25 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 <div class="screen" id="screen-create-group">
   <div class="topbar"><button class="btn-back" onclick="go('screen-groups')">← Back</button><span class="topbar-logo" style="font-size:15px">New Group</span><div style="width:60px"></div></div>
   <div class="scroll-content" style="padding:16px 20px">
-    <p class="section-label" style="margin-bottom:8px">Group name</p>
-    <input class="input-field" type="text" placeholder="e.g. Friday Night Crew" style="margin-bottom:16px">
-    <p class="section-label" style="margin-bottom:8px">Group photo or emoji</p>
+    <label class="form-label" style="margin-top:0">Group name</label>
+    <input class="input-field" type="text" placeholder="e.g. Friday Night Crew" style="margin-bottom:14px">
+    <label class="form-label" style="margin-top:0">Photo or emoji</label>
     <div style="display:flex;gap:10px;align-items:center;margin-bottom:16px">
-      <div style="width:60px;height:60px;border-radius:var(--radius-sm);background:var(--green-pale);display:flex;align-items:center;justify-content:center;font-size:28px;cursor:pointer;border:1.5px dashed var(--border)" id="group-icon-preview">🌙</div>
+      <div style="width:58px;height:58px;border-radius:var(--radius-sm);background:var(--green-pale);display:flex;align-items:center;justify-content:center;font-size:28px;cursor:pointer;border:1.5px dashed var(--border)" id="group-icon-preview">🌙</div>
       <div style="flex:1">
-        <button class="btn-sm" style="margin-bottom:8px;display:block;width:100%;text-align:center" onclick="showToast('Photo upload coming soon!')">📷 Upload photo</button>
+        <button class="btn-sm" style="margin-bottom:8px;display:block;width:100%;text-align:center" onclick="showToast('Photo upload coming in v0.3b full build!')">📷 Upload photo</button>
         <div class="pill-group">
           <button class="pill selected" onclick="setGroupIcon(this,'🌙')">🌙</button>
           <button class="pill" onclick="setGroupIcon(this,'🏠')">🏠</button>
           <button class="pill" onclick="setGroupIcon(this,'🎉')">🎉</button>
           <button class="pill" onclick="setGroupIcon(this,'🍕')">🍕</button>
-          <button class="pill" onclick="setGroupIcon(this,'🎸')">🎸</button>
           <button class="pill" onclick="setGroupIcon(this,'⚡')">⚡</button>
           <button class="pill" onclick="setGroupIcon(this,'🌊')">🌊</button>
-          <button class="pill" onclick="setGroupIcon(this,'💼')">💼</button>
         </div>
       </div>
     </div>
-    <p class="section-label" style="margin-bottom:8px">Add people</p>
-    <input class="input-field" type="text" placeholder="Search by name or phone" style="margin-bottom:10px">
-    <div style="display:flex;flex-direction:column;gap:0;margin-bottom:20px">
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px dotted var(--border-dot)"><div style="display:flex;align-items:center;gap:10px"><div class="avatar avatar-sm" style="background:#FEF3C7;color:#92400E">J</div><p style="font-size:14px;font-weight:500">Jess</p></div><button class="btn-sm" style="font-size:10px;padding:6px 12px">Add</button></div>
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px dotted var(--border-dot)"><div style="display:flex;align-items:center;gap:10px"><div class="avatar avatar-sm" style="background:#FCE7F3;color:#9D174D">S</div><p style="font-size:14px;font-weight:500">Sofia</p></div><button class="btn-sm" style="font-size:10px;padding:6px 12px">Add</button></div>
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0"><div style="display:flex;align-items:center;gap:10px"><div class="avatar avatar-sm" style="background:#EDE9FE;color:#5B21B6">R</div><p style="font-size:14px;font-weight:500">Ryan</p></div><button class="btn-sm" style="font-size:10px;padding:6px 12px">Add</button></div>
-    </div>
+    <label class="form-label" style="margin-top:0">Add people</label>
+    <input class="input-field" type="text" placeholder="Search by name or phone" style="margin-bottom:20px">
     <button class="btn-primary" onclick="go('screen-groups');showToast('Group created! 🎉')">Create Group</button>
   </div>
 </div>
@@ -1077,53 +1103,20 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
       <div class="stat-cell"><p class="stat-num">19</p><p class="stat-label">Attended</p></div>
       <div class="stat-cell"><p class="stat-num">92%</p><p class="stat-label">Reliability</p></div>
     </div>
-
-    <!-- FUN STAT CARDS - cleaner grid layout -->
     <div class="stat-cards-section">
       <p class="section-label" style="margin-bottom:12px">Your rally stats</p>
       <div class="stat-cards-grid">
-        <div class="stat-card">
-          <div class="stat-card-top"><span class="stat-card-icon">🔥</span></div>
-          <p class="stat-card-value">4 weeks</p>
-          <p class="stat-card-label">Rally streak</p>
-          <p class="stat-card-desc">4 weeks in a row with a plan that happened</p>
-        </div>
-        <div class="stat-card">
-          <div class="stat-card-top"><span class="stat-card-icon">👯</span></div>
-          <p class="stat-card-value">Jess</p>
-          <p class="stat-card-label">Most rallied with</p>
-          <p class="stat-card-desc">11 rallies together and counting</p>
-        </div>
-        <div class="stat-card">
-          <div class="stat-card-top"><span class="stat-card-icon">📍</span></div>
-          <p class="stat-card-value">West Village</p>
-          <p class="stat-card-label">Top neighborhood</p>
-          <p class="stat-card-desc">You end up here more than anywhere else</p>
-        </div>
-        <div class="stat-card">
-          <div class="stat-card-top"><span class="stat-card-icon">⚡</span></div>
-          <p class="stat-card-value">4 min</p>
-          <p class="stat-card-label">Fastest RSVP</p>
-          <p class="stat-card-desc">Your record response time to an invite</p>
-        </div>
-        <div class="stat-card">
-          <div class="stat-card-top"><span class="stat-card-icon">🌙</span></div>
-          <p class="stat-card-value">Night owl</p>
-          <p class="stat-card-label">Your vibe</p>
-          <p class="stat-card-desc">Most of your plans kick off after 8pm</p>
-        </div>
-        <div class="stat-card">
-          <div class="stat-card-top"><span class="stat-card-icon">👻</span></div>
-          <p class="stat-card-value">8%</p>
-          <p class="stat-card-label">Ghost rate</p>
-          <p class="stat-card-desc">Pretty loyal crew — only 2 bails ever</p>
-        </div>
+        <div class="stat-card"><div class="stat-card-icon">🔥</div><p class="stat-card-value">4 weeks</p><p class="stat-card-label">Rally streak</p><p class="stat-card-desc">4 weeks in a row with a plan that happened</p></div>
+        <div class="stat-card"><div class="stat-card-icon">👯</div><p class="stat-card-value">Jess</p><p class="stat-card-label">Most rallied with</p><p class="stat-card-desc">11 rallies together and counting</p></div>
+        <div class="stat-card"><div class="stat-card-icon">📍</div><p class="stat-card-value">West Village</p><p class="stat-card-label">Top neighborhood</p><p class="stat-card-desc">You end up here more than anywhere else</p></div>
+        <div class="stat-card"><div class="stat-card-icon">⚡</div><p class="stat-card-value">4 min</p><p class="stat-card-label">Fastest RSVP</p><p class="stat-card-desc">Your record response time</p></div>
+        <div class="stat-card"><div class="stat-card-icon">🌙</div><p class="stat-card-value">Night owl</p><p class="stat-card-label">Your vibe</p><p class="stat-card-desc">Most plans kick off after 8pm</p></div>
+        <div class="stat-card"><div class="stat-card-icon">👻</div><p class="stat-card-value">8%</p><p class="stat-card-label">Ghost rate</p><p class="stat-card-desc">Pretty loyal crew — only 2 bails ever</p></div>
       </div>
     </div>
-
     <div style="padding-top:14px">
       <button class="menu-item" onclick="go('screen-prefs')">
-        <div class="menu-item-left"><div class="menu-item-icon"><svg width="14" height="14" fill="none" stroke="var(--green)" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div><div><p class="menu-item-label">Your preferences</p><p class="menu-item-sub">Cuisine, vibe, neighborhood</p></div></div>
+        <div class="menu-item-left"><div class="menu-item-icon"><svg width="14" height="14" fill="none" stroke="var(--green)" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div><div><p class="menu-item-label">Your preferences</p><p class="menu-item-sub">Cuisine, vibe, dietary, neighborhood</p></div></div>
         <svg width="12" height="12" fill="none" stroke="var(--text-light)" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
       </button>
       <button class="menu-item" onclick="go('screen-friends')">
@@ -1151,35 +1144,19 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 <div class="screen" id="screen-prefs">
   <div class="topbar"><button class="btn-back" onclick="go('screen-profile')">← Back</button><span class="topbar-logo" style="font-size:15px">Preferences</span><div style="width:60px"></div></div>
   <div class="scroll-content" style="padding:14px 20px">
-    <p class="section-label" style="margin-bottom:8px">Favourite cuisines</p>
-    <div class="pill-group" style="margin-bottom:16px">
-      <button class="pill selected" onclick="togglePill(this)">Italian</button>
-      <button class="pill" onclick="togglePill(this)">Japanese</button>
-      <button class="pill selected" onclick="togglePill(this)">Mexican</button>
-      <button class="pill" onclick="togglePill(this)">Chinese</button>
-      <button class="pill" onclick="togglePill(this)">Thai</button>
-      <button class="pill" onclick="togglePill(this)">French</button>
-      <button class="pill" onclick="togglePill(this)">Korean</button>
-      <button class="pill" onclick="togglePill(this)">Seafood</button>
-    </div>
-    <p class="section-label" style="margin-bottom:8px">Preferred vibe</p>
-    <div class="pill-group" style="margin-bottom:16px">
-      <button class="pill selected" onclick="togglePill(this)">Rooftop</button>
-      <button class="pill selected" onclick="togglePill(this)">Cozy</button>
-      <button class="pill" onclick="togglePill(this)">Late night</button>
-      <button class="pill" onclick="togglePill(this)">Cocktail bar</button>
-      <button class="pill" onclick="togglePill(this)">Live music</button>
-      <button class="pill" onclick="togglePill(this)">Chill hangout</button>
-    </div>
-    <p class="section-label" style="margin-bottom:8px">Preferred neighborhoods</p>
-    <div class="pill-group" style="margin-bottom:16px">
-      <button class="pill selected" onclick="togglePill(this)">West Village</button>
-      <button class="pill selected" onclick="togglePill(this)">Lower East Side</button>
-      <button class="pill" onclick="togglePill(this)">Williamsburg</button>
-      <button class="pill" onclick="togglePill(this)">SoHo</button>
-      <button class="pill" onclick="togglePill(this)">East Village</button>
-    </div>
-    <p class="section-label" style="margin-bottom:8px">Price range</p>
+    <label class="form-label" style="margin-top:0">Favourite cuisines</label>
+    <div id="ms-cuisine-prefs" class="multi-select-wrap"></div>
+    <label class="form-label">Cuisines to avoid</label>
+    <div id="ms-avoid-prefs" class="multi-select-wrap"></div>
+    <label class="form-label">Dietary restrictions</label>
+    <div id="ms-dietary-prefs" class="multi-select-wrap"></div>
+    <label class="form-label">Preferred vibes</label>
+    <div id="ms-vibe-prefs" class="multi-select-wrap"></div>
+    <label class="form-label">Activities to skip</label>
+    <div id="ms-skip-prefs" class="multi-select-wrap"></div>
+    <label class="form-label">Preferred neighborhoods</label>
+    <div id="ms-hood-prefs" class="multi-select-wrap"></div>
+    <label class="form-label">Price range</label>
     <div class="pill-group" style="margin-bottom:20px">
       <button class="pill" onclick="togglePill(this)">$</button>
       <button class="pill selected" onclick="togglePill(this)">$$</button>
@@ -1198,12 +1175,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     <div style="padding:6px 20px 6px"><p class="section-label">On Rally</p></div>
     <div class="friend-row"><div class="avatar avatar-sm" style="background:#FEF3C7;color:#92400E">J</div><div style="flex:1"><p class="friend-name">Jess</p><p class="friend-sub">11 rallies together</p></div><button class="btn-sm" style="font-size:10px;padding:6px 12px">Invite</button></div>
     <div class="friend-row"><div class="avatar avatar-sm" style="background:#FCE7F3;color:#9D174D">S</div><div style="flex:1"><p class="friend-name">Sofia</p><p class="friend-sub">8 rallies together</p></div><button class="btn-sm" style="font-size:10px;padding:6px 12px">Invite</button></div>
-    <div class="friend-row"><div class="avatar avatar-sm" style="background:#EDE9FE;color:#5B21B6">R</div><div style="flex:1"><p class="friend-name">Ryan</p><p class="friend-sub">6 rallies together</p></div><button class="btn-sm" style="font-size:10px;padding:6px 12px">Invite</button></div>
-    <div class="friend-row" style="border:none"><div class="avatar avatar-sm" style="background:#FEE2E2;color:#991B1B">K</div><div style="flex:1"><p class="friend-name">Kate</p><p class="friend-sub">5 rallies together</p></div><button class="btn-sm" style="font-size:10px;padding:6px 12px">Invite</button></div>
-    <hr class="dot-divider" style="margin:0 20px">
-    <div style="padding:14px 20px">
-      <button class="btn-outline">Invite friends via text</button>
-    </div>
+    <div style="padding:14px 20px"><button class="btn-outline">Invite friends via text</button></div>
   </div>
 </div>
 
@@ -1215,232 +1187,309 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     <div class="toggle-row"><div><p class="toggle-label">New Rally invite</p><p class="toggle-sub">When someone starts a Rally with you</p></div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
     <div class="toggle-row"><div><p class="toggle-label">Voting open</p><p class="toggle-sub">When it's time to vote on venues</p></div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
     <div class="toggle-row"><div><p class="toggle-label">Plan locked</p><p class="toggle-sub">When a venue is decided</p></div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
+    <div class="toggle-row"><div><p class="toggle-label">Ticket reminder</p><p class="toggle-sub">When you haven't confirmed a concert ticket</p></div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
     <div style="padding:14px 20px 6px"><p class="section-label">Reminders</p></div>
-    <div class="toggle-row"><div><p class="toggle-label">Day before reminder</p><p class="toggle-sub">Evening before your plan</p></div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
-    <div class="toggle-row"><div><p class="toggle-label">2-hour reminder</p><p class="toggle-sub">Before the plan starts</p></div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
-    <div class="toggle-row" style="border:none"><div><p class="toggle-label">Bail notifications</p><p class="toggle-sub">When someone cancels within 24 hours</p></div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
+    <div class="toggle-row"><div><p class="toggle-label">Day before reminder</p></div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
+    <div class="toggle-row" style="border:none"><div><p class="toggle-label">2-hour reminder</p></div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
   </div>
 </div>
 
 <!-- ══ HELP ══ -->
 <div class="screen" id="screen-help">
-  <div class="topbar"><button class="btn-back" onclick="go('screen-profile')">← Back</button><span class="topbar-logo" style="font-size:15px">Help & Feedback</span><div style="width:60px"></div></div>
+  <div class="topbar"><button class="btn-back" onclick="go('screen-profile')">← Back</button><span class="topbar-logo" style="font-size:15px">Help</span><div style="width:60px"></div></div>
   <div class="scroll-content" style="padding:16px 20px">
-    <p class="section-label" style="margin-bottom:10px">Report an issue</p>
-    <select class="select-field" style="margin-bottom:10px">
-      <option value="">What type of issue?</option>
-      <option>App crash or bug</option>
-      <option>Feature not working</option>
-      <option>Suggestion or idea</option>
-      <option>Other</option>
-    </select>
+    <select class="select-field" style="margin-bottom:10px"><option value="">What type of issue?</option><option>App crash or bug</option><option>Feature not working</option><option>Suggestion or idea</option></select>
     <textarea class="input-field" rows="5" placeholder="Describe what happened..." style="resize:none;margin-bottom:16px"></textarea>
-    <button class="btn-primary" onclick="go('screen-profile');showToast('Feedback sent — thank you! 🙏')">Send feedback</button>
+    <button class="btn-primary" onclick="go('screen-profile');showToast('Feedback sent! 🙏')">Send feedback</button>
   </div>
 </div>
 
 <script>
-// ── NAVIGATION ──
-function go(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  const t=document.getElementById(id);
-  if(t){t.classList.add('active')}
+// ── DATA ──
+const CUISINES=['Italian','Japanese','Mexican','Chinese','Thai','Indian','French','Korean','Mediterranean','American','Middle Eastern','Vietnamese','Sushi','Pizza','Steakhouse','Seafood','Vegetarian / Vegan','Whatever'];
+const AVOID_CUISINES=['Italian','Japanese','Mexican','Chinese','Thai','Indian','French','Korean','Sushi','Pizza','Steakhouse','Seafood'];
+const DIETARY=['Vegetarian','Vegan','Gluten-free','Kosher','Halal','Dairy-free','Nut allergy','Shellfish allergy','No pork','No alcohol'];
+const VIBES=['Rooftop','Low key','Late night','Trendy','Cozy','Outdoor seating','Sports bar','Cocktail bar','Date night','Casual','Active / sporty','Outdoor adventure','Cultural','Live music','Chill hangout','Live sports','Comedy','Dive bar','Wine bar','Whatever'];
+const SKIP_ACTIVITIES=['Bowling','Mini golf','Escape room','Karaoke','Museums','Sporting events','Comedy shows','Fitness classes','Movies'];
+const HOODS=['West Village','East Village','Lower East Side','SoHo','Tribeca','Nolita','Chinatown','Financial District','Midtown','Hell\'s Kitchen','Chelsea','Flatiron','Gramercy','Upper East Side','Upper West Side','Harlem','Williamsburg','Greenpoint','Bushwick','Park Slope','Cobble Hill','Brooklyn Heights','Dumbo','Bed-Stuy','Astoria','Long Island City','Wherever'];
+
+// ── MULTI-SELECT COMPONENT ──
+function createMultiSelect(containerId, options, placeholder, preSelected=[]) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  let selected = new Set(preSelected);
+  let open = false;
+
+  function render() {
+    container.innerHTML = '';
+    const display = document.createElement('div');
+    display.className = 'multi-select-display' + (open ? ' open' : '');
+    if (selected.size === 0) {
+      display.innerHTML = `<span class="ms-placeholder">${placeholder}</span>`;
+    } else {
+      [...selected].forEach(s => {
+        const tag = document.createElement('span');
+        tag.className = 'ms-tag';
+        tag.innerHTML = `${s} <span class="ms-tag-x" data-val="${s}">×</span>`;
+        display.appendChild(tag);
+      });
+    }
+    display.onclick = (e) => {
+      if (e.target.classList.contains('ms-tag-x')) {
+        selected.delete(e.target.dataset.val);
+        render();
+        return;
+      }
+      open = !open;
+      render();
+    };
+    container.appendChild(display);
+
+    if (open) {
+      const dropdown = document.createElement('div');
+      dropdown.className = 'ms-dropdown';
+      options.forEach(opt => {
+        const item = document.createElement('div');
+        item.className = 'ms-option' + (selected.has(opt) ? ' selected' : '');
+        item.textContent = opt;
+        item.onclick = (e) => {
+          e.stopPropagation();
+          if (selected.has(opt)) selected.delete(opt);
+          else selected.add(opt);
+          render();
+        };
+        dropdown.appendChild(item);
+      });
+      container.appendChild(dropdown);
+    }
+  }
+
+  render();
+
+  document.addEventListener('click', (e) => {
+    if (!container.contains(e.target) && open) {
+      open = false;
+      render();
+    }
+  }, true);
 }
 
-// ── NAME ──
-function saveNameAndGo(dest){
-  const n=document.getElementById('user-name').value.trim();
-  if(n){
-    document.getElementById('display-name').textContent=n;
-    document.getElementById('profile-name-display').textContent=n;
-    document.getElementById('profile-avatar-lg').textContent=n[0].toUpperCase();
+// ── INIT MULTI-SELECTS ──
+function initMultiSelects() {
+  createMultiSelect('ms-cuisine-onboard', CUISINES, 'Select cuisines...');
+  createMultiSelect('ms-avoid-onboard', AVOID_CUISINES, 'Nothing to avoid');
+  createMultiSelect('ms-dietary-onboard', DIETARY, 'Select restrictions...');
+  createMultiSelect('ms-vibe-onboard', VIBES, 'Select vibes...');
+  createMultiSelect('ms-skip-activities-onboard', SKIP_ACTIVITIES, 'Select activities to skip...');
+  createMultiSelect('ms-hood-onboard', HOODS, 'Select neighborhoods...', ['West Village','Lower East Side']);
+  createMultiSelect('ms-cuisine-prefs', CUISINES, 'Select cuisines...', ['Italian','Mexican']);
+  createMultiSelect('ms-avoid-prefs', AVOID_CUISINES, 'Nothing to avoid');
+  createMultiSelect('ms-dietary-prefs', DIETARY, 'Select restrictions...');
+  createMultiSelect('ms-vibe-prefs', VIBES, 'Select vibes...', ['Rooftop','Cozy']);
+  createMultiSelect('ms-skip-prefs', SKIP_ACTIVITIES, 'Select activities to skip...');
+  createMultiSelect('ms-hood-prefs', HOODS, 'Select neighborhoods...', ['West Village','Lower East Side']);
+}
+
+// ── NAVIGATION ──
+function go(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const t = document.getElementById(id);
+  if (t) t.classList.add('active');
+}
+
+function saveNameAndGo(dest) {
+  const n = document.getElementById('user-name').value.trim();
+  if (n) {
+    document.getElementById('display-name').textContent = n;
+    document.getElementById('profile-name-display').textContent = n;
+    document.getElementById('profile-avatar-lg').textContent = n[0].toUpperCase();
   }
   go(dest);
 }
 
-// ── PLAN TYPE (multi-select) ──
-function togglePlanType(btn){
+// ── PLAN TYPE ──
+function togglePlanType(btn, type) {
   btn.classList.toggle('selected');
-  const actId='activity-subtypes';
-  const othId='other-freetext';
-  const actSelected=document.getElementById('btn-activity')&&document.getElementById('btn-activity').classList.contains('selected');
-  const othSelected=document.getElementById('btn-other')&&document.getElementById('btn-other').classList.contains('selected');
-  document.getElementById(actId).style.display=actSelected?'block':'none';
-  document.getElementById(othId).style.display=othSelected?'block':'none';
+  document.getElementById('activity-subtypes').style.display =
+    document.getElementById('btn-activity').classList.contains('selected') ? 'block' : 'none';
+  document.getElementById('trip-note').style.display =
+    document.getElementById('btn-trip').classList.contains('selected') ? 'block' : 'none';
+  document.getElementById('other-freetext').style.display =
+    document.getElementById('btn-other').classList.contains('selected') ? 'block' : 'none';
 }
 
-// ── ACTIVITY SUBTYPE ──
-function toggleAct(btn){btn.classList.toggle('selected')}
-
-// ── PILLS ──
-function togglePill(btn){btn.classList.toggle('selected')}
-
-// ── GROUP SELECT ──
-function toggleGroupSelect(card){
-  card.classList.toggle('selected');
-  const check=card.querySelector('.group-select-check');
-  if(card.classList.contains('selected')){
-    check.innerHTML='<svg width="10" height="10" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
-    check.style.background='var(--green)';check.style.borderColor='var(--green)';
+function handleStartContinue() {
+  if (document.getElementById('btn-trip').classList.contains('selected')) {
+    go('screen-trip-start');
   } else {
-    check.innerHTML='';check.style.background='';check.style.borderColor='';
+    go('screen-start-2');
   }
 }
 
-// ── GROUP ICON ──
-function setGroupIcon(btn,icon){
-  document.querySelectorAll('.pill').forEach(p=>p.classList.remove('selected'));
-  btn.classList.add('selected');
-  document.getElementById('group-icon-preview').textContent=icon;
+function toggleAct(btn) { btn.classList.toggle('selected'); }
+function togglePill(btn) { btn.classList.toggle('selected'); }
+function toggleGroupSelect(card) {
+  card.classList.toggle('selected');
+  const check = card.querySelector('.group-select-check');
+  if (card.classList.contains('selected')) {
+    check.innerHTML = '<svg width="10" height="10" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
+    check.style.background = 'var(--green)'; check.style.borderColor = 'var(--green)';
+  } else { check.innerHTML = ''; check.style.background = ''; check.style.borderColor = ''; }
 }
 
-// ── DEADLINE ──
-function selectDeadline(btn){
-  document.querySelectorAll('.deadline-opt').forEach(b=>b.classList.remove('selected'));
+function setGroupIcon(btn, icon) {
+  document.querySelectorAll('.pill').forEach(p => p.classList.remove('selected'));
+  btn.classList.add('selected');
+  document.getElementById('group-icon-preview').textContent = icon;
+}
+
+function selectDeadline(btn) {
+  document.querySelectorAll('.deadline-opt').forEach(b => b.classList.remove('selected'));
   btn.classList.add('selected');
 }
 
-// ── DATE OPT ──
-function toggleDateOpt(el){
+function toggleDateOpt(el) {
   el.classList.toggle('selected');
-  const check=el.querySelector('.date-check');
-  if(el.classList.contains('selected')){
-    check.innerHTML='<svg width="10" height="10" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
-    check.style.background='var(--green)';check.style.borderColor='var(--green)';
-  } else {check.innerHTML='';check.style.background='';check.style.borderColor='';}
+  const check = el.querySelector('.date-check');
+  if (el.classList.contains('selected')) {
+    check.innerHTML = '<svg width="10" height="10" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
+    check.style.background = 'var(--green)'; check.style.borderColor = 'var(--green)';
+  } else { check.innerHTML = ''; check.style.background = ''; check.style.borderColor = ''; }
 }
 
-// ── RSVP ──
-function selectRsvp(type){
+function selectRsvp(type) {
   document.getElementById('rsvp-in').classList.remove('in');
   document.getElementById('rsvp-out').classList.remove('in');
-  document.getElementById('rsvp-'+type).classList.add('in');
+  document.getElementById('rsvp-' + type).classList.add('in');
 }
 
 // ── VENUE VOTING ──
-function selectVenue(n){
-  [1,2,3].forEach(i=>{
-    document.getElementById('vc-'+i).classList.remove('voted');
-    const c=document.getElementById('vcheck-'+i);
-    if(c)c.remove();
+function selectVenue(n) {
+  [1, 2, 3].forEach(i => {
+    document.getElementById('vc-' + i).classList.remove('voted');
+    const c = document.getElementById('vcheck-' + i);
+    if (c) c.remove();
   });
-  document.getElementById('vc-'+n).classList.add('voted');
-  const check=document.createElement('div');
-  check.className='vote-check';check.id='vcheck-'+n;
-  check.innerHTML='<svg width="10" height="10" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
-  document.getElementById('vc-'+n).insertBefore(check,document.getElementById('vc-'+n).querySelector('.venue-name'));
+  document.getElementById('vc-' + n).classList.add('voted');
+  const check = document.createElement('div');
+  check.className = 'vote-check'; check.id = 'vcheck-' + n;
+  check.innerHTML = '<svg width="10" height="10" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
+  document.getElementById('vc-' + n).insertBefore(check, document.getElementById('vc-' + n).querySelector('.venue-name'));
 }
 
-// ── SUGGEST PLACE (start flow) ──
-function toggleStartSuggest(){
-  const wrap=document.getElementById('start-suggest-wrap');
-  const btn=document.getElementById('start-suggest-btn');
-  if(wrap.classList.contains('show')){wrap.classList.remove('show');btn.style.display='flex';}
-  else{wrap.classList.add('show');btn.style.display='none';}
+// ── SUGGEST PLACE ──
+function toggleStartSuggest() {
+  const wrap = document.getElementById('start-suggest-wrap');
+  const btn = document.getElementById('start-suggest-btn');
+  if (wrap.classList.contains('show')) { wrap.classList.remove('show'); btn.style.display = 'flex'; }
+  else { wrap.classList.add('show'); btn.style.display = 'none'; }
 }
 
-// ── SUGGEST PLACE (vote) ──
-let suggestedCount=0;
-function toggleVoteSuggest(){
-  const wrap=document.getElementById('vote-suggest-wrap');
-  const btn=document.getElementById('vote-suggest-btn');
-  if(wrap.classList.contains('show')){wrap.classList.remove('show');btn.style.display='flex';}
-  else{wrap.classList.add('show');btn.style.display='none';}
+let suggestedCount = 0;
+function toggleVoteSuggest() {
+  const wrap = document.getElementById('vote-suggest-wrap');
+  const btn = document.getElementById('vote-suggest-btn');
+  if (wrap.classList.contains('show')) { wrap.classList.remove('show'); btn.style.display = 'flex'; }
+  else { wrap.classList.add('show'); btn.style.display = 'none'; }
 }
-function addSuggestedVenue(){
-  const url=document.getElementById('suggest-url').value.trim();
+function addSuggestedVenue() {
+  const url = document.getElementById('suggest-url').value.trim();
   suggestedCount++;
-  const container=document.getElementById('suggested-venues');
-  const card=document.createElement('div');
-  card.className='venue-card suggested';
-  card.id='vc-s'+suggestedCount;
-  card.onclick=()=>selectSuggested(suggestedCount);
-  card.innerHTML=`
-    <div style="display:flex;justify-content:space-between;align-items:flex-start">
-      <div>
-        <p class="venue-name" style="font-size:14px">Your suggestion #${suggestedCount}</p>
-        <p class="venue-meta">${url||'Custom venue · Added by you'}</p>
-      </div>
-    </div>
-    <div class="venue-tags"><span class="venue-tag">Suggested</span></div>
-    <div class="venue-footer"><p class="venue-votes"><strong>0 votes</strong></p><span class="venue-link" onclick="window.open('${url||'#'}','_blank')">View →</span></div>
-  `;
+  const container = document.getElementById('suggested-venues');
+  const card = document.createElement('div');
+  card.className = 'venue-card';
+  card.style.borderColor = '#92400E';
+  card.style.background = '#FEF3C7';
+  card.innerHTML = `<p class="venue-name" style="font-size:14px">Your suggestion</p><p class="venue-meta">${url || 'Custom venue · Added by you'}</p><div class="venue-tags"><span class="venue-tag">Suggested by you</span></div><div class="venue-footer"><p class="venue-votes"><strong>0 votes</strong></p><span class="venue-link" onclick="window.open('${url || '#'}','_blank')">View →</span></div>`;
   container.appendChild(card);
-  document.getElementById('suggest-url').value='';
+  document.getElementById('suggest-url').value = '';
   toggleVoteSuggest();
-  showToast('Your venue has been added to the vote!');
+  showToast('Your venue added to the vote!');
 }
-function selectSuggested(n){
-  [1,2,3].forEach(i=>{document.getElementById('vc-'+i).classList.remove('voted');const c=document.getElementById('vcheck-'+i);if(c)c.remove();});
-  for(let i=1;i<=suggestedCount;i++){const s=document.getElementById('vc-s'+i);if(s)s.classList.remove('voted');}
-  document.getElementById('vc-s'+n).classList.add('voted');
+
+// ── TICKET CONFIRM ──
+function confirmTicket(got) {
+  const status = document.getElementById('my-ticket-status');
+  if (got) {
+    status.textContent = 'Got ticket ✓';
+    status.className = 'ticket-chip-got';
+    showToast('Great — the group knows you\'re in! 🎟');
+  } else {
+    showToast('Reminder set — get your ticket soon! ⏰');
+  }
+}
+
+// ── TRIP MODE ──
+function selectMode(mode) {
+  document.getElementById('mode-ai').classList.toggle('selected', mode === 'ai');
+  document.getElementById('mode-manual').classList.toggle('selected', mode === 'manual');
 }
 
 // ── CHAT ──
-function sendMessage(){
-  const input=document.getElementById('chat-input');
-  const text=input.value.trim();
-  if(!text)return;
-  const msgs=document.getElementById('chat-messages');
-  const div=document.createElement('div');
-  div.style.alignSelf='flex-end';
-  div.innerHTML=`<div class="chat-bubble mine">${text}<p class="chat-time" style="text-align:right">Now</p></div>`;
+function sendMessage() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text) return;
+  const msgs = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.style.alignSelf = 'flex-end';
+  div.innerHTML = `<div class="chat-bubble mine">${text}<p class="chat-time" style="text-align:right">Now</p></div>`;
   msgs.appendChild(div);
-  input.value='';
-  msgs.scrollTop=msgs.scrollHeight;
+  input.value = '';
+  msgs.scrollTop = msgs.scrollHeight;
 }
 
 // ── CALENDAR ──
-const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
-let calYear=2026,calMonth=3;
-let selectedDates=new Set();
-function renderCal(){
-  const grid=document.getElementById('cal-grid');
-  const label=document.getElementById('cal-month-label');
-  if(!grid)return;
-  label.textContent=months[calMonth]+' '+calYear;
-  grid.innerHTML='';
-  const firstDay=new Date(calYear,calMonth,1).getDay();
-  const daysInMonth=new Date(calYear,calMonth+1,0).getDate();
-  const today=new Date();
-  for(let i=0;i<firstDay;i++){const e=document.createElement('button');e.className='cal-day empty';e.disabled=true;grid.appendChild(e);}
-  for(let d=1;d<=daysInMonth;d++){
-    const e=document.createElement('button');e.className='cal-day';e.textContent=d;
-    const key=calYear+'-'+calMonth+'-'+d;
-    const isPast=new Date(calYear,calMonth,d)<new Date(today.getFullYear(),today.getMonth(),today.getDate());
-    if(isPast)e.classList.add('past');
-    if(d===today.getDate()&&calMonth===today.getMonth()&&calYear===today.getFullYear())e.classList.add('today');
-    if(selectedDates.has(key))e.classList.add('selected');
-    if(!isPast)e.onclick=()=>{if(selectedDates.has(key)){selectedDates.delete(key);e.classList.remove('selected');}else{selectedDates.add(key);e.classList.add('selected');}updateCalSelected();};
+const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+let calYear = 2026, calMonth = 3;
+let selectedDates = new Set();
+function renderCal() {
+  const grid = document.getElementById('cal-grid');
+  const label = document.getElementById('cal-month-label');
+  if (!grid) return;
+  label.textContent = months[calMonth] + ' ' + calYear;
+  grid.innerHTML = '';
+  const firstDay = new Date(calYear, calMonth, 1).getDay();
+  const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+  const today = new Date();
+  for (let i = 0; i < firstDay; i++) { const e = document.createElement('button'); e.className = 'cal-day empty'; e.disabled = true; grid.appendChild(e); }
+  for (let d = 1; d <= daysInMonth; d++) {
+    const e = document.createElement('button'); e.className = 'cal-day'; e.textContent = d;
+    const key = calYear + '-' + calMonth + '-' + d;
+    const isPast = new Date(calYear, calMonth, d) < new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    if (isPast) e.classList.add('past');
+    if (d === today.getDate() && calMonth === today.getMonth() && calYear === today.getFullYear()) e.classList.add('today');
+    if (selectedDates.has(key)) e.classList.add('selected');
+    if (!isPast) e.onclick = () => { if (selectedDates.has(key)) { selectedDates.delete(key); e.classList.remove('selected'); } else { selectedDates.add(key); e.classList.add('selected'); } updateCalSelected(); };
     grid.appendChild(e);
   }
   updateCalSelected();
 }
-function updateCalSelected(){
-  const sel=document.getElementById('cal-selected');
-  const txt=document.getElementById('cal-selected-text');
-  if(!sel)return;
-  if(selectedDates.size===0){sel.style.display='none';return;}
-  sel.style.display='block';
-  const sorted=[...selectedDates].sort();
-  const labels=sorted.map(k=>{const[y,m,d]=k.split('-').map(Number);return new Date(y,m,d).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});});
-  txt.textContent=selectedDates.size+' date'+(selectedDates.size>1?'s':'')+' selected: '+labels.join(', ');
+function updateCalSelected() {
+  const sel = document.getElementById('cal-selected');
+  const txt = document.getElementById('cal-selected-text');
+  if (!sel) return;
+  if (selectedDates.size === 0) { sel.style.display = 'none'; return; }
+  sel.style.display = 'block';
+  const labels = [...selectedDates].sort().map(k => { const [y,m,d] = k.split('-').map(Number); return new Date(y,m,d).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}); });
+  txt.textContent = selectedDates.size + ' date' + (selectedDates.size > 1 ? 's' : '') + ' selected: ' + labels.join(', ');
 }
-function prevMonth(){calMonth--;if(calMonth<0){calMonth=11;calYear--;}renderCal();}
-function nextMonth(){calMonth++;if(calMonth>11){calMonth=0;calYear++;}renderCal();}
+function prevMonth() { calMonth--; if (calMonth < 0) { calMonth = 11; calYear--; } renderCal(); }
+function nextMonth() { calMonth++; if (calMonth > 11) { calMonth = 0; calYear++; } renderCal(); }
 
 // ── TOAST ──
 let toastTimer;
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg;t.classList.add('show');
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer=setTimeout(()=>t.classList.remove('show'),2800);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
 }
 
 // ── INIT ──
 renderCal();
-if('serviceWorker' in navigator){navigator.serviceWorker.register('service-worker.js').catch(()=>{});}
+initMultiSelects();
+if ('serviceWorker' in navigator) { navigator.serviceWorker.register('service-worker.js').catch(() => {}); }
 </script>
 </body>
 </html>
