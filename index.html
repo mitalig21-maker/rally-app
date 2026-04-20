@@ -230,7 +230,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .stat-label{font-size:10px;color:var(--text-muted);margin-top:2px}
 .stat-cards-section{padding:16px 20px}
 .stat-cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.stat-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:14px;display:flex;flex-direction:column;gap:6px}
+.stat-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:14px;display:flex;flex-direction:column;gap:6px;text-align:center;align-items:center}
 .stat-card-icon{font-size:18px}
 .stat-card-value{font-family:var(--headline);font-size:17px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.3px;line-height:1.1}
 .stat-card-label{font-size:11px;font-weight:500;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;font-family:var(--headline)}
@@ -374,10 +374,10 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
       <h2 class="onboard-headline" style="font-size:20px">Food preferences</h2>
       <p style="font-size:13px;color:var(--text-muted);margin:6px 0 14px;line-height:1.5">Set your defaults — you update what you're feeling each Rally.</p>
 
-      <label class="form-label" style="margin-top:0">Favourite cuisines</label>
+      <label class="form-label" style="margin-top:0">Favorite cuisines</label>
       <div id="ms-cuisine-onboard" class="multi-select-wrap"></div>
 
-      <label class="form-label">Not in the mood for (default)</label>
+      <label class="form-label">Not about it (default)</label>
       <div id="ms-avoid-onboard" class="multi-select-wrap"></div>
 
       <label class="form-label">Dietary restrictions</label>
@@ -467,7 +467,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     <span class="topbar-logo">Rally</span>
     <button style="background:none;border:none;cursor:pointer;color:var(--text)"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></button>
   </div>
-  <div class="scroll-content">
+  <div class="scroll-content" id="rally-feed">
     <div class="home-header">
       <p class="home-greeting">Hey <span id="display-name">Mita</span> 👋</p>
       <h2 class="home-title">Your <em>plans</em><br>this week</h2>
@@ -484,9 +484,9 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px">
           <div class="rally-avatars">
             <div class="avatar avatar-sm" style="background:#E8F0EC;color:var(--green)">M</div>
-            <div class="avatar avatar-sm" style="background:#FEF3C7;color:#92400E">J</div>
-            <div class="avatar avatar-sm" style="background:#FCE7F3;color:#9D174D">S</div>
-            <div class="avatar avatar-sm" style="background:#EDE9FE;color:#5B21B6">R</div>
+            <div class="avatar avatar-sm" style="background:#FEF3C7;color:#92400E">S</div>
+            <div class="avatar avatar-sm" style="background:#FCE7F3;color:#9D174D">R</div>
+            <div class="avatar avatar-sm" style="background:#EDE9FE;color:#5B21B6">M</div>
           </div>
           <p style="font-size:12px;color:var(--text-muted)">4 going</p>
         </div>
@@ -504,8 +504,8 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px">
           <div class="rally-avatars">
             <div class="avatar avatar-sm" style="background:#E8F0EC;color:var(--green)">M</div>
-            <div class="avatar avatar-sm" style="background:#FEF3C7;color:#92400E">J</div>
-            <div class="avatar avatar-sm" style="background:#FCE7F3;color:#9D174D">S</div>
+            <div class="avatar avatar-sm" style="background:#FEF3C7;color:#92400E">S</div>
+            <div class="avatar avatar-sm" style="background:#FCE7F3;color:#9D174D">R</div>
           </div>
           <p style="font-size:12px;color:var(--text-muted)">3 hrs left</p>
         </div>
@@ -523,10 +523,10 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px">
           <div class="rally-avatars">
             <div class="avatar avatar-sm" style="background:#E8F0EC;color:var(--green)">M</div>
-            <div class="avatar avatar-sm" style="background:#FEF3C7;color:#92400E">J</div>
-            <div class="avatar avatar-sm" style="background:#FCE7F3;color:#9D174D">S</div>
-            <div class="avatar avatar-sm" style="background:#EDE9FE;color:#5B21B6">R</div>
-            <div class="avatar avatar-sm" style="background:#FEE2E2;color:#991B1B">K</div>
+            <div class="avatar avatar-sm" style="background:#FEF3C7;color:#92400E">S</div>
+            <div class="avatar avatar-sm" style="background:#FCE7F3;color:#9D174D">R</div>
+            <div class="avatar avatar-sm" style="background:#EDE9FE;color:#5B21B6">M</div>
+            <div class="avatar avatar-sm" style="background:#FEE2E2;color:#991B1B">D</div>
           </div>
           <p style="font-size:12px;color:var(--text-muted)">View itinerary</p>
         </div>
@@ -544,8 +544,8 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px">
           <div class="rally-avatars">
             <div class="avatar avatar-sm" style="background:#E8F0EC;color:var(--green)">M</div>
-            <div class="avatar avatar-sm" style="background:#FEF3C7;color:#92400E">J</div>
-            <div class="avatar avatar-sm" style="background:#FCE7F3;color:#9D174D">S</div>
+            <div class="avatar avatar-sm" style="background:#FEF3C7;color:#92400E">S</div>
+            <div class="avatar avatar-sm" style="background:#FCE7F3;color:#9D174D">R</div>
           </div>
           <p style="font-size:12px;color:#991B1B;font-weight:500">You haven't confirmed</p>
         </div>
@@ -647,6 +647,16 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
       <div class="cal-grid" id="cal-grid"></div>
       <div class="cal-selected" id="cal-selected" style="display:none"><p class="cal-selected-text" id="cal-selected-text"></p></div>
     </div>
+    <p class="section-label" style="margin-bottom:10px">Propose a time</p>
+    <div style="display:flex;gap:8px;margin-bottom:6px">
+      <button class="deadline-opt" id="time-7" onclick="selectTime(this,'7:00pm')"><div class="big" style="font-size:15px">7pm</div><div class="small">Evening</div></button>
+      <button class="deadline-opt selected" id="time-8" onclick="selectTime(this,'8:00pm')"><div class="big" style="font-size:15px">8pm</div><div class="small">Evening</div></button>
+      <button class="deadline-opt" id="time-9" onclick="selectTime(this,'9:00pm')"><div class="big" style="font-size:15px">9pm</div><div class="small">Evening</div></button>
+      <button class="deadline-opt" id="time-other" onclick="selectTime(this,'other')"><div class="big" style="font-size:15px">Other</div><div class="small">Custom</div></button>
+    </div>
+    <input class="input-field" type="time" id="custom-time-input" style="display:none;margin-bottom:4px">
+    <p style="font-size:11px;color:var(--text-muted);margin-bottom:14px">Friends can confirm this time or suggest a different one when they respond.</p>
+
     <p class="section-label" style="margin-bottom:10px">Response deadline</p>
     <div class="deadline-options">
       <button class="deadline-opt" onclick="selectDeadline(this)"><div class="big">12</div><div class="small">hours</div></button>
@@ -679,7 +689,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     </div>
     <p class="section-label" style="margin:12px 0 10px">Or add individuals</p>
     <input class="input-field" type="text" placeholder="Search by name or phone" style="margin-bottom:20px">
-    <button class="btn-primary" onclick="go('screen-home');showToast('Rally sent! 🎉')">Send Rally →</button>
+    <button class="btn-primary" onclick="go('screen-home');addRallyToFeed();showToast('Rally sent! 🎉')">Send Rally →</button>
   </div>
 </div>
 
@@ -755,7 +765,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         <p class="accom-name">Le Mount Stephen</p>
         <p class="accom-meta">Old Montreal · $$$ · Boutique hotel · 4.8★</p>
         <div style="display:flex;align-items:center;justify-content:space-between">
-          <p style="font-size:12px;color:var(--text-muted)"><strong style="color:var(--green)">3 votes</strong> · Mita, Jess, Sofia</p>
+          <p style="font-size:12px;color:var(--text-muted)"><strong style="color:var(--green)">3 votes</strong> · Mita, Soumil, Romit</p>
           <span style="font-size:11px;color:var(--green);text-decoration:underline;cursor:pointer">View →</span>
         </div>
       </div>
@@ -848,11 +858,11 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     </div>
 
     <div style="padding:14px 20px 6px"><p class="section-label">Who's confirmed</p></div>
-    <div class="attendee-row"><div style="display:flex;align-items:center;gap:10px"><div class="avatar avatar-sm" style="background:#FEF3C7;color:#92400E">J</div><p class="attendee-name">Jess</p></div><span class="ticket-chip-got">Got ticket ✓</span></div>
-    <div class="attendee-row"><div style="display:flex;align-items:center;gap:10px"><div class="avatar avatar-sm" style="background:#FCE7F3;color:#9D174D">S</div><p class="attendee-name">Sofia</p></div><span class="ticket-chip-got">Got ticket ✓</span></div>
-    <div class="attendee-row"><div style="display:flex;align-items:center;gap:10px"><div class="avatar avatar-sm" style="background:#EDE9FE;color:#5B21B6">R</div><p class="attendee-name">Ryan</p></div><span class="ticket-chip">Needs ticket</span></div>
+    <div class="attendee-row"><div style="display:flex;align-items:center;gap:10px"><div class="avatar avatar-sm" style="background:#FEF3C7;color:#92400E">S</div><p class="attendee-name">Soumil</p></div><span class="ticket-chip-got">Got ticket ✓</span></div>
+    <div class="attendee-row"><div style="display:flex;align-items:center;gap:10px"><div class="avatar avatar-sm" style="background:#FCE7F3;color:#9D174D">R</div><p class="attendee-name">Romit</p></div><span class="ticket-chip-got">Got ticket ✓</span></div>
+    <div class="attendee-row"><div style="display:flex;align-items:center;gap:10px"><div class="avatar avatar-sm" style="background:#EDE9FE;color:#5B21B6">M</div><p class="attendee-name">Morgan</p></div><span class="ticket-chip">Needs ticket</span></div>
     <div class="attendee-row" id="my-ticket-row"><div style="display:flex;align-items:center;gap:10px"><div class="avatar avatar-sm" style="background:#E8F0EC;color:var(--green)">M</div><p class="attendee-name">You</p></div><span class="ticket-chip" id="my-ticket-status">Needs ticket</span></div>
-    <div class="attendee-row" style="border:none"><div style="display:flex;align-items:center;gap:10px"><div class="avatar avatar-sm" style="background:#FEE2E2;color:#991B1B">K</div><p class="attendee-name">Kate</p></div><span class="ticket-chip">Needs ticket</span></div>
+    <div class="attendee-row" style="border:none"><div style="display:flex;align-items:center;gap:10px"><div class="avatar avatar-sm" style="background:#FEE2E2;color:#991B1B">D</div><p class="attendee-name">Diana</p></div><span class="ticket-chip">Needs ticket</span></div>
 
     <div style="padding:14px 20px">
       <button class="btn-outline" style="font-size:12px" onclick="window.open('https://ticketmaster.com','_blank')">Buy ticket on Ticketmaster →</button>
@@ -879,7 +889,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         <div class="vote-check" id="vcheck-1"><svg width="10" height="10" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
       </div>
       <div class="venue-tags"><span class="venue-tag">French</span><span class="venue-tag">Cozy</span><span class="venue-tag">Walk-in</span></div>
-      <div class="venue-footer"><p class="venue-votes"><strong>3 votes</strong> · Jess, Sofia, you</p><span class="venue-link" onclick="window.open('https://yelp.com','_blank')">View on Yelp →</span></div>
+      <div class="venue-footer"><p class="venue-votes"><strong>3 votes</strong> · Soumil, Romit, you</p><span class="venue-link" onclick="window.open('https://yelp.com','_blank')">View on Yelp →</span></div>
     </div>
     <div class="venue-card" id="vc-2" onclick="selectVenue(2)">
       <p class="venue-name">Via Carota</p><p class="venue-meta">West Village · $$$ · Italian</p>
@@ -925,8 +935,8 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     </div>
     <div style="padding:12px 20px 6px"><p class="section-label">Who's coming</p></div>
     <div class="attendee-row"><div style="display:flex;align-items:center;gap:10px"><div class="avatar avatar-sm" style="background:#E8F0EC;color:var(--green)">M</div><p class="attendee-name">You</p></div><span class="arrived-chip">Arrived</span></div>
-    <div class="attendee-row"><div style="display:flex;align-items:center;gap:10px"><div class="avatar avatar-sm" style="background:#FEF3C7;color:#92400E">J</div><p class="attendee-name">Jess</p></div><span class="eta-chip">12 min away</span></div>
-    <div class="attendee-row" style="border:none"><div style="display:flex;align-items:center;gap:10px"><div class="avatar avatar-sm" style="background:#FCE7F3;color:#9D174D">S</div><p class="attendee-name">Sofia</p></div><span class="eta-chip">8 min away</span></div>
+    <div class="attendee-row"><div style="display:flex;align-items:center;gap:10px"><div class="avatar avatar-sm" style="background:#FEF3C7;color:#92400E">S</div><p class="attendee-name">Soumil</p></div><span class="eta-chip">12 min away</span></div>
+    <div class="attendee-row" style="border:none"><div style="display:flex;align-items:center;gap:10px"><div class="avatar avatar-sm" style="background:#FCE7F3;color:#9D174D">R</div><p class="attendee-name">Romit</p></div><span class="eta-chip">8 min away</span></div>
     <div style="padding:14px 20px;display:flex;gap:8px">
       <button class="btn-outline" style="font-size:12px;flex:1">Share live location</button>
       <button class="btn-sm" onclick="go('screen-chat')">💬 Chat</button>
@@ -959,9 +969,18 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         <div class="date-opt selected" onclick="toggleDateOpt(this)"><div><p class="date-day-name">Saturday</p><p class="date-full">April 12</p></div><div class="date-check"><svg width="10" height="10" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div></div>
         <div class="date-opt" onclick="toggleDateOpt(this)"><div><p class="date-day-name">Sunday</p><p class="date-full">April 13</p></div><div class="date-check"></div></div>
       </div>
-      <button class="none-dates-btn" onclick="showToast('Jess has been notified to add more dates 📅')">None of these dates work for me</button>
+      <button class="none-dates-btn" onclick="showToast('Soumil has been notified to add more dates 📅')">None of these dates work for me</button>
 
-      <p class="section-label" style="margin-top:18px;margin-bottom:4px">What are you feeling?</p>
+      <p class="section-label" style="margin-top:18px;margin-bottom:8px">Does 8:00pm work?</p>
+      <p style="font-size:11px;color:var(--text-muted);margin-bottom:10px">Soumil proposed 8pm — confirm or suggest a different time</p>
+      <div style="display:flex;gap:8px;margin-bottom:4px">
+        <button class="deadline-opt selected" id="resp-time-yes" onclick="selectRespTime(this,'yes')" style="flex:1;padding:10px 8px"><div class="big" style="font-size:13px">8pm ✓</div><div class="small">Works for me</div></button>
+        <button class="deadline-opt" id="resp-time-diff" onclick="selectRespTime(this,'diff')" style="flex:1;padding:10px 8px"><div class="big" style="font-size:13px">Different</div><div class="small">Suggest time</div></button>
+      </div>
+      <input class="input-field" type="time" id="resp-custom-time" style="display:none;margin-bottom:4px;margin-top:8px">
+      <p style="font-size:11px;color:var(--text-muted);margin-bottom:16px">No response = flexible. Rally picks the time with the most agreement.</p>
+
+      <p class="section-label" style="margin-top:4px;margin-bottom:4px">What are you feeling?</p>
       <p style="font-size:11px;color:var(--text-muted);margin-bottom:12px">Fresh every Rally — what sounds good right now?</p>
 
       <label class="form-label" style="margin-top:0">I'm in the mood for</label>
@@ -970,7 +989,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         <option selected>Italian</option><option>Japanese</option><option>Mexican</option><option>French</option><option>Korean</option><option>Mediterranean</option><option>American</option><option>Sushi</option><option>Pizza</option><option>Seafood</option><option>Whatever</option>
       </select>
 
-      <label class="form-label" style="margin-top:0">Not in the mood for</label>
+      <label class="form-label" style="margin-top:0">Not about it</label>
       <select class="select-field" style="margin-bottom:10px">
         <option value="">Nothing to avoid</option>
         <option>Italian</option><option>Japanese</option><option>Mexican</option><option>Chinese</option><option>Thai</option><option>Sushi</option><option>Pizza</option><option>Seafood</option>
@@ -988,12 +1007,12 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         <option selected>West Village</option><option>East Village</option><option>Lower East Side</option><option>SoHo</option><option>Williamsburg</option><option>Park Slope</option><option>Wherever</option>
       </select>
 
-      <label class="form-label" style="margin-top:0">Price</label>
+      <label class="form-label" style="margin-top:0">Budget</label>
       <div class="pill-group" style="margin-bottom:16px">
-        <button class="pill" onclick="togglePill(this)">$</button>
-        <button class="pill selected" onclick="togglePill(this)">$$</button>
-        <button class="pill" onclick="togglePill(this)">$$$</button>
-        <button class="pill" onclick="togglePill(this)">Whatever</button>
+        <button class="pill" onclick="togglePill(this)">Casual</button>
+        <button class="pill selected" onclick="togglePill(this)">Mid-range</button>
+        <button class="pill" onclick="togglePill(this)">Splurge</button>
+        <button class="pill" onclick="togglePill(this)">Don't care</button>
       </div>
 
       <label class="form-label" style="margin-top:0">Have a specific place in mind?</label>
@@ -1008,9 +1027,9 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
   <div class="topbar"><button class="btn-back" onclick="go('screen-home')">← Back</button><span class="topbar-logo" style="font-size:14px">Group chat</span><div style="width:40px"></div></div>
   <div style="display:flex;flex-direction:column;height:100%">
     <div class="chat-messages" id="chat-messages">
-      <div style="align-self:flex-start"><p class="chat-sender">Jess</p><div class="chat-bubble theirs">Should we make a res?<p class="chat-time">6:42pm</p></div></div>
+      <div style="align-self:flex-start"><p class="chat-sender">Soumil</p><div class="chat-bubble theirs">Should we make a res?<p class="chat-time">6:42pm</p></div></div>
       <div style="align-self:flex-end"><div class="chat-bubble mine">Yes! West Village works for everyone<p class="chat-time" style="text-align:right">6:44pm</p></div></div>
-      <div style="align-self:flex-start"><p class="chat-sender">Sofia</p><div class="chat-bubble theirs">Rooftop vibes tonight 🍹<p class="chat-time">6:45pm</p></div></div>
+      <div style="align-self:flex-start"><p class="chat-sender">Romit</p><div class="chat-bubble theirs">Rooftop vibes tonight 🍹<p class="chat-time">6:45pm</p></div></div>
     </div>
     <div class="chat-input-bar">
       <input class="chat-input" type="text" placeholder="Message..." id="chat-input">
@@ -1057,8 +1076,8 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
   <div class="scroll-content">
     <div style="padding:12px 20px 6px"><p class="section-label">Members</p></div>
     <div class="member-row"><div class="avatar avatar-sm" style="background:#E8F0EC;color:var(--green)">M</div><div><p class="member-name">You</p><p class="member-sub">92% reliability</p></div></div>
-    <div class="member-row"><div class="avatar avatar-sm" style="background:#FEF3C7;color:#92400E">J</div><div><p class="member-name">Jess</p><p class="member-sub">88% reliability</p></div></div>
-    <div class="member-row" style="border:none"><div class="avatar avatar-sm" style="background:#FCE7F3;color:#9D174D">S</div><div><p class="member-name">Sofia</p><p class="member-sub">95% reliability</p></div></div>
+    <div class="member-row"><div class="avatar avatar-sm" style="background:#FEF3C7;color:#92400E">S</div><div><p class="member-name">Soumil</p><p class="member-sub">88% reliability</p></div></div>
+    <div class="member-row" style="border:none"><div class="avatar avatar-sm" style="background:#FCE7F3;color:#9D174D">R</div><div><p class="member-name">Romit</p><p class="member-sub">95% reliability</p></div></div>
     <div style="padding:14px 20px"><button class="btn-outline" onclick="go('screen-start-1')">Start a Rally</button></div>
   </div>
 </div>
@@ -1107,7 +1126,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
       <p class="section-label" style="margin-bottom:12px">Your rally stats</p>
       <div class="stat-cards-grid">
         <div class="stat-card"><div class="stat-card-icon">🔥</div><p class="stat-card-value">4 weeks</p><p class="stat-card-label">Rally streak</p><p class="stat-card-desc">4 weeks in a row with a plan that happened</p></div>
-        <div class="stat-card"><div class="stat-card-icon">👯</div><p class="stat-card-value">Jess</p><p class="stat-card-label">Most rallied with</p><p class="stat-card-desc">11 rallies together and counting</p></div>
+        <div class="stat-card"><div class="stat-card-icon">👯</div><p class="stat-card-value">Soumil</p><p class="stat-card-label">Most rallied with</p><p class="stat-card-desc">11 rallies together and counting</p></div>
         <div class="stat-card"><div class="stat-card-icon">📍</div><p class="stat-card-value">West Village</p><p class="stat-card-label">Top neighborhood</p><p class="stat-card-desc">You end up here more than anywhere else</p></div>
         <div class="stat-card"><div class="stat-card-icon">⚡</div><p class="stat-card-value">4 min</p><p class="stat-card-label">Fastest RSVP</p><p class="stat-card-desc">Your record response time</p></div>
         <div class="stat-card"><div class="stat-card-icon">🌙</div><p class="stat-card-value">Night owl</p><p class="stat-card-label">Your vibe</p><p class="stat-card-desc">Most plans kick off after 8pm</p></div>
@@ -1144,7 +1163,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 <div class="screen" id="screen-prefs">
   <div class="topbar"><button class="btn-back" onclick="go('screen-profile')">← Back</button><span class="topbar-logo" style="font-size:15px">Preferences</span><div style="width:60px"></div></div>
   <div class="scroll-content" style="padding:14px 20px">
-    <label class="form-label" style="margin-top:0">Favourite cuisines</label>
+    <label class="form-label" style="margin-top:0">Favorite cuisines</label>
     <div id="ms-cuisine-prefs" class="multi-select-wrap"></div>
     <label class="form-label">Cuisines to avoid</label>
     <div id="ms-avoid-prefs" class="multi-select-wrap"></div>
@@ -1158,10 +1177,10 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     <div id="ms-hood-prefs" class="multi-select-wrap"></div>
     <label class="form-label">Price range</label>
     <div class="pill-group" style="margin-bottom:20px">
-      <button class="pill" onclick="togglePill(this)">$</button>
-      <button class="pill selected" onclick="togglePill(this)">$$</button>
-      <button class="pill" onclick="togglePill(this)">$$$</button>
-      <button class="pill" onclick="togglePill(this)">Whatever</button>
+      <button class="pill" onclick="togglePill(this)">Casual</button>
+      <button class="pill selected" onclick="togglePill(this)">Mid-range</button>
+      <button class="pill" onclick="togglePill(this)">Splurge</button>
+      <button class="pill" onclick="togglePill(this)">Don't care</button>
     </div>
     <button class="btn-primary" onclick="go('screen-profile');showToast('Preferences saved!')">Save preferences</button>
   </div>
@@ -1173,8 +1192,8 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
   <div class="scroll-content">
     <div style="padding:14px 20px 10px"><input class="input-field" type="text" placeholder="Search by name or phone"></div>
     <div style="padding:6px 20px 6px"><p class="section-label">On Rally</p></div>
-    <div class="friend-row"><div class="avatar avatar-sm" style="background:#FEF3C7;color:#92400E">J</div><div style="flex:1"><p class="friend-name">Jess</p><p class="friend-sub">11 rallies together</p></div><button class="btn-sm" style="font-size:10px;padding:6px 12px">Invite</button></div>
-    <div class="friend-row"><div class="avatar avatar-sm" style="background:#FCE7F3;color:#9D174D">S</div><div style="flex:1"><p class="friend-name">Sofia</p><p class="friend-sub">8 rallies together</p></div><button class="btn-sm" style="font-size:10px;padding:6px 12px">Invite</button></div>
+    <div class="friend-row"><div class="avatar avatar-sm" style="background:#FEF3C7;color:#92400E">S</div><div style="flex:1"><p class="friend-name">Soumil</p><p class="friend-sub">11 rallies together</p></div><button class="btn-sm" style="font-size:10px;padding:6px 12px">Invite</button></div>
+    <div class="friend-row"><div class="avatar avatar-sm" style="background:#FCE7F3;color:#9D174D">R</div><div style="flex:1"><p class="friend-name">Romit</p><p class="friend-sub">8 rallies together</p></div><button class="btn-sm" style="font-size:10px;padding:6px 12px">Invite</button></div>
     <div style="padding:14px 20px"><button class="btn-outline">Invite friends via text</button></div>
   </div>
 </div>
@@ -1344,8 +1363,59 @@ function setGroupIcon(btn, icon) {
 }
 
 function selectDeadline(btn) {
-  document.querySelectorAll('.deadline-opt').forEach(b => b.classList.remove('selected'));
+  const parent = btn.closest('.deadline-options');
+  if (parent) parent.querySelectorAll('.deadline-opt').forEach(b => b.classList.remove('selected'));
   btn.classList.add('selected');
+}
+
+// TIME PICKER
+function selectTime(btn, val) {
+  ['time-7','time-8','time-9','time-other'].forEach(id => { const el=document.getElementById(id); if(el)el.classList.remove('selected'); });
+  btn.classList.add('selected');
+  const ci = document.getElementById('custom-time-input');
+  if (ci) ci.style.display = val === 'other' ? 'block' : 'none';
+}
+
+function selectRespTime(btn, val) {
+  ['resp-time-yes','resp-time-diff'].forEach(id => { const el=document.getElementById(id); if(el)el.classList.remove('selected'); });
+  btn.classList.add('selected');
+  const input = document.getElementById('resp-custom-time');
+  if (input) input.style.display = val === 'diff' ? 'block' : 'none';
+}
+
+// ADD RALLY TO FEED
+let rallyCount = 0;
+function addRallyToFeed() {
+  rallyCount++;
+  const feed = document.getElementById('rally-feed');
+  if (!feed) return;
+  const types = document.querySelectorAll('.plan-type-btn.selected');
+  const typeNames = [...types].map(t => t.querySelector('.pt-name').textContent).join(' + ') || 'Plans';
+  const dateLabel = selectedDates.size > 0
+    ? new Date(...[...selectedDates][0].split('-').map(Number)).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})
+    : 'TBD';
+  const timeEl = document.querySelector('#time-7.selected,#time-8.selected,#time-9.selected');
+  const timeLabel = timeEl ? timeEl.querySelector('.big').textContent.replace(' ✓','') : '8pm';
+  const card = document.createElement('div');
+  card.className = 'rally-card';
+  card.innerHTML = \`<div class="card card-pad" style="border-left:3px solid var(--green)">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
+      <div><p class="rally-title-text">\${typeNames}</p><p class="rally-meta">\${dateLabel} · \${timeLabel} · You started</p></div>
+      <span class="badge badge-pending">Pending</span>
+    </div>
+    <hr class="dot-divider">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px">
+      <div class="rally-avatars"><div class="avatar avatar-sm" style="background:#E8F0EC;color:var(--green)">M</div></div>
+      <button onclick="openEditRally()" style="background:none;border:none;font-size:11px;color:var(--green);cursor:pointer;text-decoration:underline;font-family:var(--body)">Edit rally</button>
+    </div>
+  </div>\`;
+  const firstSection = feed.querySelector('.section-label');
+  if (firstSection) feed.insertBefore(card, firstSection.parentNode || firstSection);
+  else feed.appendChild(card);
+}
+
+function openEditRally() {
+  showToast('Edit rally — update time, dates, or invite more friends');
 }
 
 function toggleDateOpt(el) {
