@@ -1223,6 +1223,145 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
   </div>
 </div>
 
+<!-- ══ EDIT RALLY ══ -->
+<div class="screen" id="screen-edit-rally">
+  <div class="topbar"><button class="btn-back" onclick="go('screen-home')">← Back</button><span class="topbar-logo" style="font-size:15px">Edit Rally</span><div style="width:60px"></div></div>
+  <div class="scroll-content" style="padding:14px 20px">
+    <p class="section-label" style="margin-bottom:8px">Rally name</p>
+    <input class="input-field" id="edit-rally-title" type="text" placeholder="e.g. Bars Friday" style="margin-bottom:14px">
+    <p class="section-label" style="margin-bottom:8px">Update time</p>
+    <input class="input-field" type="time" value="20:00" step="1800" style="margin-bottom:6px;font-size:16px">
+    <p style="font-size:11px;color:var(--text-muted);margin-bottom:14px">Friends who already responded will be notified of the change.</p>
+    <p class="section-label" style="margin-bottom:8px">Update dates</p>
+    <div class="calendar">
+      <div class="cal-header">
+        <button class="cal-nav" onclick="prevMonth()">&#8249;</button>
+        <span class="cal-month" id="cal-month-label-edit">April 2026</span>
+        <button class="cal-nav" onclick="nextMonth()">&#8250;</button>
+      </div>
+      <div class="cal-days-header">
+        <div class="cal-day-label">Su</div><div class="cal-day-label">Mo</div><div class="cal-day-label">Tu</div><div class="cal-day-label">We</div><div class="cal-day-label">Th</div><div class="cal-day-label">Fr</div><div class="cal-day-label">Sa</div>
+      </div>
+      <div class="cal-grid" id="cal-grid-edit"></div>
+    </div>
+    <p class="section-label" style="margin-bottom:8px">Invite more people</p>
+    <input class="input-field" type="text" placeholder="Search by name or phone" style="margin-bottom:20px">
+    <button class="btn-primary" onclick="go('screen-home');showToast('Rally updated! Friends notified')">Save changes</button>
+  </div>
+</div>
+
+<!-- ══ TRIP AI ITINERARY ══ -->
+<div class="screen" id="screen-trip-ai">
+  <div class="topbar"><button class="btn-back" onclick="go('screen-trip-start')">← Back</button><span class="topbar-logo" style="font-size:14px">AI Itinerary</span><div style="width:60px"></div></div>
+  <div class="scroll-content" style="padding:14px 20px">
+    <div id="ai-loading" style="text-align:center;padding:40px 20px">
+      <div style="font-size:36px;margin-bottom:12px">&#10024;</div>
+      <p style="font-family:var(--headline);font-size:16px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;color:var(--green)">Building your itinerary</p>
+      <p style="font-size:13px;color:var(--text-muted);line-height:1.6;margin-bottom:20px">Reading everyone's top 3s and building a day-by-day plan...</p>
+      <div style="display:flex;gap:8px;justify-content:center">
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 1.2s ease-in-out infinite 0s"></div>
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 1.2s ease-in-out infinite .3s"></div>
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 1.2s ease-in-out infinite .6s"></div>
+      </div>
+    </div>
+    <div id="ai-result" style="display:none">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;background:var(--green-pale);border-radius:var(--radius-sm);padding:10px 14px">
+        <span>&#10024;</span>
+        <p style="font-size:12px;color:var(--green);font-weight:500">AI-generated from your group's top 3s</p>
+      </div>
+      <div id="ai-itinerary-content" style="margin-bottom:14px"></div>
+      <div style="display:flex;gap:8px">
+        <button class="btn-outline" style="font-size:12px;flex:1" onclick="generateItinerary()">Regenerate</button>
+        <button class="btn-primary" style="flex:1;font-size:12px" onclick="go('screen-trip-plan')">View full trip</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TRIP MANUAL ITINERARY ══ -->
+<div class="screen" id="screen-trip-manual">
+  <div class="topbar"><button class="btn-back" onclick="go('screen-trip-start')">← Back</button><span class="topbar-logo" style="font-size:14px">Build Itinerary</span><div style="width:60px"></div></div>
+  <div class="scroll-content" style="padding:14px 20px">
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px;line-height:1.5">Add activities day by day. Anyone in the trip can suggest changes.</p>
+    <div class="itinerary-day">
+      <p class="itinerary-day-header">Day 1 &#8212; Friday May 2</p>
+      <div id="day1-items">
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+          <input class="input-field" type="time" value="16:00" step="1800" style="width:90px;padding:8px;font-size:13px;flex-shrink:0">
+          <input class="input-field" type="text" placeholder="Add activity..." style="flex:1;padding:10px 12px;font-size:13px">
+        </div>
+      </div>
+      <button onclick="addManualItem('day1-items')" style="background:none;border:1.5px dashed var(--border);border-radius:var(--radius-sm);padding:8px;width:100%;font-size:12px;color:var(--text-muted);cursor:pointer;font-family:var(--body)">+ Add activity</button>
+    </div>
+    <div class="itinerary-day">
+      <p class="itinerary-day-header">Day 2 &#8212; Saturday May 3</p>
+      <div id="day2-items">
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+          <input class="input-field" type="time" value="10:00" step="1800" style="width:90px;padding:8px;font-size:13px;flex-shrink:0">
+          <input class="input-field" type="text" placeholder="Add activity..." style="flex:1;padding:10px 12px;font-size:13px">
+        </div>
+      </div>
+      <button onclick="addManualItem('day2-items')" style="background:none;border:1.5px dashed var(--border);border-radius:var(--radius-sm);padding:8px;width:100%;font-size:12px;color:var(--text-muted);cursor:pointer;font-family:var(--body)">+ Add activity</button>
+    </div>
+    <div class="itinerary-day">
+      <p class="itinerary-day-header">Day 3 &#8212; Sunday May 4</p>
+      <div id="day3-items">
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+          <input class="input-field" type="time" value="10:00" step="1800" style="width:90px;padding:8px;font-size:13px;flex-shrink:0">
+          <input class="input-field" type="text" placeholder="Add activity..." style="flex:1;padding:10px 12px;font-size:13px">
+        </div>
+      </div>
+      <button onclick="addManualItem('day3-items')" style="background:none;border:1.5px dashed var(--border);border-radius:var(--radius-sm);padding:8px;width:100%;font-size:12px;color:var(--text-muted);cursor:pointer;font-family:var(--body)">+ Add activity</button>
+    </div>
+    <button class="btn-primary" style="margin-top:8px" onclick="go('screen-trip-plan');showToast('Itinerary saved!')">Save itinerary</button>
+  </div>
+</div>
+
+<!-- ══ TRIP PACKING LIST ══ -->
+<div class="screen" id="screen-trip-packing">
+  <div class="topbar"><button class="btn-back" onclick="go('screen-trip-plan')">← Back</button><span class="topbar-logo" style="font-size:14px">Packing List</span><div style="width:60px"></div></div>
+  <div class="scroll-content" style="padding:14px 20px">
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px">Shared with the whole group &#8212; check off as you pack.</p>
+    <div id="packing-items">
+      <div style="padding:12px 0;border-bottom:1px dotted var(--border-dot)"><label style="font-size:14px;display:flex;align-items:center;gap:10px;cursor:pointer"><input type="checkbox" style="width:18px;height:18px;accent-color:var(--green)"> Passport</label></div>
+      <div style="padding:12px 0;border-bottom:1px dotted var(--border-dot)"><label style="font-size:14px;display:flex;align-items:center;gap:10px;cursor:pointer"><input type="checkbox" style="width:18px;height:18px;accent-color:var(--green)"> Phone charger</label></div>
+      <div style="padding:12px 0;border-bottom:1px dotted var(--border-dot)"><label style="font-size:14px;display:flex;align-items:center;gap:10px;cursor:pointer"><input type="checkbox" style="width:18px;height:18px;accent-color:var(--green)"> Travel insurance docs</label></div>
+      <div style="padding:12px 0"><label style="font-size:14px;display:flex;align-items:center;gap:10px;cursor:pointer"><input type="checkbox" style="width:18px;height:18px;accent-color:var(--green)"> Comfortable walking shoes</label></div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:14px">
+      <input class="input-field" id="new-pack-item" type="text" placeholder="Add item..." style="flex:1">
+      <button class="btn-sm" onclick="addPackingItem()">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TRIP BUDGET TRACKER ══ -->
+<div class="screen" id="screen-trip-budget">
+  <div class="topbar"><button class="btn-back" onclick="go('screen-trip-plan')">← Back</button><span class="topbar-logo" style="font-size:14px">Budget</span><div style="width:60px"></div></div>
+  <div class="scroll-content" style="padding:14px 20px">
+    <div style="background:var(--green);border-radius:var(--radius);padding:18px;color:var(--white);margin-bottom:16px;text-align:center">
+      <p style="font-size:11px;opacity:.7;text-transform:uppercase;letter-spacing:1px;font-family:var(--headline);margin-bottom:4px">Per person budget</p>
+      <p style="font-family:var(--headline);font-size:32px;font-weight:700">$350</p>
+      <div style="display:flex;justify-content:center;gap:24px;margin-top:10px">
+        <div><p style="font-size:11px;opacity:.7">Spent</p><p style="font-size:18px;font-weight:600">$180</p></div>
+        <div><p style="font-size:11px;opacity:.7">Remaining</p><p style="font-size:18px;font-weight:600">$170</p></div>
+      </div>
+    </div>
+    <p class="section-label" style="margin-bottom:10px">Expenses</p>
+    <div class="card" style="margin-bottom:12px">
+      <div style="padding:12px 14px;border-bottom:1px dotted var(--border-dot);display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px">Hotel (Le Mount Stephen)</span><span style="font-size:13px;font-weight:600;color:var(--green)">$120/person</span></div>
+      <div style="padding:12px 14px;border-bottom:1px dotted var(--border-dot);display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px">Shared Uber to airport</span><span style="font-size:13px;font-weight:600;color:var(--green)">$35/person</span></div>
+      <div style="padding:12px 14px;display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px">Dinner at Schwartz's</span><span style="font-size:13px;font-weight:600;color:var(--green)">$25/person</span></div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <input class="input-field" type="text" placeholder="Add expense..." style="flex:1">
+      <input class="input-field" type="number" placeholder="$" style="width:72px">
+      <button class="btn-sm" onclick="showToast('Expense added!')">Add</button>
+    </div>
+  </div>
+</div>
+
+
 <script>
 // ── DATA ──
 const CUISINES=['Italian','Japanese','Mexican','Chinese','Thai','Indian','French','Korean','Mediterranean','American','Middle Eastern','Vietnamese','Sushi','Pizza','Steakhouse','Seafood','Vegetarian / Vegan','Whatever'];
@@ -1390,7 +1529,9 @@ function addRallyToFeed() {
   const feed = document.getElementById('rally-feed');
   if (!feed) return;
   const types = document.querySelectorAll('.plan-type-btn.selected');
-  const typeNames = [...types].map(t => t.querySelector('.pt-name').textContent).join(' + ') || 'Plans';
+  const titleInput = document.getElementById('rally-title-input');
+  const customTitle = titleInput && titleInput.value.trim() ? titleInput.value.trim() : null;
+  const typeNames = customTitle || ([...types].map(t => t.querySelector('.pt-name').textContent).join(' + ') || 'Rally');
   const dateLabel = selectedDates.size > 0
     ? new Date(...[...selectedDates][0].split('-').map(Number)).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})
     : 'TBD';
@@ -1415,7 +1556,110 @@ function addRallyToFeed() {
 }
 
 function openEditRally() {
-  showToast('Edit rally — update time, dates, or invite more friends');
+  go('screen-edit-rally');
+}
+
+// RALLY TITLE
+function getRallyTitle() {
+  const input = document.getElementById('rally-title-input');
+  return input && input.value.trim() ? input.value.trim() : null;
+}
+
+// MANUAL ITINERARY
+function addManualItem(containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  const div = document.createElement('div');
+  div.style.cssText = 'display:flex;gap:8px;align-items:center;margin-bottom:8px';
+  div.innerHTML = '<input class="input-field" type="time" value="12:00" step="1800" style="width:90px;padding:8px;font-size:13px;flex-shrink:0"><input class="input-field" type="text" placeholder="Add activity..." style="flex:1;padding:10px 12px;font-size:13px">';
+  container.appendChild(div);
+}
+
+// PACKING LIST
+function addPackingItem() {
+  const input = document.getElementById('new-pack-item');
+  if (!input || !input.value.trim()) return;
+  const container = document.getElementById('packing-items');
+  const div = document.createElement('div');
+  div.style.cssText = 'padding:12px 0;border-bottom:1px dotted var(--border-dot)';
+  div.innerHTML = '<label style="font-size:14px;display:flex;align-items:center;gap:10px;cursor:pointer"><input type="checkbox" style="width:18px;height:18px;accent-color:var(--green)"> ' + input.value.trim() + '</label>';
+  container.appendChild(div);
+  input.value = '';
+  showToast('Added to packing list!');
+}
+
+// AI ITINERARY
+async function generateItinerary() {
+  const loading = document.getElementById('ai-loading');
+  const result = document.getElementById('ai-result');
+  if (loading) loading.style.display = 'block';
+  if (result) result.style.display = 'none';
+  go('screen-trip-ai');
+
+  const top3Fields = document.querySelectorAll('#screen-trip-start .top3-field');
+  const top3 = [...top3Fields].map(f => f.value.trim()).filter(Boolean);
+  const destInput = document.querySelector('#screen-trip-start input[type=text]');
+  const destName = destInput && destInput.value.trim() ? destInput.value.trim() : 'Montreal';
+
+  const prompt = 'You are a travel itinerary expert. Create a 3-day itinerary for a group trip to ' + destName + '.\n\nGroup top 3 things:\n' + (top3.length > 0 ? top3.map((t,i) => (i+1)+'. '+t).join('\n') : '1. Explore local food\n2. See major sights\n3. Nightlife') + '\n\nReturn ONLY valid JSON in this exact format with no other text:\n{"days":[{"label":"Friday - Arrival","items":[{"time":"4:00pm","activity":"Check in to hotel"},{"time":"7:00pm","activity":"Welcome dinner"}]}]}\n\nMake it specific with real places in ' + destName + '. Incorporate the group top 3 throughout.';
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const data = await response.json();
+    const text = data.content && data.content[0] ? data.content[0].text : null;
+    if (text) {
+      try {
+        const clean = text.replace(/```json|```/g, '').trim();
+        renderAIItinerary(JSON.parse(clean));
+      } catch(e) {
+        document.getElementById('ai-itinerary-content').innerHTML = '<p style="font-size:13px;line-height:1.7">' + text.replace(/\n/g, '<br>') + '</p>';
+        if (loading) loading.style.display = 'none';
+        if (result) result.style.display = 'block';
+      }
+    } else { renderFallbackItinerary(destName); }
+  } catch(err) { renderFallbackItinerary(destName); }
+}
+
+function renderAIItinerary(data) {
+  const container = document.getElementById('ai-itinerary-content');
+  const loading = document.getElementById('ai-loading');
+  const result = document.getElementById('ai-result');
+  if (!container) return;
+  let html = '';
+  (data.days || []).forEach(function(day) {
+    html += '<div class="itinerary-day"><p class="itinerary-day-header">' + day.label + '</p>';
+    (day.items || []).forEach(function(item) {
+      html += '<div class="itinerary-item"><span class="itinerary-time">' + item.time + '</span><p class="itinerary-text">' + item.activity + '</p></div>';
+    });
+    html += '</div>';
+  });
+  container.innerHTML = html;
+  if (loading) loading.style.display = 'none';
+  if (result) result.style.display = 'block';
+}
+
+function renderFallbackItinerary(dest) {
+  renderAIItinerary({days:[
+    {label:'Day 1 - Arrival',items:[{time:'4:00pm',activity:'Check in and freshen up'},{time:'7:00pm',activity:'Welcome dinner at a local favourite'},{time:'9:30pm',activity:'Evening drinks and explore the neighbourhood'}]},
+    {label:'Day 2 - Full Day',items:[{time:'10:00am',activity:'Morning exploring ' + dest},{time:'1:00pm',activity:'Lunch at a spot the group picked'},{time:'7:00pm',activity:'Group dinner reservation'}]},
+    {label:'Day 3 - Departure',items:[{time:'10:00am',activity:'Brunch and final stroll'},{time:'12:00pm',activity:'Head to the airport'}]}
+  ]});
+}
+
+// ITINERARY MODE
+function selectMode(mode) {
+  document.getElementById('mode-ai').classList.toggle('selected', mode === 'ai');
+  document.getElementById('mode-manual').classList.toggle('selected', mode === 'manual');
+  if (mode === 'ai') { generateItinerary(); }
+  else { go('screen-trip-manual'); }
 }
 
 function toggleDateOpt(el) {
