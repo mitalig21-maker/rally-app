@@ -1230,7 +1230,7 @@ const AVOID_CUISINES=['Italian','Japanese','Mexican','Chinese','Thai','Indian','
 const DIETARY=['Vegetarian','Vegan','Gluten-free','Kosher','Halal','Dairy-free','Nut allergy','Shellfish allergy','No pork','No alcohol'];
 const VIBES=['Rooftop','Low key','Late night','Trendy','Cozy','Outdoor seating','Sports bar','Cocktail bar','Date night','Casual','Active / sporty','Outdoor adventure','Cultural','Live music','Chill hangout','Live sports','Comedy','Dive bar','Wine bar','Whatever'];
 const SKIP_ACTIVITIES=['Bowling','Mini golf','Escape room','Karaoke','Museums','Sporting events','Comedy shows','Fitness classes','Movies'];
-const HOODS=['West Village','East Village','Lower East Side','SoHo','Tribeca','Nolita','Chinatown','Financial District','Midtown','Hell\'s Kitchen','Chelsea','Flatiron','Gramercy','Upper East Side','Upper West Side','Harlem','Williamsburg','Greenpoint','Bushwick','Park Slope','Cobble Hill','Brooklyn Heights','Dumbo','Bed-Stuy','Astoria','Long Island City','Wherever'];
+const HOODS=['West Village','East Village','Lower East Side','SoHo','Tribeca','Nolita','Chinatown','Financial District','Midtown',"Hell's Kitchen",'Chelsea','Flatiron','Gramercy','Upper East Side','Upper West Side','Harlem','Williamsburg','Greenpoint','Bushwick','Park Slope','Cobble Hill','Brooklyn Heights','Dumbo','Bed-Stuy','Astoria','Long Island City','Wherever'];
 
 // ── MULTI-SELECT COMPONENT ──
 function createMultiSelect(containerId, options, placeholder, preSelected=[]) {
@@ -1398,7 +1398,7 @@ function addRallyToFeed() {
   const timeLabel = timeEl ? timeEl.querySelector('.big').textContent.replace(' ✓','') : '8pm';
   const card = document.createElement('div');
   card.className = 'rally-card';
-  card.innerHTML = \`<div class="card card-pad" style="border-left:3px solid var(--green)">
+  card.innerHTML = `<div class="card card-pad" style="border-left:3px solid var(--green)">
     <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
       <div><p class="rally-title-text">\${typeNames}</p><p class="rally-meta">\${dateLabel} · \${timeLabel} · You started</p></div>
       <span class="badge badge-pending">Pending</span>
@@ -1408,7 +1408,7 @@ function addRallyToFeed() {
       <div class="rally-avatars"><div class="avatar avatar-sm" style="background:#E8F0EC;color:var(--green)">M</div></div>
       <button onclick="openEditRally()" style="background:none;border:none;font-size:11px;color:var(--green);cursor:pointer;text-decoration:underline;font-family:var(--body)">Edit rally</button>
     </div>
-  </div>\`;
+  </div>`;
   const firstSection = feed.querySelector('.section-label');
   if (firstSection) feed.insertBefore(card, firstSection.parentNode || firstSection);
   else feed.appendChild(card);
