@@ -230,7 +230,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .stat-label{font-size:10px;color:var(--text-muted);margin-top:2px}
 .stat-cards-section{padding:16px 20px}
 .stat-cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.stat-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:14px;display:flex;flex-direction:column;gap:6px;text-align:center;align-items:center}
+.stat-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:16px 14px;display:flex;flex-direction:column;gap:4px;text-align:center;align-items:center;position:relative;overflow:hidden}.stat-card::after{content:"";position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--green),transparent)}
 .stat-card-icon{font-size:18px}
 .stat-card-value{font-family:var(--headline);font-size:17px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.3px;line-height:1.1}
 .stat-card-label{font-size:11px;font-weight:500;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;font-family:var(--headline)}
@@ -610,6 +610,63 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
       <input class="input-field" type="text" placeholder="e.g. Birthday dinner, pottery class, rooftop hangout...">
     </div>
 
+    <!-- CONTEXTUAL: Dinner -->
+    <div id="ctx-dinner" style="display:none;margin-bottom:14px">
+      <p class="section-label" style="margin-bottom:8px">Dinner preferences</p>
+      <label class="form-label" style="margin-top:8px">Not about it tonight?</label>
+      <select class="select-field" style="margin-bottom:8px">
+        <option value="">Nothing to avoid</option>
+        <option>Italian</option><option>Japanese</option><option>Mexican</option><option>Chinese</option><option>Thai</option><option>Sushi</option><option>Pizza</option><option>Seafood</option>
+      </select>
+      <label class="form-label" style="margin-top:0">Vibe</label>
+      <select class="select-field" style="margin-bottom:8px">
+        <option value="">Select vibe...</option>
+        <option>Rooftop</option><option>Low key</option><option>Trendy</option><option>Cozy</option><option>Date night</option><option>Casual</option><option>Whatever</option>
+      </select>
+      <label class="form-label" style="margin-top:0">Budget</label>
+      <div class="pill-group" style="margin-bottom:4px">
+        <button class="pill" onclick="togglePill(this)">Casual</button>
+        <button class="pill selected" onclick="togglePill(this)">Mid-range</button>
+        <button class="pill" onclick="togglePill(this)">Splurge</button>
+        <button class="pill" onclick="togglePill(this)">Don't care</button>
+      </div>
+    </div>
+    <!-- CONTEXTUAL: Bars -->
+    <div id="ctx-bars" style="display:none;margin-bottom:14px">
+      <p class="section-label" style="margin-bottom:8px">Bar preferences</p>
+      <label class="form-label" style="margin-top:8px">Vibe</label>
+      <select class="select-field" style="margin-bottom:8px">
+        <option value="">Select vibe...</option>
+        <option>Rooftop</option><option>Dive bar</option><option>Cocktail bar</option><option>Wine bar</option><option>Sports bar</option><option>Late night</option><option>Whatever</option>
+      </select>
+      <label class="form-label" style="margin-top:0">Budget</label>
+      <div class="pill-group" style="margin-bottom:4px">
+        <button class="pill selected" onclick="togglePill(this)">Casual</button>
+        <button class="pill" onclick="togglePill(this)">Mid-range</button>
+        <button class="pill" onclick="togglePill(this)">Splurge</button>
+        <button class="pill" onclick="togglePill(this)">Don't care</button>
+      </div>
+    </div>
+    <!-- CONTEXTUAL: Brunch -->
+    <div id="ctx-brunch" style="display:none;margin-bottom:14px">
+      <p class="section-label" style="margin-bottom:8px">Brunch preferences</p>
+      <label class="form-label" style="margin-top:8px">Not about it?</label>
+      <select class="select-field" style="margin-bottom:8px">
+        <option value="">Nothing to avoid</option>
+        <option>American</option><option>Mexican</option><option>Italian</option><option>Eggs heavy</option>
+      </select>
+      <label class="form-label" style="margin-top:0">Vibe</label>
+      <select class="select-field" style="margin-bottom:8px">
+        <option value="">Select vibe...</option>
+        <option>Cozy</option><option>Trendy</option><option>Outdoor seating</option><option>Low key</option><option>Whatever</option>
+      </select>
+      <label class="form-label" style="margin-top:0">Budget</label>
+      <div class="pill-group" style="margin-bottom:4px">
+        <button class="pill selected" onclick="togglePill(this)">Casual</button>
+        <button class="pill" onclick="togglePill(this)">Mid-range</button>
+        <button class="pill" onclick="togglePill(this)">Don't care</button>
+      </div>
+    </div>
     <p class="section-label" style="margin-bottom:8px">Have a place in mind?</p>
     <div style="margin-bottom:14px">
       <button class="suggest-place-btn" id="start-suggest-btn" onclick="toggleStartSuggest()">
@@ -954,8 +1011,8 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
   <div class="topbar"><button class="btn-back" onclick="go('screen-home')">← Back</button><div></div><div></div></div>
   <div class="scroll-content">
     <div style="padding:16px 20px;text-align:center;border-bottom:1px dotted var(--border-dot)">
-      <p style="font-size:12px;color:var(--text-muted);margin-bottom:5px">Jess started a Rally</p>
-      <h2 class="headline-lg" style="font-size:22px">Brunch</h2>
+      <p style="font-size:12px;color:var(--text-muted);margin-bottom:5px" id="respond-starter">Soumil started a Rally</p>
+      <h2 class="headline-lg" style="font-size:22px" id="respond-type">Brunch</h2>
       <p style="font-size:13px;color:var(--green);margin-top:4px">Sunday, Apr 13 · 6 invited</p>
     </div>
     <div style="padding:16px 20px">
@@ -964,6 +1021,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         <button class="rsvp-btn in" id="rsvp-in" onclick="selectRsvp('in')">I'm in ✓</button>
         <button class="rsvp-btn" id="rsvp-out" onclick="selectRsvp('out')">Can't make it</button>
       </div>
+
       <p class="section-label" style="margin-bottom:10px">Which dates work?</p>
       <div style="margin-bottom:4px">
         <div class="date-opt selected" onclick="toggleDateOpt(this)"><div><p class="date-day-name">Saturday</p><p class="date-full">April 12</p></div><div class="date-check"><svg width="10" height="10" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div></div>
@@ -971,34 +1029,53 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
       </div>
       <button class="none-dates-btn" onclick="showToast('Soumil has been notified to add more dates 📅')">None of these dates work for me</button>
 
-      <p class="section-label" style="margin-top:18px;margin-bottom:8px">Does 8:00pm work?</p>
-      <p style="font-size:11px;color:var(--text-muted);margin-bottom:10px">Soumil proposed 8pm — confirm or suggest a different time</p>
-      <div style="display:flex;gap:8px;margin-bottom:4px">
-        <button class="deadline-opt selected" id="resp-time-yes" onclick="selectRespTime(this,'yes')" style="flex:1;padding:10px 8px"><div class="big" style="font-size:13px">8pm ✓</div><div class="small">Works for me</div></button>
-        <button class="deadline-opt" id="resp-time-diff" onclick="selectRespTime(this,'diff')" style="flex:1;padding:10px 8px"><div class="big" style="font-size:13px">Different</div><div class="small">Suggest time</div></button>
+      <p class="section-label" style="margin-top:18px;margin-bottom:8px">What time works for you?</p>
+      <p style="font-size:11px;color:var(--text-muted);margin-bottom:8px">Soumil proposed 8:00pm. Confirm or pick your preferred time.</p>
+      <input class="input-field" type="time" id="resp-time-input" value="20:00" step="1800" style="margin-bottom:6px;font-size:16px">
+      <p style="font-size:11px;color:var(--text-muted);margin-bottom:16px">No response = flexible. Ties go to the earlier time.</p>
+
+      <!-- DINNER / BRUNCH questions -->
+      <div id="respond-food-section">
+        <p class="section-label" style="margin-bottom:4px">What are you feeling?</p>
+        <p style="font-size:11px;color:var(--text-muted);margin-bottom:12px">Fresh every Rally — what sounds good right now?</p>
+        <label class="form-label" style="margin-top:0">I'm in the mood for</label>
+        <select class="select-field" style="margin-bottom:10px">
+          <option value="">Select cuisine...</option>
+          <option>Italian</option><option>Japanese</option><option selected>Mexican</option><option>French</option><option>Korean</option><option>Mediterranean</option><option>American</option><option>Sushi</option><option>Pizza</option><option>Seafood</option><option>Whatever</option>
+        </select>
+        <label class="form-label" style="margin-top:0">Not about it</label>
+        <select class="select-field" id="respond-avoid-select" style="margin-bottom:10px">
+          <option value="">Nothing to avoid</option>
+          <option>Japanese</option><option>Chinese</option><option>Thai</option><option>Sushi</option><option>Pizza</option><option>Seafood</option>
+        </select>
       </div>
-      <input class="input-field" type="time" id="resp-custom-time" style="display:none;margin-bottom:4px;margin-top:8px">
-      <p style="font-size:11px;color:var(--text-muted);margin-bottom:16px">No response = flexible. Rally picks the time with the most agreement.</p>
 
-      <p class="section-label" style="margin-top:4px;margin-bottom:4px">What are you feeling?</p>
-      <p style="font-size:11px;color:var(--text-muted);margin-bottom:12px">Fresh every Rally — what sounds good right now?</p>
+      <!-- BARS questions -->
+      <div id="respond-bars-section" style="display:none">
+        <p class="section-label" style="margin-bottom:4px">What are you feeling?</p>
+        <p style="font-size:11px;color:var(--text-muted);margin-bottom:12px">Fresh every Rally.</p>
+      </div>
 
-      <label class="form-label" style="margin-top:0">I'm in the mood for</label>
-      <select class="select-field" style="margin-bottom:10px">
-        <option value="">Select cuisine...</option>
-        <option selected>Italian</option><option>Japanese</option><option>Mexican</option><option>French</option><option>Korean</option><option>Mediterranean</option><option>American</option><option>Sushi</option><option>Pizza</option><option>Seafood</option><option>Whatever</option>
-      </select>
+      <!-- ACTIVITY questions -->
+      <div id="respond-activity-section" style="display:none">
+        <p class="section-label" style="margin-bottom:8px">What kind of activity?</p>
+        <div class="pill-group" style="margin-bottom:12px">
+          <button class="pill" onclick="togglePill(this)">🎳 Bowling</button>
+          <button class="pill" onclick="togglePill(this)">⛳ Mini golf</button>
+          <button class="pill" onclick="togglePill(this)">🔐 Escape room</button>
+          <button class="pill" onclick="togglePill(this)">🎤 Karaoke</button>
+          <button class="pill" onclick="togglePill(this)">🎨 Museum</button>
+          <button class="pill" onclick="togglePill(this)">🎬 Movie</button>
+          <button class="pill" onclick="togglePill(this)">🧘 Wellness</button>
+          <button class="pill" onclick="togglePill(this)">🎯 Other</button>
+        </div>
+      </div>
 
-      <label class="form-label" style="margin-top:0">Not about it</label>
-      <select class="select-field" style="margin-bottom:10px">
-        <option value="">Nothing to avoid</option>
-        <option>Italian</option><option>Japanese</option><option>Mexican</option><option>Chinese</option><option>Thai</option><option>Sushi</option><option>Pizza</option><option>Seafood</option>
-      </select>
-
+      <!-- VIBE (all types) -->
       <label class="form-label" style="margin-top:0">Vibe</label>
       <select class="select-field" style="margin-bottom:10px">
         <option value="">Select vibe...</option>
-        <option>Rooftop</option><option>Low key</option><option selected>Cozy</option><option>Cocktail bar</option><option>Live music</option><option>Chill hangout</option><option>Active / sporty</option><option>Cultural</option><option>Whatever</option>
+        <option>Rooftop</option><option>Low key</option><option selected>Cozy</option><option>Cocktail bar</option><option>Live music</option><option>Chill hangout</option><option>Active / sporty</option><option>Dive bar</option><option>Wine bar</option><option>Whatever</option>
       </select>
 
       <label class="form-label" style="margin-top:0">Neighborhood</label>
@@ -1372,7 +1449,14 @@ const SKIP_ACTIVITIES=['Bowling','Mini golf','Escape room','Karaoke','Museums','
 const HOODS=['West Village','East Village','Lower East Side','SoHo','Tribeca','Nolita','Chinatown','Financial District','Midtown',"Hell's Kitchen",'Chelsea','Flatiron','Gramercy','Upper East Side','Upper West Side','Harlem','Williamsburg','Greenpoint','Bushwick','Park Slope','Cobble Hill','Brooklyn Heights','Dumbo','Bed-Stuy','Astoria','Long Island City','Wherever'];
 
 // ── MULTI-SELECT COMPONENT ──
-function createMultiSelect(containerId, options, placeholder, preSelected=[]) {
+function rebuildAvoid(avoidId, favSelected) {
+  const container = document.getElementById(avoidId);
+  if (!container) return;
+  const filtered = AVOID_CUISINES.filter(function(x) { return !favSelected.has(x); });
+  createMultiSelect(avoidId, filtered, 'Nothing to avoid');
+}
+
+function createMultiSelect(containerId, options, placeholder, preSelected=[], onChange=null) {
   const container = document.getElementById(containerId);
   if (!container) return;
   let selected = new Set(preSelected);
@@ -1396,6 +1480,7 @@ function createMultiSelect(containerId, options, placeholder, preSelected=[]) {
       if (e.target.classList.contains('ms-tag-x')) {
         selected.delete(e.target.dataset.val);
         render();
+        if (onChange) onChange(selected);
         return;
       }
       open = !open;
@@ -1415,6 +1500,7 @@ function createMultiSelect(containerId, options, placeholder, preSelected=[]) {
           if (selected.has(opt)) selected.delete(opt);
           else selected.add(opt);
           render();
+          if (onChange) onChange(selected);
         };
         dropdown.appendChild(item);
       });
@@ -1434,14 +1520,19 @@ function createMultiSelect(containerId, options, placeholder, preSelected=[]) {
 
 // ── INIT MULTI-SELECTS ──
 function initMultiSelects() {
-  createMultiSelect('ms-cuisine-onboard', CUISINES, 'Select cuisines...');
+  createMultiSelect('ms-cuisine-onboard', CUISINES, 'Select cuisines...', [], function(sel) {
+    // Rebuild avoid dropdown excluding selected favorites
+    rebuildAvoid('ms-avoid-onboard', sel);
+  });
   createMultiSelect('ms-avoid-onboard', AVOID_CUISINES, 'Nothing to avoid');
   createMultiSelect('ms-dietary-onboard', DIETARY, 'Select restrictions...');
   createMultiSelect('ms-vibe-onboard', VIBES, 'Select vibes...');
   createMultiSelect('ms-skip-activities-onboard', SKIP_ACTIVITIES, 'Select activities to skip...');
   createMultiSelect('ms-hood-onboard', HOODS, 'Select neighborhoods...', ['West Village','Lower East Side']);
-  createMultiSelect('ms-cuisine-prefs', CUISINES, 'Select cuisines...', ['Italian','Mexican']);
-  createMultiSelect('ms-avoid-prefs', AVOID_CUISINES, 'Nothing to avoid');
+  createMultiSelect('ms-cuisine-prefs', CUISINES, 'Select cuisines...', ['Italian','Mexican'], function(sel) {
+    rebuildAvoid('ms-avoid-prefs', sel);
+  });
+  createMultiSelect('ms-avoid-prefs', AVOID_CUISINES.filter(function(x) { return x !== 'Italian' && x !== 'Mexican'; }), 'Nothing to avoid');
   createMultiSelect('ms-dietary-prefs', DIETARY, 'Select restrictions...');
   createMultiSelect('ms-vibe-prefs', VIBES, 'Select vibes...', ['Rooftop','Cozy']);
   createMultiSelect('ms-skip-prefs', SKIP_ACTIVITIES, 'Select activities to skip...');
@@ -1468,6 +1559,12 @@ function saveNameAndGo(dest) {
 // ── PLAN TYPE ──
 function togglePlanType(btn, type) {
   btn.classList.toggle('selected');
+  const dinnerSel = document.getElementById('btn-activity') && document.querySelector('.plan-type-btn[onclick*="dinner"]') && document.querySelector('.plan-type-btn[onclick*="dinner"]').classList.contains('selected');
+  const barsSel = document.querySelector('.plan-type-btn[onclick*="bars"]') && document.querySelector('.plan-type-btn[onclick*="bars"]').classList.contains('selected');
+  const brunchSel = document.querySelector('.plan-type-btn[onclick*="brunch"]') && document.querySelector('.plan-type-btn[onclick*="brunch"]').classList.contains('selected');
+  if (document.getElementById('ctx-dinner')) document.getElementById('ctx-dinner').style.display = dinnerSel ? 'block' : 'none';
+  if (document.getElementById('ctx-bars')) document.getElementById('ctx-bars').style.display = barsSel ? 'block' : 'none';
+  if (document.getElementById('ctx-brunch')) document.getElementById('ctx-brunch').style.display = brunchSel ? 'block' : 'none';
   document.getElementById('activity-subtypes').style.display =
     document.getElementById('btn-activity').classList.contains('selected') ? 'block' : 'none';
   document.getElementById('trip-note').style.display =
