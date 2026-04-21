@@ -429,14 +429,6 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
       <label class="form-label" style="margin-top:8px">Preferred neighborhoods</label>
       <div id="ms-hood-onboard" class="multi-select-wrap"></div>
 
-      <label class="form-label">Price range</label>
-      <div class="pill-group" style="margin-bottom:20px">
-        <button class="pill" onclick="togglePill(this)">$</button>
-        <button class="pill selected" onclick="togglePill(this)">$$</button>
-        <button class="pill" onclick="togglePill(this)">$$$</button>
-        <button class="pill" onclick="togglePill(this)">Whatever</button>
-      </div>
-
       <button class="btn-primary" onclick="go('screen-onboard-friends')" style="margin-bottom:8px">Continue</button>
     </div>
   </div>
@@ -573,6 +565,8 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
   </div>
   <div class="sheet-header"><p class="sheet-title">Start a Rally</p><p class="sheet-sub">Pick all that apply</p></div>
   <div class="scroll-content" style="padding:14px 20px">
+    <p class="section-label" style="margin-bottom:8px">Name your rally</p>
+    <input class="input-field" id="rally-title-input" type="text" placeholder="e.g. Bars Friday, Dimple's birthday dinner..." style="margin-bottom:14px">
     <div class="plan-type-grid" id="plan-type-grid" style="margin-bottom:14px">
       <button class="plan-type-btn" onclick="togglePlanType(this,'dinner')"><div class="pt-icon">🍽</div><span class="pt-name">Dinner</span><span class="pt-desc">Restaurants</span></button>
       <button class="plan-type-btn" onclick="togglePlanType(this,'bars')"><div class="pt-icon">🍸</div><span class="pt-name">Bars</span><span class="pt-desc">Drinks & nightlife</span></button>
@@ -857,38 +851,50 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     <div style="width:60px"></div>
   </div>
   <div class="scroll-content">
-    <div style="padding:12px 20px 12px;border-bottom:1px dotted var(--border-dot)">
+    <div style="padding:12px 20px 14px;border-bottom:1px dotted var(--border-dot)">
       <h2 class="headline-lg" style="font-size:20px">Weekend in Montreal</h2>
       <p style="font-size:12px;color:var(--text-muted);margin-top:3px">5 people · Le Mount Stephen · AI itinerary</p>
     </div>
-
-    <div style="padding:14px 20px 0"><p class="section-label" style="margin-bottom:10px">Itinerary</p></div>
+    <div style="padding:12px 20px;display:grid;grid-template-columns:1fr 1fr;gap:8px;border-bottom:1px dotted var(--border-dot)">
+      <button class="btn-outline" style="font-size:11px;padding:10px" onclick="go('screen-trip-packing')">🧳 Packing list</button>
+      <button class="btn-outline" style="font-size:11px;padding:10px" onclick="go('screen-trip-budget')">💰 Budget</button>
+      <button class="btn-outline" style="font-size:11px;padding:10px" onclick="go('screen-trip-manual')">✏️ Edit itinerary</button>
+      <button class="btn-outline" style="font-size:11px;padding:10px" onclick="go('screen-chat')">💬 Group chat</button>
+    </div>
+    <div style="padding:14px 20px 0">
+      <p class="section-label" style="margin-bottom:8px">Group notes</p>
+      <textarea class="input-field" rows="2" placeholder="Add a note for the group..." style="resize:none;font-size:13px;margin-bottom:14px"></textarea>
+    </div>
+    <div style="padding:0 20px 0"><p class="section-label" style="margin-bottom:10px">Itinerary</p></div>
     <div style="padding:0 20px">
       <div class="itinerary-day">
         <p class="itinerary-day-header">Friday May 2 — Arrival day</p>
-        <div class="itinerary-item"><span class="itinerary-time">4:00pm</span><p class="itinerary-text">Check in to Le Mount Stephen, Old Montreal</p></div>
-        <div class="itinerary-item"><span class="itinerary-time">6:30pm</span><p class="itinerary-text">Smoked meat at Schwartz's Deli (Mita's top pick)</p></div>
-        <div class="itinerary-item"><span class="itinerary-time">9:00pm</span><p class="itinerary-text">Rooftop drinks at Bar Le Lab, Plateau</p></div>
+        <div class="itinerary-item"><span class="itinerary-time">4:00pm</span><div style="flex:1"><p class="itinerary-text">Check in to Le Mount Stephen, Old Montreal</p><div style="display:flex;gap:10px;margin-top:4px"><button onclick="window.open('https://lemountstephen.com','_blank')" style="background:none;border:none;font-size:11px;color:var(--green);cursor:pointer;text-decoration:underline;font-family:var(--body);padding:0">Book →</button><button onclick="window.open('https://maps.google.com/?q=Le+Mount+Stephen+Montreal','_blank')" style="background:none;border:none;font-size:11px;color:var(--text-muted);cursor:pointer;text-decoration:underline;font-family:var(--body);padding:0">Directions →</button></div></div></div>
+        <div class="itinerary-item"><span class="itinerary-time">6:30pm</span><div style="flex:1"><p class="itinerary-text">Smoked meat at Schwartz's Deli — Mita's top pick</p><button onclick="window.open('https://maps.google.com/?q=Schwartz+Deli+Montreal','_blank')" style="background:none;border:none;font-size:11px;color:var(--text-muted);cursor:pointer;text-decoration:underline;font-family:var(--body);padding:0;margin-top:4px;display:block">Directions →</button></div></div>
+        <div class="itinerary-item"><span class="itinerary-time">9:00pm</span><div style="flex:1"><p class="itinerary-text">Rooftop drinks at Bar Le Lab, Plateau</p><button onclick="window.open('https://maps.google.com/?q=Bar+Le+Lab+Montreal','_blank')" style="background:none;border:none;font-size:11px;color:var(--text-muted);cursor:pointer;text-decoration:underline;font-family:var(--body);padding:0;margin-top:4px;display:block">Directions →</button></div></div>
       </div>
       <div class="itinerary-day">
         <p class="itinerary-day-header">Saturday May 3 — Full day</p>
-        <div class="itinerary-item"><span class="itinerary-time">10:00am</span><p class="itinerary-text">Bagels at St-Viateur Bagel, Mile End</p></div>
-        <div class="itinerary-item"><span class="itinerary-time">12:00pm</span><p class="itinerary-text">Old Port walking tour (Jess's top pick)</p></div>
-        <div class="itinerary-item"><span class="itinerary-time">3:00pm</span><p class="itinerary-text">Museum of Fine Arts — Impressionist exhibit</p></div>
-        <div class="itinerary-item"><span class="itinerary-time">7:00pm</span><p class="itinerary-text">Dinner at Joe Beef, Little Burgundy</p></div>
-        <div class="itinerary-item"><span class="itinerary-time">9:30pm</span><p class="itinerary-text">Rooftop bar at sunset at Terrasse William Gray (Sofia's top pick)</p></div>
+        <div class="itinerary-item"><span class="itinerary-time">10:00am</span><div style="flex:1"><p class="itinerary-text">Bagels at St-Viateur Bagel, Mile End</p><button onclick="window.open('https://maps.google.com/?q=St+Viateur+Bagel+Montreal','_blank')" style="background:none;border:none;font-size:11px;color:var(--text-muted);cursor:pointer;text-decoration:underline;font-family:var(--body);padding:0;margin-top:4px;display:block">Directions →</button></div></div>
+        <div class="itinerary-item"><span class="itinerary-time">12:00pm</span><div style="flex:1"><p class="itinerary-text">Old Port walking tour — Soumil's top pick</p><div style="display:flex;gap:10px;margin-top:4px"><button onclick="showToast('Activity vote sent to the group!')" style="background:none;border:none;font-size:11px;color:var(--green);cursor:pointer;text-decoration:underline;font-family:var(--body);padding:0">Vote on this →</button><button onclick="window.open('https://maps.google.com/?q=Old+Port+Montreal','_blank')" style="background:none;border:none;font-size:11px;color:var(--text-muted);cursor:pointer;text-decoration:underline;font-family:var(--body);padding:0">Directions →</button></div></div></div>
+        <div class="itinerary-item"><span class="itinerary-time">3:00pm</span><div style="flex:1"><p class="itinerary-text">Montreal Museum of Fine Arts — Impressionist exhibit</p><div style="display:flex;gap:10px;margin-top:4px"><button onclick="window.open('https://mbam.qc.ca','_blank')" style="background:none;border:none;font-size:11px;color:var(--green);cursor:pointer;text-decoration:underline;font-family:var(--body);padding:0">Book tickets →</button><button onclick="window.open('https://maps.google.com/?q=Montreal+Museum+Fine+Arts','_blank')" style="background:none;border:none;font-size:11px;color:var(--text-muted);cursor:pointer;text-decoration:underline;font-family:var(--body);padding:0">Directions →</button></div></div></div>
+        <div class="itinerary-item"><span class="itinerary-time">7:00pm</span><div style="flex:1"><p class="itinerary-text">Dinner at Joe Beef, Little Burgundy</p><div style="display:flex;gap:10px;margin-top:4px"><button onclick="window.open('https://joebeef.com','_blank')" style="background:none;border:none;font-size:11px;color:var(--green);cursor:pointer;text-decoration:underline;font-family:var(--body);padding:0">Reserve →</button><button onclick="window.open('https://maps.google.com/?q=Joe+Beef+Montreal','_blank')" style="background:none;border:none;font-size:11px;color:var(--text-muted);cursor:pointer;text-decoration:underline;font-family:var(--body);padding:0">Directions →</button></div></div></div>
+        <div class="itinerary-item"><span class="itinerary-time">9:30pm</span><div style="flex:1"><p class="itinerary-text">Rooftop at Terrasse William Gray — Romit's top pick</p><div style="display:flex;gap:10px;margin-top:4px"><button onclick="showToast('Activity vote sent to the group!')" style="background:none;border:none;font-size:11px;color:var(--green);cursor:pointer;text-decoration:underline;font-family:var(--body);padding:0">Vote on this →</button><button onclick="window.open('https://maps.google.com/?q=Terrasse+William+Gray+Montreal','_blank')" style="background:none;border:none;font-size:11px;color:var(--text-muted);cursor:pointer;text-decoration:underline;font-family:var(--body);padding:0">Directions →</button></div></div></div>
       </div>
       <div class="itinerary-day" style="margin-bottom:4px">
         <p class="itinerary-day-header">Sunday May 4 — Departure</p>
-        <div class="itinerary-item"><span class="itinerary-time">10:00am</span><p class="itinerary-text">Brunch at Lemeac Cafe Bistro</p></div>
-        <div class="itinerary-item"><span class="itinerary-time">12:00pm</span><p class="itinerary-text">Last walk through Old Montreal</p></div>
-        <div class="itinerary-item"><span class="itinerary-time">2:00pm</span><p class="itinerary-text">Head to airport</p></div>
+        <div class="itinerary-item"><span class="itinerary-time">10:00am</span><div style="flex:1"><p class="itinerary-text">Brunch at Lemeac Cafe Bistro</p><button onclick="window.open('https://maps.google.com/?q=Lemeac+Bistro+Montreal','_blank')" style="background:none;border:none;font-size:11px;color:var(--text-muted);cursor:pointer;text-decoration:underline;font-family:var(--body);padding:0;margin-top:4px;display:block">Directions →</button></div></div>
+        <div class="itinerary-item"><span class="itinerary-time">12:00pm</span><div style="flex:1"><p class="itinerary-text">Last walk through Old Montreal</p></div></div>
+        <div class="itinerary-item"><span class="itinerary-time">2:00pm</span><div style="flex:1"><p class="itinerary-text">Head to airport — safe travels! ✈️</p></div></div>
       </div>
     </div>
-    <div style="padding:14px 20px;display:flex;gap:8px">
-      <button class="btn-outline" style="font-size:12px;flex:1" onclick="showToast('Itinerary saved!')">Save itinerary</button>
-      <button class="btn-sm" onclick="go('screen-chat')">💬 Chat</button>
+    <div style="padding:14px 20px">
+      <div style="background:var(--green);border-radius:var(--radius);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer" onclick="showToast('Day-of view unlocks on the morning of each trip day')">
+        <div><p style="font-family:var(--headline);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.7);margin-bottom:2px">Day-of view</p><p style="font-family:var(--headline);font-size:15px;font-weight:700;color:var(--white)">Friday May 2 →</p></div>
+        <span style="font-size:22px">📍</span>
+      </div>
     </div>
+    <div style="height:8px"></div>
   </div>
 </div>
 
@@ -1252,13 +1258,6 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     <div id="ms-skip-prefs" class="multi-select-wrap"></div>
     <label class="form-label">Preferred neighborhoods</label>
     <div id="ms-hood-prefs" class="multi-select-wrap"></div>
-    <label class="form-label">Price range</label>
-    <div class="pill-group" style="margin-bottom:20px">
-      <button class="pill" onclick="togglePill(this)">Casual</button>
-      <button class="pill selected" onclick="togglePill(this)">Mid-range</button>
-      <button class="pill" onclick="togglePill(this)">Splurge</button>
-      <button class="pill" onclick="togglePill(this)">Don't care</button>
-    </div>
     <button class="btn-primary" onclick="go('screen-profile');showToast('Preferences saved!')">Save preferences</button>
   </div>
 </div>
