@@ -347,7 +347,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 <div class="screen" id="screen-signup">
   <div class="onboard-wrap">
     <div class="onboard-logo">Rally</div>
-    <div class="pdots" style="margin-bottom:24px"><div class="pdot active"></div><div class="pdot"></div><div class="pdot"></div><div class="pdot"></div><div class="pdot"></div></div>
+    <div class="pdots" style="margin-bottom:24px"><div class="pdot active"></div><div class="pdot"></div><div class="pdot"></div></div>
     <h2 class="onboard-headline" style="font-size:24px">What should<br>we call you?</h2>
     <p class="onboard-sub" style="margin-bottom:14px">Your friends will see this in every Rally.</p>
     <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px">
@@ -361,97 +361,96 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
   </div>
 </div>
 
-<!-- ══ ONBOARD: CUISINE + DIETARY ══ -->
+<!-- ══ ONBOARD SCREEN 1: Food + Dietary ══ -->
 <div class="screen" id="screen-onboard-cuisine">
   <div class="step-indicator">
     <button class="btn-back" onclick="go('screen-signup')">← Back</button>
-    <span class="step-count">Step 2 of 5</span>
+    <span class="step-count">Step 2 of 3</span>
     <button class="step-skip" onclick="go('screen-onboard-vibe')">Skip</button>
   </div>
   <div class="scroll-content" style="padding-bottom:20px">
     <div style="padding:14px 20px 0">
-      <div class="pdots" style="margin-bottom:14px"><div class="pdot"></div><div class="pdot active"></div><div class="pdot"></div><div class="pdot"></div><div class="pdot"></div></div>
+      <div class="pdots" style="margin-bottom:14px"><div class="pdot"></div><div class="pdot active"></div><div class="pdot"></div></div>
       <h2 class="onboard-headline" style="font-size:20px">Food preferences</h2>
       <p style="font-size:13px;color:var(--text-muted);margin:6px 0 14px;line-height:1.5">Set your defaults — you update what you're feeling each Rally.</p>
 
       <label class="form-label" style="margin-top:0">Favorite cuisines</label>
       <div id="ms-cuisine-onboard" class="multi-select-wrap"></div>
 
-      <label class="form-label">Not about it (default)</label>
+      <label class="form-label">Not about it</label>
       <div id="ms-avoid-onboard" class="multi-select-wrap"></div>
 
       <label class="form-label">Dietary restrictions</label>
-      <p class="form-hint">Applied silently to every Rally — never needs changing</p>
+      <span class="form-hint">Applied silently to every Rally</span>
       <div id="ms-dietary-onboard" class="multi-select-wrap"></div>
 
-      <button class="btn-primary" onclick="go('screen-onboard-vibe')" style="margin-top:8px;margin-bottom:8px">Continue</button>
+      <button class="btn-primary" onclick="go('screen-onboard-vibe')" style="margin-top:12px;margin-bottom:8px">Continue</button>
     </div>
   </div>
 </div>
 
-<!-- ══ ONBOARD: VIBE ══ -->
+<!-- ══ ONBOARD SCREEN 2: Vibe + Activities + Neighborhoods ══ -->
 <div class="screen" id="screen-onboard-vibe">
   <div class="step-indicator">
     <button class="btn-back" onclick="go('screen-onboard-cuisine')">← Back</button>
-    <span class="step-count">Step 3 of 5</span>
-    <button class="step-skip" onclick="go('screen-onboard-location')">Skip</button>
+    <span class="step-count">Step 3 of 3</span>
+    <button class="step-skip" onclick="go('screen-onboard-friends')">Skip</button>
   </div>
   <div class="scroll-content" style="padding-bottom:20px">
     <div style="padding:14px 20px 0">
-      <div class="pdots" style="margin-bottom:14px"><div class="pdot"></div><div class="pdot"></div><div class="pdot active"></div><div class="pdot"></div><div class="pdot"></div></div>
-      <h2 class="onboard-headline" style="font-size:20px">What's your vibe?</h2>
-      <p style="font-size:13px;color:var(--text-muted);margin:6px 0 14px;line-height:1.5">Covers all plan types — food, bars, activities, and more.</p>
+      <div class="pdots" style="margin-bottom:14px"><div class="pdot"></div><div class="pdot"></div><div class="pdot active"></div></div>
+      <h2 class="onboard-headline" style="font-size:20px">Vibe + where</h2>
+      <p style="font-size:13px;color:var(--text-muted);margin:6px 0 14px;line-height:1.5">Covers all plan types — nights out, activities, weekends.</p>
 
       <label class="form-label" style="margin-top:0">Preferred vibes</label>
       <div id="ms-vibe-onboard" class="multi-select-wrap"></div>
 
       <label class="form-label">Activities I'd rather skip</label>
-      <p class="form-hint">Applied whenever the plan type is Activity</p>
+      <span class="form-hint">Applied when plan type is Activity</span>
       <div id="ms-skip-activities-onboard" class="multi-select-wrap"></div>
 
-      <button class="btn-primary" onclick="go('screen-onboard-location')" style="margin-top:8px;margin-bottom:8px">Continue</button>
+      <label class="form-label">Preferred neighborhoods</label>
+      <div id="ms-hood-onboard" class="multi-select-wrap"></div>
+
+      <button class="btn-primary" onclick="go('screen-onboard-friends')" style="margin-top:12px;margin-bottom:8px">Continue</button>
     </div>
   </div>
 </div>
 
-<!-- ══ ONBOARD: LOCATION + PRICE ══ -->
+<!-- ══ ONBOARD: FIND FRIENDS ══ -->
 <div class="screen" id="screen-onboard-location">
-  <div class="step-indicator">
-    <button class="btn-back" onclick="go('screen-onboard-vibe')">← Back</button>
-    <span class="step-count">Step 4 of 5</span>
-    <button class="step-skip" onclick="go('screen-onboard-friends')">Skip</button>
-  </div>
-  <div class="scroll-content" style="padding-bottom:20px">
-    <div style="padding:14px 20px 0">
-      <div class="pdots" style="margin-bottom:14px"><div class="pdot"></div><div class="pdot"></div><div class="pdot"></div><div class="pdot active"></div><div class="pdot"></div></div>
-      <h2 class="onboard-headline" style="font-size:20px">Where + how much?</h2>
-
-      <label class="form-label" style="margin-top:8px">Preferred neighborhoods</label>
-      <div id="ms-hood-onboard" class="multi-select-wrap"></div>
-
-      <button class="btn-primary" onclick="go('screen-onboard-friends')" style="margin-bottom:8px">Continue</button>
-    </div>
-  </div>
+  <div style="display:none"></div>
 </div>
 
 <!-- ══ ONBOARD: FRIENDS ══ -->
 <div class="screen" id="screen-onboard-friends">
-  <div class="step-indicator">
-    <button class="btn-back" onclick="go('screen-onboard-location')">← Back</button>
-    <span class="step-count">Step 5 of 5</span>
-    <button class="step-skip" onclick="go('screen-home')">Skip</button>
-  </div>
-  <div class="onboard-wrap" style="padding-top:14px">
-    <div class="pdots" style="margin-bottom:20px"><div class="pdot"></div><div class="pdot"></div><div class="pdot"></div><div class="pdot"></div><div class="pdot active"></div></div>
-    <h2 class="onboard-headline" style="font-size:22px">Find your people</h2>
-    <p class="onboard-sub" style="margin-bottom:14px">Sync contacts to find friends on Rally or invite them.</p>
-    <input class="input-field" type="text" placeholder="Search by name or phone" style="margin-bottom:14px">
+  <div class="step-indicator" style="display:none"></div>
+  <div class="onboard-wrap" style="padding-top:calc(50px + var(--safe-top))">
+    <div class="onboard-logo">Rally</div>
+    <div class="pdots" style="margin-bottom:20px"><div class="pdot"></div><div class="pdot"></div><div class="pdot active"></div></div>
+    <h2 class="onboard-headline" style="font-size:24px">Find your<br>people</h2>
+    <p class="onboard-sub" style="margin-bottom:6px">Search for friends already on Rally, or invite them via text.</p>
+    <p style="font-size:12px;color:var(--text-light);margin-bottom:16px">Contact sync coming soon — for now search by name.</p>
+    <input class="input-field" type="text" placeholder="Search by name or phone" style="margin-bottom:14px" onkeyup="searchFriends(this.value)">
+    <div id="friend-search-results" style="margin-bottom:14px;display:none">
+      <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px dotted var(--border-dot)">
+        <div class="avatar avatar-sm" style="background:#FEF3C7;color:#92400E">A</div>
+        <div style="flex:1"><p style="font-size:14px;font-weight:500">Aaheli</p><p style="font-size:12px;color:var(--text-muted)">On Rally</p></div>
+        <button class="btn-sm" style="font-size:10px;padding:6px 12px" onclick="showToast('Invite sent to Aaheli!')">Invite</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;padding:10px 0">
+        <div class="avatar avatar-sm" style="background:#E8F0EC;color:var(--green)">S</div>
+        <div style="flex:1"><p style="font-size:14px;font-weight:500">Soumil</p><p style="font-size:12px;color:var(--text-muted)">On Rally</p></div>
+        <button class="btn-sm" style="font-size:10px;padding:6px 12px" onclick="showToast('Invite sent to Soumil!')">Invite</button>
+      </div>
+    </div>
     <div class="onboard-actions">
-      <button class="btn-primary" onclick="go('screen-home')">Sync contacts</button>
+      <button class="btn-primary" onclick="go('screen-home');showToast('Welcome to Rally! 🎉')">Let's go →</button>
       <button class="btn-outline" onclick="go('screen-home')">Skip for now</button>
     </div>
   </div>
 </div>
+
 
 <!-- ══ HOME ══ -->
 <div class="screen" id="screen-home">
@@ -1444,7 +1443,7 @@ const CUISINES=['Italian','Japanese','Mexican','Chinese','Thai','Indian','French
 const AVOID_CUISINES=['Italian','Japanese','Mexican','Chinese','Thai','Indian','French','Korean','Sushi','Pizza','Steakhouse','Seafood'];
 const DIETARY=['Vegetarian','Vegan','Gluten-free','Kosher','Halal','Dairy-free','Nut allergy','Shellfish allergy','No pork','No alcohol'];
 const VIBES=['Rooftop','Low key','Late night','Trendy','Cozy','Outdoor seating','Sports bar','Cocktail bar','Date night','Casual','Active / sporty','Outdoor adventure','Cultural','Live music','Chill hangout','Live sports','Comedy','Dive bar','Wine bar','Whatever'];
-const SKIP_ACTIVITIES=['Bowling','Mini golf','Escape room','Karaoke','Museums','Sporting events','Comedy shows','Fitness classes','Movies'];
+const SKIP_ACTIVITIES=['Bowling','Mini golf','Escape room','Karaoke','Museums','Sporting events','Comedy shows','Fitness classes','Movies','Hiking','Road trip','Central Park hang','Beach day','Game night','Cooking class','Paint and sip','Trivia night','Picnic','Skating','Cycling','Rooftop hang'];
 const HOODS=['West Village','East Village','Lower East Side','SoHo','Tribeca','Nolita','Chinatown','Financial District','Midtown',"Hell's Kitchen",'Chelsea','Flatiron','Gramercy','Upper East Side','Upper West Side','Harlem','Williamsburg','Greenpoint','Bushwick','Park Slope','Cobble Hill','Brooklyn Heights','Dumbo','Bed-Stuy','Astoria','Long Island City','Wherever'];
 
 // ── MULTI-SELECT COMPONENT ──
@@ -1523,15 +1522,15 @@ function initMultiSelects() {
     // Rebuild avoid dropdown excluding selected favorites
     rebuildAvoid('ms-avoid-onboard', sel);
   });
-  createMultiSelect('ms-avoid-onboard', AVOID_CUISINES, 'Nothing to avoid');
+  createMultiSelect('ms-avoid-onboard', AVOID_CUISINES, 'Feeling everything');
   createMultiSelect('ms-dietary-onboard', DIETARY, 'Select restrictions...');
   createMultiSelect('ms-vibe-onboard', VIBES, 'Select vibes...');
   createMultiSelect('ms-skip-activities-onboard', SKIP_ACTIVITIES, 'Select activities to skip...');
-  createMultiSelect('ms-hood-onboard', HOODS, 'Select neighborhoods...', ['West Village','Lower East Side']);
+  createMultiSelect('ms-hood-onboard', HOODS, 'Select neighborhoods...', ['West Village','Lower East Side'], function(sel){});
   createMultiSelect('ms-cuisine-prefs', CUISINES, 'Select cuisines...', ['Italian','Mexican'], function(sel) {
     rebuildAvoid('ms-avoid-prefs', sel);
   });
-  createMultiSelect('ms-avoid-prefs', AVOID_CUISINES.filter(function(x) { return x !== 'Italian' && x !== 'Mexican'; }), 'Nothing to avoid');
+  createMultiSelect('ms-avoid-prefs', AVOID_CUISINES.filter(function(x) { return x !== 'Italian' && x !== 'Mexican'; }), 'Feeling everything');
   createMultiSelect('ms-dietary-prefs', DIETARY, 'Select restrictions...');
   createMultiSelect('ms-vibe-prefs', VIBES, 'Select vibes...', ['Rooftop','Cozy']);
   createMultiSelect('ms-skip-prefs', SKIP_ACTIVITIES, 'Select activities to skip...');
@@ -1894,6 +1893,13 @@ function showToast(msg) {
   t.textContent = msg; t.classList.add('show');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// FRIEND SEARCH
+function searchFriends(val) {
+  const results = document.getElementById('friend-search-results');
+  if (!results) return;
+  results.style.display = val.trim().length > 0 ? 'block' : 'none';
 }
 
 // ── INIT ──
