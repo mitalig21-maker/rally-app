@@ -282,6 +282,8 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .toggle.on{background:var(--green)}
 .toggle::after{content:'';position:absolute;width:18px;height:18px;background:var(--white);border-radius:50%;top:3px;left:3px;transition:transform .2s;box-shadow:0 1px 4px rgba(0,0,0,0.2)}
 .toggle.on::after{transform:translateX(20px)}
+.filter-pill{padding:7px 16px;border-radius:50px;border:1.5px solid var(--border);background:var(--white);font-family:var(--body);font-size:12px;font-weight:500;color:var(--text-muted);cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .15s}
+.filter-pill.active{background:var(--green);border-color:var(--green);color:var(--white)}
 
 /* FRIENDS */
 .friend-row{display:flex;align-items:center;gap:12px;padding:11px 20px;border-bottom:1px dotted var(--border-dot)}
@@ -463,9 +465,16 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
       <p class="home-greeting">Hey <span id="display-name">Mita</span> 👋</p>
       <h2 class="home-title">Your <em>plans</em><br>this week</h2>
     </div>
+    <div style="padding:8px 20px 4px;display:flex;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none">
+      <button class="filter-pill active" onclick="filterFeed('all',this)">All</button>
+      <button class="filter-pill" onclick="filterFeed('tonight',this)">Tonight</button>
+      <button class="filter-pill" onclick="filterFeed('vote',this)">Vote</button>
+      <button class="filter-pill" onclick="filterFeed('trip',this)">Trip</button>
+      <button class="filter-pill" onclick="filterFeed('concert',this)">Concert</button>
+    </div>
 
-    <div style="padding:14px 20px 0"><p class="section-label" style="margin-bottom:10px">Tonight</p></div>
-    <div class="rally-card" onclick="go('screen-locked')">
+    <div style="padding:10px 20px 0"><p class="section-label" style="margin-bottom:10px">Tonight</p></div>
+    <div class="rally-card" data-cat="tonight" onclick="go('screen-locked')">
       <div class="card card-pad">
         <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
           <div><p class="rally-title-text">Dinner in the West Village</p><p class="rally-meta">Saturday, Apr 12 · 7:30pm · Lilia</p></div>
@@ -485,7 +494,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     </div>
 
     <div style="padding:6px 20px 0"><p class="section-label" style="margin-bottom:10px">Needs your vote</p></div>
-    <div class="rally-card" onclick="go('screen-vote')">
+    <div class="rally-card" data-cat="vote" onclick="go('screen-vote')">
       <div class="card card-pad">
         <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
           <div><p class="rally-title-text">Brunch Sunday</p><p class="rally-meta">Sunday, Apr 13 · Started by Jess</p></div>
@@ -504,7 +513,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     </div>
 
     <div style="padding:6px 20px 0"><p class="section-label" style="margin-bottom:10px">Trip planning</p></div>
-    <div class="rally-card" onclick="go('screen-trip-plan')">
+    <div class="rally-card" data-cat="trip" onclick="go('screen-trip-plan')">
       <div class="card card-pad">
         <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
           <div><p class="rally-title-text">Weekend in Montreal</p><p class="rally-meta">May 2–4 · 5 people · AI itinerary ready</p></div>
@@ -525,7 +534,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     </div>
 
     <div style="padding:6px 20px 0"><p class="section-label" style="margin-bottom:10px">Concert — get your ticket</p></div>
-    <div class="rally-card" onclick="go('screen-ticket-confirm')">
+    <div class="rally-card" data-cat="concert" onclick="go('screen-ticket-confirm')">
       <div class="card card-pad">
         <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
           <div><p class="rally-title-text">Sabrina Carpenter · MSG</p><p class="rally-meta">Friday, Apr 18 · 8:00pm</p></div>
@@ -621,7 +630,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         <button class="pill" onclick="togglePill(this)">Casual</button>
         <button class="pill selected" onclick="togglePill(this)">Mid-range</button>
         <button class="pill" onclick="togglePill(this)">Splurge</button>
-        <button class="pill" onclick="togglePill(this)">Don't care</button>
+        <button class="pill" onclick="togglePill(this)">Don&#39;t care</button>
       </div>
     </div>
     <!-- CONTEXTUAL: Bars -->
@@ -637,7 +646,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         <button class="pill selected" onclick="togglePill(this)">Casual</button>
         <button class="pill" onclick="togglePill(this)">Mid-range</button>
         <button class="pill" onclick="togglePill(this)">Splurge</button>
-        <button class="pill" onclick="togglePill(this)">Don't care</button>
+        <button class="pill" onclick="togglePill(this)">Don&#39;t care</button>
       </div>
     </div>
     <!-- CONTEXTUAL: Brunch -->
@@ -657,7 +666,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
       <div class="pill-group" style="margin-bottom:4px">
         <button class="pill selected" onclick="togglePill(this)">Casual</button>
         <button class="pill" onclick="togglePill(this)">Mid-range</button>
-        <button class="pill" onclick="togglePill(this)">Don't care</button>
+        <button class="pill" onclick="togglePill(this)">Don&#39;t care</button>
       </div>
     </div>
     <p class="section-label" style="margin-bottom:8px">Have a place in mind?</p>
@@ -677,6 +686,41 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 </div>
 
 <!-- ══ START RALLY 2 — Calendar ══ -->
+<!-- CONTEXTUAL QUESTIONS SCREEN -->
+<div class="screen" id="screen-start-1b">
+  <div class="step-indicator">
+    <button class="btn-back" onclick="go('screen-start-1')">← Back</button>
+    <span class="step-count">Step 2 of 4</span>
+    <div style="width:44px"></div>
+  </div>
+  <div class="sheet-header"><p class="sheet-title">Your preferences</p><p class="sheet-sub" id="ctx-sub">What are you feeling?</p></div>
+  <div class="scroll-content" style="padding:14px 20px">
+    <!-- Dinner / Brunch: cuisine + not about it -->
+    <div id="ctx1b-food" style="display:none">
+      <label class="form-label" style="margin-top:0">Not about it tonight?</label>
+      <select class="select-field" style="margin-bottom:12px">
+        <option value="">Feeling everything</option>
+        <option>Italian</option><option>Japanese</option><option>Mexican</option><option>Chinese</option><option>Thai</option><option>Sushi</option><option>Pizza</option><option>Seafood</option>
+      </select>
+    </div>
+    <!-- Vibe (all) -->
+    <label class="form-label" style="margin-top:0">Vibe</label>
+    <select class="select-field" style="margin-bottom:12px" id="ctx1b-vibe">
+      <option value="">Select vibe...</option>
+      <option>Rooftop</option><option>Low key</option><option>Trendy</option><option>Cozy</option><option>Cocktail bar</option><option>Dive bar</option><option>Wine bar</option><option>Sports bar</option><option>Outdoor seating</option><option>Live music</option><option>Whatever</option>
+    </select>
+    <!-- Budget (all) -->
+    <label class="form-label" style="margin-top:0">Budget</label>
+    <div class="pill-group" style="margin-bottom:16px">
+      <button class="pill" onclick="togglePill(this)">Casual</button>
+      <button class="pill selected" onclick="togglePill(this)">Mid-range</button>
+      <button class="pill" onclick="togglePill(this)">Splurge</button>
+      <button class="pill" onclick="togglePill(this)">Don&#39;t care</button>
+    </div>
+    <button class="btn-primary" onclick="go('screen-start-2')">Continue →</button>
+  </div>
+</div>
+
 <div class="screen" id="screen-start-2">
   <div class="step-indicator">
     <button class="btn-back" onclick="go('screen-start-1')">← Back</button>
@@ -951,12 +995,12 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         <div class="vote-check" id="vcheck-1"><svg width="10" height="10" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
       </div>
       <div class="venue-tags"><span class="venue-tag">French</span><span class="venue-tag">Cozy</span><span class="venue-tag">Walk-in</span></div>
-      <div class="venue-footer"><p class="venue-votes"><strong>3 votes</strong> · Soumil, Romit, you</p><span class="venue-link" onclick="window.open('https://yelp.com','_blank')">View on Yelp →</span></div>
+      <div class="venue-footer"><p class="venue-votes"><strong>3 votes</strong> · Soumil, Romit, you</p><div style="display:flex;gap:10px"><span class="venue-link" onclick="window.open('https://www.yelp.com/search?find_desc=Buvette&find_loc=West+Village+NYC','_blank')">Yelp →</span><span class="venue-link" onclick="window.open('https://maps.google.com/?q=Buvette+West+Village+NYC','_blank')">Maps →</span></div></div>
     </div>
     <div class="venue-card" id="vc-2" onclick="selectVenue(2)">
       <p class="venue-name">Via Carota</p><p class="venue-meta">West Village · $$$ · Italian</p>
       <div class="venue-tags"><span class="venue-tag">Italian</span><span class="venue-tag">Romantic</span></div>
-      <div class="venue-footer"><p class="venue-votes"><strong>1 vote</strong> · Ryan</p><span class="venue-link" onclick="window.open('https://yelp.com','_blank')">View on Yelp →</span></div>
+      <div class="venue-footer"><p class="venue-votes"><strong>1 vote</strong> · Ryan</p><div style="display:flex;gap:10px"><span class="venue-link" onclick="window.open('https://www.yelp.com/search?find_desc=Via+Carota&find_loc=West+Village+NYC','_blank')">Yelp →</span><span class="venue-link" onclick="window.open('https://maps.google.com/?q=Via+Carota+West+Village+NYC','_blank')">Maps →</span></div></div>
     </div>
     <div id="suggested-venues"></div>
     <div style="padding:0 20px 16px">
@@ -1094,7 +1138,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         <button class="pill" onclick="togglePill(this)">Casual</button>
         <button class="pill selected" onclick="togglePill(this)">Mid-range</button>
         <button class="pill" onclick="togglePill(this)">Splurge</button>
-        <button class="pill" onclick="togglePill(this)">Don't care</button>
+        <button class="pill" onclick="togglePill(this)">Don&#39;t care</button>
       </div>
 
       <label class="form-label" style="margin-top:0">Have a specific place in mind?</label>
@@ -1438,15 +1482,15 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 
 
 <script>
-// ── DATA ──
+// -- DATA --
 const CUISINES=['Italian','Japanese','Mexican','Chinese','Thai','Indian','French','Korean','Mediterranean','American','Middle Eastern','Vietnamese','Sushi','Pizza','Steakhouse','Seafood','Vegetarian / Vegan','Whatever'];
 const AVOID_CUISINES=['Italian','Japanese','Mexican','Chinese','Thai','Indian','French','Korean','Sushi','Pizza','Steakhouse','Seafood'];
 const DIETARY=['Vegetarian','Vegan','Gluten-free','Kosher','Halal','Dairy-free','Nut allergy','Shellfish allergy','No pork','No alcohol'];
 const VIBES=['Rooftop','Low key','Late night','Trendy','Cozy','Outdoor seating','Sports bar','Cocktail bar','Date night','Casual','Active / sporty','Outdoor adventure','Cultural','Live music','Chill hangout','Live sports','Comedy','Dive bar','Wine bar','Whatever'];
 const SKIP_ACTIVITIES=['Bowling','Mini golf','Escape room','Karaoke','Museums','Sporting events','Comedy shows','Fitness classes','Movies','Hiking','Road trip','Central Park hang','Beach day','Game night','Cooking class','Paint and sip','Trivia night','Picnic','Skating','Cycling','Rooftop hang'];
-const HOODS=['West Village','East Village','Lower East Side','SoHo','Tribeca','Nolita','Chinatown','Financial District','Midtown',"Hell's Kitchen",'Chelsea','Flatiron','Gramercy','Upper East Side','Upper West Side','Harlem','Williamsburg','Greenpoint','Bushwick','Park Slope','Cobble Hill','Brooklyn Heights','Dumbo','Bed-Stuy','Astoria','Long Island City','Wherever'];
+const HOODS=['West Village','East Village','Lower East Side','SoHo','Tribeca','Nolita','Chinatown','Financial District','Midtown','Hells Kitchen','Chelsea','Flatiron','Gramercy','Upper East Side','Upper West Side','Harlem','Williamsburg','Greenpoint','Bushwick','Park Slope','Cobble Hill','Brooklyn Heights','Dumbo','Bed-Stuy','Astoria','Long Island City','Wherever'];
 
-// ── MULTI-SELECT COMPONENT ──
+// -- MULTI-SELECT COMPONENT --
 function rebuildAvoid(avoidId, favSelected) {
   const container = document.getElementById(avoidId);
   if (!container) return;
@@ -1516,7 +1560,7 @@ function createMultiSelect(containerId, options, placeholder, preSelected=[], on
   }, true);
 }
 
-// ── INIT MULTI-SELECTS ──
+// -- INIT MULTI-SELECTS --
 function initMultiSelects() {
   createMultiSelect('ms-cuisine-onboard', CUISINES, 'Select cuisines...', [], function(sel) {
     // Rebuild avoid dropdown excluding selected favorites
@@ -1537,7 +1581,7 @@ function initMultiSelects() {
   createMultiSelect('ms-hood-prefs', HOODS, 'Select neighborhoods...', ['West Village','Lower East Side']);
 }
 
-// ── NAVIGATION ──
+// -- NAVIGATION --
 function go(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   const t = document.getElementById(id);
@@ -1554,7 +1598,7 @@ function saveNameAndGo(dest) {
   go(dest);
 }
 
-// ── PLAN TYPE ──
+// -- PLAN TYPE --
 function togglePlanType(btn, type) {
   btn.classList.toggle('selected');
   const dinnerSel = document.getElementById('btn-activity') && document.querySelector('.plan-type-btn[onclick*="dinner"]') && document.querySelector('.plan-type-btn[onclick*="dinner"]').classList.contains('selected');
@@ -1575,7 +1619,15 @@ function handleStartContinue() {
   if (document.getElementById('btn-trip').classList.contains('selected')) {
     go('screen-trip-start');
   } else {
-    go('screen-start-2');
+    // Check if any contextual questions exist (dinner/bars/brunch selected)
+    const hasDinner = document.querySelector('.plan-type-btn[onclick*="dinner"]') && document.querySelector('.plan-type-btn[onclick*="dinner"]').classList.contains('selected');
+    const hasBars = document.querySelector('.plan-type-btn[onclick*="bars"]') && document.querySelector('.plan-type-btn[onclick*="bars"]').classList.contains('selected');
+    const hasBrunch = document.querySelector('.plan-type-btn[onclick*="brunch"]') && document.querySelector('.plan-type-btn[onclick*="brunch"]').classList.contains('selected');
+    if (hasDinner || hasBars || hasBrunch) {
+      go('screen-start-1b');
+    } else {
+      go('screen-start-2');
+    }
   }
 }
 
@@ -1626,7 +1678,7 @@ function addRallyToFeed() {
   const types = document.querySelectorAll('.plan-type-btn.selected');
   const titleInput = document.getElementById('rally-title-input');
   const customTitle = titleInput && titleInput.value.trim() ? titleInput.value.trim() : null;
-  const typeNames = customTitle || ([...types].map(t => t.querySelector('.pt-name').textContent).join(' + ') || 'Rally');
+  const typeNames = customTitle || ([...types].map(t => t.querySelector('.pt-name').textContent).join(' + ') || 'New Rally');
   const dateLabel = selectedDates.size > 0
     ? new Date(...[...selectedDates][0].split('-').map(Number)).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})
     : 'TBD';
@@ -1652,6 +1704,21 @@ function addRallyToFeed() {
 
 function openEditRally() {
   go('screen-edit-rally');
+}
+
+// FEED FILTER
+function filterFeed(cat, btn) {
+  document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.rally-card').forEach(card => {
+    if (cat === 'all') { card.style.display = ''; }
+    else { card.style.display = card.dataset.cat === cat ? '' : 'none'; }
+  });
+  // Also hide/show section labels
+  document.querySelectorAll('#rally-feed .section-label').forEach(label => {
+    const next = label.closest('div') && label.closest('div').nextElementSibling;
+    label.closest('div').style.display = '';
+  });
 }
 
 // RALLY TITLE
@@ -1772,21 +1839,60 @@ function selectRsvp(type) {
   document.getElementById('rsvp-' + type).classList.add('in');
 }
 
-// ── VENUE VOTING ──
+// -- VENUE VOTING --
 function selectVenue(n) {
-  [1, 2, 3].forEach(i => {
-    document.getElementById('vc-' + i).classList.remove('voted');
-    const c = document.getElementById('vcheck-' + i);
-    if (c) c.remove();
-  });
-  document.getElementById('vc-' + n).classList.add('voted');
-  const check = document.createElement('div');
-  check.className = 'vote-check'; check.id = 'vcheck-' + n;
-  check.innerHTML = '<svg width="10" height="10" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
-  document.getElementById('vc-' + n).insertBefore(check, document.getElementById('vc-' + n).querySelector('.venue-name'));
+  // Show vote confirmation sheet
+  const names = {1:'Buvette',2:'Via Carota'};
+  const name = names[n] || 'This venue';
+  showVoteSheet(n, name);
 }
 
-// ── SUGGEST PLACE ──
+function showVoteSheet(n, name) {
+  let sheet = document.getElementById('vote-sheet');
+  if (!sheet) {
+    sheet = document.createElement('div');
+    sheet.id = 'vote-sheet';
+    sheet.style.cssText = 'position:fixed;bottom:0;left:0;right:0;max-width:430px;margin:0 auto;background:var(--white);border-radius:20px 20px 0 0;padding:20px;z-index:500;box-shadow:0 -4px 30px rgba(0,0,0,0.15);transform:translateY(100%);transition:transform .3s ease';
+    document.body.appendChild(sheet);
+  }
+  sheet.innerHTML = '<div style="width:36px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 16px"></div>' +
+    '<p style="font-family:var(--headline);font-size:16px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">Vote for ' + name + '?</p>' +
+    '<p style="font-size:12px;color:var(--text-muted);margin-bottom:14px">This is your pick — confirm your preferences too</p>' +
+    '<label style="font-size:12px;font-weight:500;color:var(--text);display:block;margin-bottom:6px">Vibe</label>' +
+    '<select class="select-field" style="margin-bottom:10px"><option>Cozy</option><option>Rooftop</option><option>Low key</option><option>Trendy</option><option>Whatever</option></select>' +
+    '<label style="font-size:12px;font-weight:500;color:var(--text);display:block;margin-bottom:6px">Budget</label>' +
+    '<div style="display:flex;gap:8px;margin-bottom:16px">' +
+    '<button class="pill" onclick="togglePill(this)">Casual</button><button class="pill selected" onclick="togglePill(this)">Mid-range</button><button class="pill" onclick="togglePill(this)">Splurge</button><button class="pill" onclick="togglePill(this)">Don&#39;t care</button></div>' +
+    '<button class="btn-primary" onclick="confirmVote(' + n + ')" style="margin-bottom:10px">Confirm vote for ' + name + '</button>' +
+    '<button class="btn-outline" onclick="closeVoteSheet()" style="font-size:12px">Cancel</button>';
+  setTimeout(() => sheet.style.transform = 'translateY(0)', 10);
+}
+
+function closeVoteSheet() {
+  const sheet = document.getElementById('vote-sheet');
+  if (sheet) sheet.style.transform = 'translateY(100%)';
+}
+
+function confirmVote(n) {
+  closeVoteSheet();
+  [1,2,3].forEach(i => {
+    const el = document.getElementById('vc-'+i);
+    if(el) el.classList.remove('voted');
+    const c = document.getElementById('vcheck-'+i);
+    if(c) c.remove();
+  });
+  const card = document.getElementById('vc-'+n);
+  if(card){
+    card.classList.add('voted');
+    const check = document.createElement('div');
+    check.className='vote-check';check.id='vcheck-'+n;
+    check.innerHTML='<svg width="10" height="10" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
+    card.insertBefore(check,card.firstChild);
+  }
+  showToast('Vote confirmed! ✓');
+}
+
+// -- SUGGEST PLACE --
 function toggleStartSuggest() {
   const wrap = document.getElementById('start-suggest-wrap');
   const btn = document.getElementById('start-suggest-btn');
@@ -1801,22 +1907,55 @@ function toggleVoteSuggest() {
   if (wrap.classList.contains('show')) { wrap.classList.remove('show'); btn.style.display = 'flex'; }
   else { wrap.classList.add('show'); btn.style.display = 'none'; }
 }
+function parseVenueName(url) {
+  if (!url) return null;
+  try {
+    // Yelp: yelp.com/biz/buvette-new-york
+    if (url.includes('yelp.com/biz/')) {
+      const slug = url.split('/biz/')[1].split('?')[0];
+      return slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ').replace(/\s+\d+$/, '');
+    }
+    // Google Maps: maps.google.com/?q=Buvette or place/Buvette
+    if (url.includes('maps.google.com') || url.includes('google.com/maps')) {
+      const qMatch = url.match(/[?&]q=([^&]+)/);
+      if (qMatch) return decodeURIComponent(qMatch[1]).replace(/\+/g,' ').split(',')[0];
+      const placeMatch = url.match(/place\/([^/]+)/);
+      if (placeMatch) return decodeURIComponent(placeMatch[1]).replace(/\+/g,' ');
+    }
+    // maps.apple.com
+    if (url.includes('maps.apple.com')) {
+      const qMatch = url.match(/[?&]q=([^&]+)/);
+      if (qMatch) return decodeURIComponent(qMatch[1]).replace(/\+/g,' ');
+    }
+  } catch(e) {}
+  return null;
+}
+
 function addSuggestedVenue() {
-  const url = document.getElementById('suggest-url').value.trim();
+  var url = document.getElementById('suggest-url').value.trim();
+  var venueName = parseVenueName(url) || 'Your suggestion';
   suggestedCount++;
-  const container = document.getElementById('suggested-venues');
-  const card = document.createElement('div');
+  var container = document.getElementById('suggested-venues');
+  var card = document.createElement('div');
   card.className = 'venue-card';
   card.style.borderColor = '#92400E';
   card.style.background = '#FEF3C7';
-  card.innerHTML = `<p class="venue-name" style="font-size:14px">Your suggestion</p><p class="venue-meta">${url || 'Custom venue · Added by you'}</p><div class="venue-tags"><span class="venue-tag">Suggested by you</span></div><div class="venue-footer"><p class="venue-votes"><strong>0 votes</strong></p><span class="venue-link" onclick="window.open('${url || '#'}','_blank')">View →</span></div>`;
+  var html = '<p class="venue-name" style="font-size:14px">' + venueName + '</p>';
+  html += '<p class="venue-meta">Suggested by you</p>';
+  html += '<div class="venue-tags"><span class="venue-tag">Your pick</span></div>';
+  html += '<div class="venue-footer"><p class="venue-votes"><strong>0 votes</strong></p>';
+  if (url) {
+    html += '<span class="venue-link" onclick="window.open(\'' + url.replace(/'/g, '') + '\',\'_blank\')">View &#8594;</span>';
+  }
+  html += '</div>';
+  card.innerHTML = html;
   container.appendChild(card);
   document.getElementById('suggest-url').value = '';
   toggleVoteSuggest();
-  showToast('Your venue added to the vote!');
+  showToast(venueName + ' added to the vote!');
 }
 
-// ── TICKET CONFIRM ──
+// -- TICKET CONFIRM --
 function confirmTicket(got) {
   const status = document.getElementById('my-ticket-status');
   if (got) {
@@ -1828,27 +1967,46 @@ function confirmTicket(got) {
   }
 }
 
-// ── TRIP MODE ──
+// -- TRIP MODE --
 function selectMode(mode) {
   document.getElementById('mode-ai').classList.toggle('selected', mode === 'ai');
   document.getElementById('mode-manual').classList.toggle('selected', mode === 'manual');
 }
 
-// ── CHAT ──
+// -- CHAT --
 function sendMessage() {
   const input = document.getElementById('chat-input');
   const text = input.value.trim();
   if (!text) return;
   const msgs = document.getElementById('chat-messages');
   const div = document.createElement('div');
-  div.style.alignSelf = 'flex-end';
-  div.innerHTML = `<div class="chat-bubble mine">${text}<p class="chat-time" style="text-align:right">Now</p></div>`;
+  div.style.cssText = 'align-self:flex-end;max-width:75%';
+  div.innerHTML = '<div class="chat-bubble mine">' + text + '<p class="chat-time" style="text-align:right">Now</p></div>';
   msgs.appendChild(div);
   input.value = '';
   msgs.scrollTop = msgs.scrollHeight;
+  // Simulate a reply after 1.5s for fun
+  setTimeout(function() {
+    const names = ['Soumil','Romit','Diana','Morgan'];
+    const replies = ['haha yes!','sounds good to me','lol yes','let us do it!','agreed','ok works','cannot wait'];
+    const name = names[Math.floor(Math.random()*names.length)];
+    const reply = replies[Math.floor(Math.random()*replies.length)];
+    const replyDiv = document.createElement('div');
+    replyDiv.style.cssText = 'align-self:flex-start;max-width:75%';
+    replyDiv.innerHTML = '<p class="chat-sender">' + name + '</p><div class="chat-bubble theirs">' + reply + '<p class="chat-time">Now</p></div>';
+    msgs.appendChild(replyDiv);
+    msgs.scrollTop = msgs.scrollHeight;
+  }, 1500);
 }
 
-// ── CALENDAR ──
+// Allow enter key to send
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && document.getElementById('chat-input') === document.activeElement) {
+    sendMessage();
+  }
+});
+
+// -- CALENDAR --
 const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 let calYear = 2026, calMonth = 3;
 let selectedDates = new Set();
@@ -1886,7 +2044,7 @@ function updateCalSelected() {
 function prevMonth() { calMonth--; if (calMonth < 0) { calMonth = 11; calYear--; } renderCal(); }
 function nextMonth() { calMonth++; if (calMonth > 11) { calMonth = 0; calYear++; } renderCal(); }
 
-// ── TOAST ──
+// -- TOAST --
 let toastTimer;
 function showToast(msg) {
   const t = document.getElementById('toast');
@@ -1902,7 +2060,7 @@ function searchFriends(val) {
   results.style.display = val.trim().length > 0 ? 'block' : 'none';
 }
 
-// ── INIT ──
+// -- INIT --
 renderCal();
 initMultiSelects();
 if ('serviceWorker' in navigator) { navigator.serviceWorker.register('service-worker.js').catch(() => {}); }
