@@ -37,7 +37,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:calc(14px + var(--safe-top)) 20px 14px;border-bottom:1px dotted var(--border-dot);flex-shrink:0;background:var(--cream)}
 .topbar-logo{font-family:var(--headline);font-size:20px;font-weight:700;color:var(--green);letter-spacing:2px;text-transform:uppercase}
 .bottom-nav{position:absolute;bottom:0;left:0;right:0;background:var(--cream);border-top:1px dotted var(--border-dot);display:flex;padding:10px 0 calc(10px + var(--safe-bottom));z-index:100}
-.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;padding:4px 0;font-family:var(--body);font-size:10px;color:var(--text-light)}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;padding:4px 0;font-family:var(--body);font-size:9px;color:var(--text-light)}
 .nav-item.active{color:var(--green);font-weight:500}
 .fab{position:absolute;bottom:calc(70px + var(--safe-bottom));left:50%;transform:translateX(-50%);background:var(--green);color:var(--white);border:none;border-radius:28px;padding:13px 24px;font-family:var(--headline);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;z-index:101;display:flex;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(27,58,45,0.22)}
 
@@ -473,7 +473,19 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
       <button class="filter-pill" onclick="filterFeed('concert',this)">Concert</button>
     </div>
 
-    <div style="padding:10px 20px 0"><p class="section-label" style="margin-bottom:10px">Tonight</p></div>
+    <div style="padding:10px 20px 0" data-cat-section="prompt"><p class="section-label" style="margin-bottom:10px">Add to memories</p></div>
+    <div class="rally-card" data-cat="prompt" onclick="go('screen-memory-detail');showToast('Add a photo from last night!')" style="cursor:pointer">
+      <div class="card card-pad" style="background:linear-gradient(135deg,#FEF3C7 0%,#FCE7F3 100%);border:1px solid #92400E">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">
+          <div>
+            <p class="rally-title-text" style="font-size:14px">📸 How was Lilia?</p>
+            <p class="rally-meta" style="font-size:11px">Add a photo from last night</p>
+          </div>
+          <span class="badge" style="background:#92400E;color:white">Tap to add</span>
+        </div>
+      </div>
+    </div>
+    <div style="padding:10px 20px 0" data-cat-section="tonight"><p class="section-label" style="margin-bottom:10px">Tonight</p></div>
     <div class="rally-card" data-cat="tonight" onclick="go('screen-locked')">
       <div class="card card-pad">
         <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
@@ -493,7 +505,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
       </div>
     </div>
 
-    <div style="padding:6px 20px 0"><p class="section-label" style="margin-bottom:10px">Needs your vote</p></div>
+    <div style="padding:6px 20px 0" data-cat-section="vote"><p class="section-label" style="margin-bottom:10px">Needs your vote</p></div>
     <div class="rally-card" data-cat="vote" onclick="go('screen-vote')">
       <div class="card card-pad">
         <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
@@ -512,7 +524,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
       </div>
     </div>
 
-    <div style="padding:6px 20px 0"><p class="section-label" style="margin-bottom:10px">Trip planning</p></div>
+    <div style="padding:6px 20px 0" data-cat-section="trip"><p class="section-label" style="margin-bottom:10px">Trip planning</p></div>
     <div class="rally-card" data-cat="trip" onclick="go('screen-trip-plan')">
       <div class="card card-pad">
         <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
@@ -533,7 +545,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
       </div>
     </div>
 
-    <div style="padding:6px 20px 0"><p class="section-label" style="margin-bottom:10px">Concert — get your ticket</p></div>
+    <div style="padding:6px 20px 0" data-cat-section="concert"><p class="section-label" style="margin-bottom:10px">Concert — get your ticket</p></div>
     <div class="rally-card" data-cat="concert" onclick="go('screen-ticket-confirm')">
       <div class="card card-pad">
         <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
@@ -559,6 +571,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
   </button>
   <nav class="bottom-nav">
     <button class="nav-item active" onclick="go('screen-home')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Plans</button>
+    <button class="nav-item" onclick="go('screen-memories')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Memories</button>
     <button class="nav-item" onclick="go('screen-groups')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Groups</button>
     <button class="nav-item" onclick="go('screen-profile')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</button>
   </nav>
@@ -582,6 +595,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
       <button class="plan-type-btn" onclick="togglePlanType(this,'activity')" id="btn-activity"><div class="pt-icon">🎉</div><span class="pt-name">Activity</span><span class="pt-desc">Bowling, shows...</span></button>
       <button class="plan-type-btn" onclick="togglePlanType(this,'trip')" id="btn-trip"><div class="pt-icon">✈️</div><span class="pt-name">Trip</span><span class="pt-desc">Weekend getaway</span></button>
       <button class="plan-type-btn" onclick="togglePlanType(this,'other')" id="btn-other"><div class="pt-icon">💬</div><span class="pt-name">Other</span><span class="pt-desc">Something else</span></button>
+      <button class="plan-type-btn" onclick="togglePlanType(this,'anything')" id="btn-anything" style="grid-column:span 2"><div class="pt-icon">✨</div><span class="pt-name">Anything else</span><span class="pt-desc">Custom Rally — add your own questions</span></button>
     </div>
 
     <div id="activity-subtypes" style="display:none;margin-bottom:14px">
@@ -607,68 +621,15 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
       <p style="font-size:13px;color:var(--green);line-height:1.5">Trip mode unlocks a full planning flow — destination, dates, accommodation voting, and an AI-powered itinerary built from everyone's top 3.</p>
     </div>
 
+    <div id="anything-note" style="display:none;margin-bottom:14px;background:#FEF3C7;border-radius:var(--radius-sm);padding:12px 14px">
+      <p style="font-size:13px;color:#92400E;line-height:1.5">✨ <strong>Anything Rally</strong> — add up to 5 custom questions for your group (poll or free text). Perfect for Halloween outfits, what to bring, or any group decision.</p>
+    </div>
+
     <div id="other-freetext" style="display:none;margin-bottom:14px">
       <p class="section-label" style="margin-bottom:8px">What's the plan?</p>
       <input class="input-field" type="text" placeholder="e.g. Birthday dinner, pottery class, rooftop hangout...">
     </div>
 
-    <!-- CONTEXTUAL: Dinner -->
-    <div id="ctx-dinner" style="display:none;margin-bottom:14px">
-      <p class="section-label" style="margin-bottom:8px">Dinner preferences</p>
-      <label class="form-label" style="margin-top:8px">Not about it tonight?</label>
-      <select class="select-field" style="margin-bottom:8px">
-        <option value="">Nothing to avoid</option>
-        <option>Italian</option><option>Japanese</option><option>Mexican</option><option>Chinese</option><option>Thai</option><option>Sushi</option><option>Pizza</option><option>Seafood</option>
-      </select>
-      <label class="form-label" style="margin-top:0">Vibe</label>
-      <select class="select-field" style="margin-bottom:8px">
-        <option value="">Select vibe...</option>
-        <option>Rooftop</option><option>Low key</option><option>Trendy</option><option>Cozy</option><option>Date night</option><option>Casual</option><option>Whatever</option>
-      </select>
-      <label class="form-label" style="margin-top:0">Budget</label>
-      <div class="pill-group" style="margin-bottom:4px">
-        <button class="pill" onclick="togglePill(this)">Casual</button>
-        <button class="pill selected" onclick="togglePill(this)">Mid-range</button>
-        <button class="pill" onclick="togglePill(this)">Splurge</button>
-        <button class="pill" onclick="togglePill(this)">Don&#39;t care</button>
-      </div>
-    </div>
-    <!-- CONTEXTUAL: Bars -->
-    <div id="ctx-bars" style="display:none;margin-bottom:14px">
-      <p class="section-label" style="margin-bottom:8px">Bar preferences</p>
-      <label class="form-label" style="margin-top:8px">Vibe</label>
-      <select class="select-field" style="margin-bottom:8px">
-        <option value="">Select vibe...</option>
-        <option>Rooftop</option><option>Dive bar</option><option>Cocktail bar</option><option>Wine bar</option><option>Sports bar</option><option>Late night</option><option>Whatever</option>
-      </select>
-      <label class="form-label" style="margin-top:0">Budget</label>
-      <div class="pill-group" style="margin-bottom:4px">
-        <button class="pill selected" onclick="togglePill(this)">Casual</button>
-        <button class="pill" onclick="togglePill(this)">Mid-range</button>
-        <button class="pill" onclick="togglePill(this)">Splurge</button>
-        <button class="pill" onclick="togglePill(this)">Don&#39;t care</button>
-      </div>
-    </div>
-    <!-- CONTEXTUAL: Brunch -->
-    <div id="ctx-brunch" style="display:none;margin-bottom:14px">
-      <p class="section-label" style="margin-bottom:8px">Brunch preferences</p>
-      <label class="form-label" style="margin-top:8px">Not about it?</label>
-      <select class="select-field" style="margin-bottom:8px">
-        <option value="">Nothing to avoid</option>
-        <option>American</option><option>Mexican</option><option>Italian</option><option>Eggs heavy</option>
-      </select>
-      <label class="form-label" style="margin-top:0">Vibe</label>
-      <select class="select-field" style="margin-bottom:8px">
-        <option value="">Select vibe...</option>
-        <option>Cozy</option><option>Trendy</option><option>Outdoor seating</option><option>Low key</option><option>Whatever</option>
-      </select>
-      <label class="form-label" style="margin-top:0">Budget</label>
-      <div class="pill-group" style="margin-bottom:4px">
-        <button class="pill selected" onclick="togglePill(this)">Casual</button>
-        <button class="pill" onclick="togglePill(this)">Mid-range</button>
-        <button class="pill" onclick="togglePill(this)">Don&#39;t care</button>
-      </div>
-    </div>
     <p class="section-label" style="margin-bottom:8px">Have a place in mind?</p>
     <div style="margin-bottom:14px">
       <button class="suggest-place-btn" id="start-suggest-btn" onclick="toggleStartSuggest()">
@@ -741,22 +702,23 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
       <div class="cal-grid" id="cal-grid"></div>
       <div class="cal-selected" id="cal-selected" style="display:none"><p class="cal-selected-text" id="cal-selected-text"></p></div>
     </div>
-    <p class="section-label" style="margin-bottom:10px">Propose a time</p>
-    <div style="display:flex;gap:8px;margin-bottom:6px">
-      <button class="deadline-opt" id="time-7" onclick="selectTime(this,'7:00pm')"><div class="big" style="font-size:15px">7pm</div><div class="small">Evening</div></button>
-      <button class="deadline-opt selected" id="time-8" onclick="selectTime(this,'8:00pm')"><div class="big" style="font-size:15px">8pm</div><div class="small">Evening</div></button>
-      <button class="deadline-opt" id="time-9" onclick="selectTime(this,'9:00pm')"><div class="big" style="font-size:15px">9pm</div><div class="small">Evening</div></button>
-      <button class="deadline-opt" id="time-other" onclick="selectTime(this,'other')"><div class="big" style="font-size:15px">Other</div><div class="small">Custom</div></button>
-    </div>
-    <input class="input-field" type="time" id="custom-time-input" style="display:none;margin-bottom:4px">
-    <p style="font-size:11px;color:var(--text-muted);margin-bottom:14px">Friends can confirm this time or suggest a different one when they respond.</p>
+    <p class="section-label" style="margin-bottom:8px">Propose a time</p>
+    <input class="input-field" type="time" id="rally-time-input" value="20:00" step="1800" style="margin-bottom:6px;font-size:16px">
+    <p style="font-size:11px;color:var(--text-muted);margin-bottom:14px">30-minute intervals. Friends can confirm or suggest a different time.</p>
 
-    <p class="section-label" style="margin-bottom:10px">Response deadline</p>
-    <div class="deadline-options">
-      <button class="deadline-opt" onclick="selectDeadline(this)"><div class="big">12</div><div class="small">hours</div></button>
-      <button class="deadline-opt selected" onclick="selectDeadline(this)"><div class="big">24</div><div class="small">hours</div></button>
-      <button class="deadline-opt" onclick="selectDeadline(this)"><div class="big">48</div><div class="small">hours</div></button>
-    </div>
+    <p class="section-label" style="margin-bottom:8px">Response deadline</p>
+    <select class="select-field" id="rally-deadline-input" style="margin-bottom:14px">
+      <option value="1h">1 hour</option>
+      <option value="3h">3 hours</option>
+      <option value="6h">6 hours</option>
+      <option value="12h">12 hours</option>
+      <option value="24h" selected>1 day</option>
+      <option value="48h">2 days</option>
+      <option value="72h">3 days</option>
+      <option value="120h">5 days</option>
+      <option value="168h">7 days</option>
+      <option value="240h">10 days</option>
+    </select>
     <button class="btn-primary" onclick="go('screen-start-3')">Continue →</button>
   </div>
 </div>
@@ -970,12 +932,14 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     <div class="attendee-row" id="my-ticket-row"><div style="display:flex;align-items:center;gap:10px"><div class="avatar avatar-sm" style="background:#E8F0EC;color:var(--green)">M</div><p class="attendee-name">You</p></div><span class="ticket-chip" id="my-ticket-status">Needs ticket</span></div>
     <div class="attendee-row" style="border:none"><div style="display:flex;align-items:center;gap:10px"><div class="avatar avatar-sm" style="background:#FEE2E2;color:#991B1B">D</div><p class="attendee-name">Diana</p></div><span class="ticket-chip">Needs ticket</span></div>
 
-    <div style="padding:14px 20px">
-      <button class="btn-outline" style="font-size:12px" onclick="window.open('https://ticketmaster.com','_blank')">Buy ticket on Ticketmaster →</button>
+    <div style="padding:14px 20px;display:flex;gap:8px">
+      <button class="btn-outline" style="font-size:12px;flex:1" onclick="window.open('https://ticketmaster.com','_blank')">Buy ticket</button>
+      <button class="btn-outline" style="font-size:12px;flex:1" onclick="go('screen-chat')">💬 Chat</button>
     </div>
   </div>
   <nav class="bottom-nav">
     <button class="nav-item active" onclick="go('screen-home')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Plans</button>
+    <button class="nav-item" onclick="go('screen-memories')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Memories</button>
     <button class="nav-item" onclick="go('screen-groups')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Groups</button>
     <button class="nav-item" onclick="go('screen-profile')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</button>
   </nav>
@@ -1017,6 +981,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
   </div>
   <nav class="bottom-nav">
     <button class="nav-item active" onclick="go('screen-home')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Plans</button>
+    <button class="nav-item" onclick="go('screen-memories')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Memories</button>
     <button class="nav-item" onclick="go('screen-groups')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Groups</button>
     <button class="nav-item" onclick="go('screen-profile')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</button>
   </nav>
@@ -1045,11 +1010,16 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     <div class="attendee-row" style="border:none"><div style="display:flex;align-items:center;gap:10px"><div class="avatar avatar-sm" style="background:#FCE7F3;color:#9D174D">R</div><p class="attendee-name">Romit</p></div><span class="eta-chip">8 min away</span></div>
     <div style="padding:14px 20px;display:flex;gap:8px">
       <button class="btn-outline" style="font-size:12px;flex:1">Share live location</button>
-      <button class="btn-sm" onclick="go('screen-chat')">💬 Chat</button>
+      <button class="btn-outline" style="font-size:12px;flex:1" onclick="go('screen-chat')">💬 Chat</button>
+    </div>
+    <div style="padding:0 20px 14px">
+      <p class="section-label" style="margin-bottom:8px">📸 Memories</p>
+      <button onclick="showToast('Photo upload coming!')" style="width:100%;background:none;border:1.5px dashed var(--border);border-radius:var(--radius-sm);padding:14px;color:var(--text-muted);cursor:pointer;font-family:var(--body);font-size:13px">+ Add photos from tonight</button>
     </div>
   </div>
   <nav class="bottom-nav">
     <button class="nav-item active" onclick="go('screen-home')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Plans</button>
+    <button class="nav-item" onclick="go('screen-memories')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Memories</button>
     <button class="nav-item" onclick="go('screen-groups')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Groups</button>
     <button class="nav-item" onclick="go('screen-profile')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</button>
   </nav>
@@ -1187,6 +1157,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
   </div>
   <nav class="bottom-nav">
     <button class="nav-item" onclick="go('screen-home')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Plans</button>
+    <button class="nav-item" onclick="go('screen-memories')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Memories</button>
     <button class="nav-item active" onclick="go('screen-groups')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Groups</button>
     <button class="nav-item" onclick="go('screen-profile')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</button>
   </nav>
@@ -1280,6 +1251,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
   </div>
   <nav class="bottom-nav">
     <button class="nav-item" onclick="go('screen-home')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Plans</button>
+    <button class="nav-item" onclick="go('screen-memories')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Memories</button>
     <button class="nav-item" onclick="go('screen-groups')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Groups</button>
     <button class="nav-item active" onclick="go('screen-profile')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</button>
   </nav>
@@ -1481,6 +1453,188 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 </div>
 
 
+<!-- ══ ANYTHING — CUSTOM QUESTIONS SCREEN ══ -->
+<div class="screen" id="screen-anything-questions">
+  <div class="step-indicator">
+    <button class="btn-back" onclick="go('screen-start-1')">← Back</button>
+    <span class="step-count">Step 2 of 4</span>
+    <div style="width:44px"></div>
+  </div>
+  <div class="sheet-header"><p class="sheet-title">Custom questions</p><p class="sheet-sub">Ask your group up to 5 questions</p></div>
+  <div class="scroll-content" style="padding:14px 20px">
+    <div id="custom-questions-list">
+      <div class="custom-question-block" data-idx="1" style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+          <span style="font-family:var(--headline);font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-light)">Question 1</span>
+          <button onclick="removeQuestion(this)" style="background:none;border:none;color:var(--text-muted);font-size:18px;cursor:pointer;padding:0;line-height:1">×</button>
+        </div>
+        <input class="input-field" type="text" placeholder="e.g. What outfit are you wearing?" style="margin-bottom:8px">
+        <div style="display:flex;gap:8px;margin-bottom:8px">
+          <button class="q-type-btn selected" onclick="setQuestionType(this,'free')" style="flex:1;padding:8px;border:1.5px solid var(--green);background:var(--green-pale);color:var(--green);border-radius:var(--radius-sm);font-family:var(--body);font-size:12px;cursor:pointer;font-weight:500">Free text</button>
+          <button class="q-type-btn" onclick="setQuestionType(this,'poll')" style="flex:1;padding:8px;border:1.5px solid var(--border);background:var(--white);color:var(--text-muted);border-radius:var(--radius-sm);font-family:var(--body);font-size:12px;cursor:pointer">Poll options</button>
+        </div>
+        <div class="poll-options" style="display:none;flex-direction:column;gap:6px">
+          <input class="input-field" type="text" placeholder="Option 1" style="font-size:13px;padding:8px 12px">
+          <input class="input-field" type="text" placeholder="Option 2" style="font-size:13px;padding:8px 12px">
+          <button onclick="addPollOption(this)" style="background:none;border:1.5px dashed var(--border);border-radius:var(--radius-sm);padding:6px;font-size:11px;color:var(--text-muted);cursor:pointer;font-family:var(--body)">+ Add option</button>
+        </div>
+      </div>
+    </div>
+    <button onclick="addCustomQuestion()" style="width:100%;background:none;border:1.5px dashed var(--border);border-radius:var(--radius-sm);padding:12px;color:var(--text-muted);cursor:pointer;font-family:var(--body);font-size:13px;margin-bottom:14px">+ Add another question</button>
+    <button class="btn-primary" onclick="go('screen-start-2')">Continue →</button>
+  </div>
+</div>
+
+<!-- ══ MEMORIES TAB ══ -->
+<div class="screen" id="screen-memories">
+  <div class="topbar">
+    <span class="topbar-logo">Memories</span>
+    <button style="background:none;border:none;cursor:pointer;color:var(--text)" onclick="showToast('Filter by year or group')"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg></button>
+  </div>
+  <div class="scroll-content">
+    <!-- Memory stats -->
+    <div style="padding:16px 20px 0">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px">
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:14px 8px;text-align:center">
+          <p style="font-family:var(--headline);font-size:22px;font-weight:700;color:var(--green);line-height:1">12</p>
+          <p style="font-size:10px;color:var(--text-muted);margin-top:3px;text-transform:uppercase;letter-spacing:0.5px;font-family:var(--headline);font-weight:700">Memories</p>
+        </div>
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:14px 8px;text-align:center">
+          <p style="font-family:var(--headline);font-size:22px;font-weight:700;color:var(--green);line-height:1">47</p>
+          <p style="font-size:10px;color:var(--text-muted);margin-top:3px;text-transform:uppercase;letter-spacing:0.5px;font-family:var(--headline);font-weight:700">Photos</p>
+        </div>
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:14px 8px;text-align:center">
+          <p style="font-family:var(--headline);font-size:22px;font-weight:700;color:var(--green);line-height:1">4</p>
+          <p style="font-size:10px;color:var(--text-muted);margin-top:3px;text-transform:uppercase;letter-spacing:0.5px;font-family:var(--headline);font-weight:700">This month</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter pills -->
+    <div style="padding:0 20px 8px;display:flex;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none">
+      <button class="filter-pill active" onclick="filterMemories('all',this)">All</button>
+      <button class="filter-pill" onclick="filterMemories('2026',this)">2026</button>
+      <button class="filter-pill" onclick="filterMemories('friday',this)">Friday Night Crew</button>
+      <button class="filter-pill" onclick="filterMemories('roommates',this)">Roommates</button>
+    </div>
+
+    <!-- Memory grid -->
+    <div style="padding:8px 20px 0">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <!-- Memory card 1 -->
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer" onclick="openMemory('lilia')">
+          <div style="aspect-ratio:1;background:linear-gradient(135deg,#1B3A2D 0%,#2C5A43 100%);position:relative;display:flex;align-items:center;justify-content:center">
+            <span style="font-size:36px">🍝</span>
+            <div style="position:absolute;top:8px;right:8px;background:rgba(255,255,255,0.9);border-radius:50px;padding:3px 8px;font-size:10px;font-weight:600;color:var(--green)">8 photos</div>
+          </div>
+          <div style="padding:10px 12px">
+            <p style="font-family:var(--headline);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;line-height:1.2;margin-bottom:2px">Dinner at Lilia</p>
+            <p style="font-size:11px;color:var(--text-muted)">Apr 12 · 4 people</p>
+          </div>
+        </div>
+        <!-- Memory card 2 -->
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer" onclick="openMemory('wren')">
+          <div style="aspect-ratio:1;background:linear-gradient(135deg,#FEF3C7 0%,#92400E 100%);position:relative;display:flex;align-items:center;justify-content:center">
+            <span style="font-size:36px">🍸</span>
+            <div style="position:absolute;top:8px;right:8px;background:rgba(255,255,255,0.9);border-radius:50px;padding:3px 8px;font-size:10px;font-weight:600;color:var(--green)">5 photos</div>
+          </div>
+          <div style="padding:10px 12px">
+            <p style="font-family:var(--headline);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;line-height:1.2;margin-bottom:2px">The Wren Bars</p>
+            <p style="font-size:11px;color:var(--text-muted)">Mar 29 · 5 people</p>
+          </div>
+        </div>
+        <!-- Memory card 3 -->
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer" onclick="openMemory('buvette')">
+          <div style="aspect-ratio:1;background:linear-gradient(135deg,#FCE7F3 0%,#9D174D 100%);position:relative;display:flex;align-items:center;justify-content:center">
+            <span style="font-size:36px">🥐</span>
+            <div style="position:absolute;top:8px;right:8px;background:rgba(255,255,255,0.9);border-radius:50px;padding:3px 8px;font-size:10px;font-weight:600;color:var(--green)">12 photos</div>
+          </div>
+          <div style="padding:10px 12px">
+            <p style="font-family:var(--headline);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;line-height:1.2;margin-bottom:2px">Buvette Brunch</p>
+            <p style="font-size:11px;color:var(--text-muted)">Mar 15 · 6 people</p>
+          </div>
+        </div>
+        <!-- Memory card 4 -->
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer" onclick="openMemory('bowling')">
+          <div style="aspect-ratio:1;background:linear-gradient(135deg,#EDE9FE 0%,#5B21B6 100%);position:relative;display:flex;align-items:center;justify-content:center">
+            <span style="font-size:36px">🎳</span>
+            <div style="position:absolute;top:8px;right:8px;background:rgba(255,255,255,0.9);border-radius:50px;padding:3px 8px;font-size:10px;font-weight:600;color:var(--green)">6 photos</div>
+          </div>
+          <div style="padding:10px 12px">
+            <p style="font-family:var(--headline);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;line-height:1.2;margin-bottom:2px">Bowling Night</p>
+            <p style="font-size:11px;color:var(--text-muted)">Mar 8 · 6 people</p>
+          </div>
+        </div>
+        <!-- Memory card 5 -->
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer" onclick="openMemory('central')">
+          <div style="aspect-ratio:1;background:linear-gradient(135deg,#DCFCE7 0%,#166534 100%);position:relative;display:flex;align-items:center;justify-content:center">
+            <span style="font-size:36px">🌳</span>
+            <div style="position:absolute;top:8px;right:8px;background:rgba(255,255,255,0.9);border-radius:50px;padding:3px 8px;font-size:10px;font-weight:600;color:var(--green)">9 photos</div>
+          </div>
+          <div style="padding:10px 12px">
+            <p style="font-family:var(--headline);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;line-height:1.2;margin-bottom:2px">Central Park</p>
+            <p style="font-size:11px;color:var(--text-muted)">Feb 28 · 4 people</p>
+          </div>
+        </div>
+        <!-- Memory card 6 -->
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer" onclick="openMemory('sabrina')">
+          <div style="aspect-ratio:1;background:linear-gradient(135deg,#FEE2E2 0%,#991B1B 100%);position:relative;display:flex;align-items:center;justify-content:center">
+            <span style="font-size:36px">🎤</span>
+            <div style="position:absolute;top:8px;right:8px;background:rgba(255,255,255,0.9);border-radius:50px;padding:3px 8px;font-size:10px;font-weight:600;color:var(--green)">7 photos</div>
+          </div>
+          <div style="padding:10px 12px">
+            <p style="font-family:var(--headline);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;line-height:1.2;margin-bottom:2px">Sabrina Concert</p>
+            <p style="font-size:11px;color:var(--text-muted)">Feb 14 · 3 people</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="height:80px"></div>
+  </div>
+  <nav class="bottom-nav">
+    <button class="nav-item" onclick="go('screen-home')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Plans</button>
+    <button class="nav-item active" onclick="go('screen-memories')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Memories</button>
+    <button class="nav-item" onclick="go('screen-groups')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Groups</button>
+    <button class="nav-item" onclick="go('screen-profile')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</button>
+  </nav>
+</div>
+
+<!-- ══ MEMORY DETAIL ══ -->
+<div class="screen" id="screen-memory-detail">
+  <div class="topbar">
+    <button class="btn-back" onclick="go('screen-memories')">← Back</button>
+    <button style="background:none;border:none;cursor:pointer;color:var(--text)" onclick="showToast('Share memory link copied!')"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
+  </div>
+  <div class="scroll-content">
+    <div style="padding:14px 20px 14px;border-bottom:1px dotted var(--border-dot)">
+      <h2 class="headline-lg" style="font-size:22px" id="memory-title">Dinner at Lilia</h2>
+      <p style="font-size:12px;color:var(--text-muted);margin-top:4px" id="memory-meta">Saturday, April 12 · Williamsburg · 4 people</p>
+      <div style="display:flex;gap:5px;margin-top:10px">
+        <div class="avatar avatar-sm" style="background:#E8F0EC;color:var(--green)">M</div>
+        <div class="avatar avatar-sm" style="background:#FEF3C7;color:#92400E">S</div>
+        <div class="avatar avatar-sm" style="background:#FCE7F3;color:#9D174D">R</div>
+        <div class="avatar avatar-sm" style="background:#EDE9FE;color:#5B21B6">M</div>
+      </div>
+    </div>
+    <div style="padding:14px 20px 0">
+      <p class="section-label" style="margin-bottom:10px">Photos · 8</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">
+        <div style="aspect-ratio:1;background:linear-gradient(135deg,#1B3A2D 0%,#2C5A43 100%);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:24px">🍝</div>
+        <div style="aspect-ratio:1;background:linear-gradient(135deg,#FEF3C7 0%,#92400E 100%);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:24px">🍷</div>
+        <div style="aspect-ratio:1;background:linear-gradient(135deg,#FCE7F3 0%,#9D174D 100%);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:24px">📸</div>
+        <div style="aspect-ratio:1;background:linear-gradient(135deg,#EDE9FE 0%,#5B21B6 100%);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:24px">🥗</div>
+        <div style="aspect-ratio:1;background:linear-gradient(135deg,#DCFCE7 0%,#166534 100%);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:24px">🍰</div>
+        <div style="aspect-ratio:1;background:linear-gradient(135deg,#FEE2E2 0%,#991B1B 100%);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:24px">🥂</div>
+        <div style="aspect-ratio:1;background:linear-gradient(135deg,#1B3A2D 0%,#2C5A43 100%);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:24px">🍝</div>
+        <div style="aspect-ratio:1;background:linear-gradient(135deg,#FEF3C7 0%,#92400E 100%);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:24px">📷</div>
+      </div>
+      <button onclick="showToast('Photo upload coming!')" style="width:100%;background:none;border:1.5px dashed var(--border);border-radius:var(--radius-sm);padding:14px;color:var(--text-muted);cursor:pointer;font-family:var(--body);font-size:13px;margin-top:10px">+ Add a photo</button>
+    </div>
+    <div style="height:80px"></div>
+  </div>
+</div>
+
+
 <script>
 // -- DATA --
 const CUISINES=['Italian','Japanese','Mexican','Chinese','Thai','Indian','French','Korean','Mediterranean','American','Middle Eastern','Vietnamese','Sushi','Pizza','Steakhouse','Seafood','Vegetarian / Vegan','Whatever'];
@@ -1584,8 +1738,16 @@ function initMultiSelects() {
 // -- NAVIGATION --
 function go(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  const t = document.getElementById(id);
+  var t = document.getElementById(id);
   if (t) t.classList.add('active');
+  // Reset ticket card buttons when entering ticket screen fresh
+  if (id === 'screen-ticket-confirm') {
+    var card = document.querySelector('#screen-ticket-confirm .ticket-confirm-card');
+    if (card) {
+      var btns = card.querySelector('.ticket-btns');
+      if (btns && !card.dataset.confirmed) btns.style.display = 'flex';
+    }
+  }
 }
 
 function saveNameAndGo(dest) {
@@ -1601,33 +1763,34 @@ function saveNameAndGo(dest) {
 // -- PLAN TYPE --
 function togglePlanType(btn, type) {
   btn.classList.toggle('selected');
-  const dinnerSel = document.getElementById('btn-activity') && document.querySelector('.plan-type-btn[onclick*="dinner"]') && document.querySelector('.plan-type-btn[onclick*="dinner"]').classList.contains('selected');
-  const barsSel = document.querySelector('.plan-type-btn[onclick*="bars"]') && document.querySelector('.plan-type-btn[onclick*="bars"]').classList.contains('selected');
-  const brunchSel = document.querySelector('.plan-type-btn[onclick*="brunch"]') && document.querySelector('.plan-type-btn[onclick*="brunch"]').classList.contains('selected');
-  if (document.getElementById('ctx-dinner')) document.getElementById('ctx-dinner').style.display = dinnerSel ? 'block' : 'none';
-  if (document.getElementById('ctx-bars')) document.getElementById('ctx-bars').style.display = barsSel ? 'block' : 'none';
-  if (document.getElementById('ctx-brunch')) document.getElementById('ctx-brunch').style.display = brunchSel ? 'block' : 'none';
   document.getElementById('activity-subtypes').style.display =
     document.getElementById('btn-activity').classList.contains('selected') ? 'block' : 'none';
   document.getElementById('trip-note').style.display =
     document.getElementById('btn-trip').classList.contains('selected') ? 'block' : 'none';
   document.getElementById('other-freetext').style.display =
     document.getElementById('btn-other').classList.contains('selected') ? 'block' : 'none';
+  var anythingNote = document.getElementById('anything-note');
+  if (anythingNote) anythingNote.style.display =
+    document.getElementById('btn-anything') && document.getElementById('btn-anything').classList.contains('selected') ? 'block' : 'none';
 }
 
 function handleStartContinue() {
   if (document.getElementById('btn-trip').classList.contains('selected')) {
     go('screen-trip-start');
+    return;
+  }
+  if (document.getElementById('btn-anything') && document.getElementById('btn-anything').classList.contains('selected')) {
+    go('screen-anything-questions');
+    return;
+  }
+  // Check if any contextual questions exist (dinner/bars/brunch selected)
+  var hasDinner = document.querySelector('.plan-type-btn[onclick*="dinner"]') && document.querySelector('.plan-type-btn[onclick*="dinner"]').classList.contains('selected');
+  var hasBars = document.querySelector('.plan-type-btn[onclick*="bars"]') && document.querySelector('.plan-type-btn[onclick*="bars"]').classList.contains('selected');
+  var hasBrunch = document.querySelector('.plan-type-btn[onclick*="brunch"]') && document.querySelector('.plan-type-btn[onclick*="brunch"]').classList.contains('selected');
+  if (hasDinner || hasBars || hasBrunch) {
+    go('screen-start-1b');
   } else {
-    // Check if any contextual questions exist (dinner/bars/brunch selected)
-    const hasDinner = document.querySelector('.plan-type-btn[onclick*="dinner"]') && document.querySelector('.plan-type-btn[onclick*="dinner"]').classList.contains('selected');
-    const hasBars = document.querySelector('.plan-type-btn[onclick*="bars"]') && document.querySelector('.plan-type-btn[onclick*="bars"]').classList.contains('selected');
-    const hasBrunch = document.querySelector('.plan-type-btn[onclick*="brunch"]') && document.querySelector('.plan-type-btn[onclick*="brunch"]').classList.contains('selected');
-    if (hasDinner || hasBars || hasBrunch) {
-      go('screen-start-1b');
-    } else {
-      go('screen-start-2');
-    }
+    go('screen-start-2');
   }
 }
 
@@ -1682,8 +1845,16 @@ function addRallyToFeed() {
   const dateLabel = selectedDates.size > 0
     ? new Date(...[...selectedDates][0].split('-').map(Number)).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})
     : 'TBD';
-  const timeEl = document.querySelector('#time-7.selected,#time-8.selected,#time-9.selected');
-  const timeLabel = timeEl ? timeEl.querySelector('.big').textContent.replace(' ✓','') : '8pm';
+  const timeInput = document.getElementById('rally-time-input');
+  var timeLabel = '8:00pm';
+  if(timeInput && timeInput.value){
+    var parts = timeInput.value.split(':');
+    var h = parseInt(parts[0],10);
+    var m = parts[1];
+    var ampm = h >= 12 ? 'pm' : 'am';
+    var dh = h > 12 ? h-12 : (h === 0 ? 12 : h);
+    timeLabel = dh + ':' + m + ampm;
+  }
   const card = document.createElement('div');
   card.className = 'rally-card';
   card.innerHTML = `<div class="card card-pad" style="border-left:3px solid var(--green)">
@@ -1708,17 +1879,115 @@ function openEditRally() {
 
 // FEED FILTER
 function filterFeed(cat, btn) {
-  document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.filter-pill').forEach(function(p) { p.classList.remove('active'); });
   btn.classList.add('active');
-  document.querySelectorAll('.rally-card').forEach(card => {
+  // Show/hide cards
+  document.querySelectorAll('#rally-feed .rally-card').forEach(function(card) {
     if (cat === 'all') { card.style.display = ''; }
     else { card.style.display = card.dataset.cat === cat ? '' : 'none'; }
   });
-  // Also hide/show section labels
-  document.querySelectorAll('#rally-feed .section-label').forEach(label => {
-    const next = label.closest('div') && label.closest('div').nextElementSibling;
-    label.closest('div').style.display = '';
+  // Show/hide section labels
+  document.querySelectorAll('#rally-feed [data-cat-section]').forEach(function(sec) {
+    if (cat === 'all') { sec.style.display = ''; }
+    else { sec.style.display = sec.dataset.catSection === cat ? '' : 'none'; }
   });
+}
+
+// MEMORIES FILTER
+function filterMemories(cat, btn) {
+  document.querySelectorAll('#screen-memories .filter-pill').forEach(function(p){ p.classList.remove('active'); });
+  btn.classList.add('active');
+}
+
+// MEMORY DETAIL
+function openMemory(id) {
+  var titles = {
+    'lilia': 'Dinner at Lilia',
+    'wren': 'The Wren Bars',
+    'buvette': 'Buvette Brunch',
+    'bowling': 'Bowling Night',
+    'central': 'Central Park Hang',
+    'sabrina': 'Sabrina Concert'
+  };
+  var metas = {
+    'lilia': 'Saturday, April 12 - Williamsburg - 4 people',
+    'wren': 'Friday, March 29 - East Village - 5 people',
+    'buvette': 'Sunday, March 15 - West Village - 6 people',
+    'bowling': 'Saturday, March 8 - Brooklyn - 6 people',
+    'central': 'Saturday, February 28 - Central Park - 4 people',
+    'sabrina': 'Friday, February 14 - MSG - 3 people'
+  };
+  var t = document.getElementById('memory-title');
+  var m = document.getElementById('memory-meta');
+  if (t) t.textContent = titles[id] || 'Memory';
+  if (m) m.textContent = metas[id] || '';
+  go('screen-memory-detail');
+}
+
+// CUSTOM QUESTIONS
+var qCount = 1;
+function addCustomQuestion() {
+  if (qCount >= 5) {
+    showToast('Maximum 5 questions per Rally');
+    return;
+  }
+  qCount++;
+  var list = document.getElementById('custom-questions-list');
+  if (!list) return;
+  var div = document.createElement('div');
+  div.className = 'custom-question-block';
+  div.dataset.idx = qCount;
+  div.style.cssText = 'background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px';
+  div.innerHTML = '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">' +
+    '<span style="font-family:var(--headline);font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-light)">Question ' + qCount + '</span>' +
+    '<button onclick="removeQuestion(this)" style="background:none;border:none;color:var(--text-muted);font-size:18px;cursor:pointer;padding:0;line-height:1">&times;</button></div>' +
+    '<input class="input-field" type="text" placeholder="e.g. What time should we meet?" style="margin-bottom:8px">' +
+    '<div style="display:flex;gap:8px;margin-bottom:8px">' +
+    '<button class="q-type-btn selected" onclick="setQuestionType(this,&quot;free&quot;)" style="flex:1;padding:8px;border:1.5px solid var(--green);background:var(--green-pale);color:var(--green);border-radius:var(--radius-sm);font-family:var(--body);font-size:12px;cursor:pointer;font-weight:500">Free text</button>' +
+    '<button class="q-type-btn" onclick="setQuestionType(this,&quot;poll&quot;)" style="flex:1;padding:8px;border:1.5px solid var(--border);background:var(--white);color:var(--text-muted);border-radius:var(--radius-sm);font-family:var(--body);font-size:12px;cursor:pointer">Poll options</button></div>' +
+    '<div class="poll-options" style="display:none;flex-direction:column;gap:6px">' +
+    '<input class="input-field" type="text" placeholder="Option 1" style="font-size:13px;padding:8px 12px">' +
+    '<input class="input-field" type="text" placeholder="Option 2" style="font-size:13px;padding:8px 12px">' +
+    '<button onclick="addPollOption(this)" style="background:none;border:1.5px dashed var(--border);border-radius:var(--radius-sm);padding:6px;font-size:11px;color:var(--text-muted);cursor:pointer;font-family:var(--body)">+ Add option</button></div>';
+  list.appendChild(div);
+}
+
+function removeQuestion(btn) {
+  var block = btn.closest('.custom-question-block');
+  if (block) {
+    block.remove();
+    qCount--;
+  }
+}
+
+function setQuestionType(btn, type) {
+  var block = btn.closest('.custom-question-block');
+  if (!block) return;
+  var btns = block.querySelectorAll('.q-type-btn');
+  btns.forEach(function(b) {
+    b.classList.remove('selected');
+    b.style.border = '1.5px solid var(--border)';
+    b.style.background = 'var(--white)';
+    b.style.color = 'var(--text-muted)';
+    b.style.fontWeight = '400';
+  });
+  btn.classList.add('selected');
+  btn.style.border = '1.5px solid var(--green)';
+  btn.style.background = 'var(--green-pale)';
+  btn.style.color = 'var(--green)';
+  btn.style.fontWeight = '500';
+  var pollOpts = block.querySelector('.poll-options');
+  if (pollOpts) pollOpts.style.display = type === 'poll' ? 'flex' : 'none';
+}
+
+function addPollOption(btn) {
+  var pollOpts = btn.parentElement;
+  var input = document.createElement('input');
+  input.className = 'input-field';
+  input.type = 'text';
+  input.placeholder = 'Option ' + (pollOpts.querySelectorAll('input').length + 1);
+  input.style.cssText = 'font-size:13px;padding:8px 12px';
+  pollOpts.insertBefore(input, btn);
 }
 
 // RALLY TITLE
