@@ -977,6 +977,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         <input class="input-field" type="url" placeholder="https://..." id="suggest-url" style="margin-bottom:10px">
         <button class="btn-sm" onclick="addSuggestedVenue()">Add to vote</button>
       </div>
+      <button class="btn-outline" style="font-size:12px;margin-top:14px;padding:12px;width:100%" onclick="go('screen-chat')">&#128172; Group chat</button>
     </div>
   </div>
   <nav class="bottom-nav">
@@ -1014,7 +1015,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     </div>
     <div style="padding:0 20px 14px">
       <p class="section-label" style="margin-bottom:8px">📸 Memories</p>
-      <button onclick="showToast('Photo upload coming!')" style="width:100%;background:none;border:1.5px dashed var(--border);border-radius:var(--radius-sm);padding:14px;color:var(--text-muted);cursor:pointer;font-family:var(--body);font-size:13px">+ Add photos from tonight</button>
+      <input type="file" id="locked-photo-input" accept="image/*" multiple style="display:none" onchange="handlePhotoUpload(this,'locked-photo-grid')"><div id="locked-photo-grid" style="display:none;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px"></div><button onclick="document.getElementById('locked-photo-input').click()" style="width:100%;background:none;border:1.5px dashed var(--border);border-radius:var(--radius-sm);padding:14px;color:var(--text-muted);cursor:pointer;font-family:var(--body);font-size:13px">&#128247; Add photos from tonight</button>
     </div>
   </div>
   <nav class="bottom-nav">
@@ -1628,7 +1629,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         <div style="aspect-ratio:1;background:linear-gradient(135deg,#1B3A2D 0%,#2C5A43 100%);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:24px">🍝</div>
         <div style="aspect-ratio:1;background:linear-gradient(135deg,#FEF3C7 0%,#92400E 100%);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:24px">📷</div>
       </div>
-      <button onclick="showToast('Photo upload coming!')" style="width:100%;background:none;border:1.5px dashed var(--border);border-radius:var(--radius-sm);padding:14px;color:var(--text-muted);cursor:pointer;font-family:var(--body);font-size:13px;margin-top:10px">+ Add a photo</button>
+      <input type="file" id="memory-photo-input" accept="image/*" multiple style="display:none" onchange="handlePhotoUpload(this,'memory-photo-grid')"><div id="memory-photo-grid" style="display:none;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:10px"></div><button onclick="document.getElementById('memory-photo-input').click()" style="width:100%;background:none;border:1.5px dashed var(--border);border-radius:var(--radius-sm);padding:14px;color:var(--text-muted);cursor:pointer;font-family:var(--body);font-size:13px;margin-top:10px">&#128247; Add a photo</button>
     </div>
     <div style="height:80px"></div>
   </div>
@@ -1834,47 +1835,81 @@ function selectRespTime(btn, val) {
 
 // ADD RALLY TO FEED
 let rallyCount = 0;
+var lastRallyData = null;
 function addRallyToFeed() {
   rallyCount++;
-  const feed = document.getElementById('rally-feed');
+  var feed = document.getElementById('rally-feed');
   if (!feed) return;
-  const types = document.querySelectorAll('.plan-type-btn.selected');
-  const titleInput = document.getElementById('rally-title-input');
-  const customTitle = titleInput && titleInput.value.trim() ? titleInput.value.trim() : null;
-  const typeNames = customTitle || ([...types].map(t => t.querySelector('.pt-name').textContent).join(' + ') || 'New Rally');
-  const dateLabel = selectedDates.size > 0
-    ? new Date(...[...selectedDates][0].split('-').map(Number)).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})
-    : 'TBD';
-  const timeInput = document.getElementById('rally-time-input');
-  var timeLabel = '8:00pm';
-  if(timeInput && timeInput.value){
-    var parts = timeInput.value.split(':');
-    var h = parseInt(parts[0],10);
-    var m = parts[1];
-    var ampm = h >= 12 ? 'pm' : 'am';
-    var dh = h > 12 ? h-12 : (h === 0 ? 12 : h);
-    timeLabel = dh + ':' + m + ampm;
+  var types = document.querySelectorAll('#screen-start-1 .plan-type-btn.selected');
+  var titleInput = document.getElementById('rally-title-input');
+  var customTitle = titleInput && titleInput.value.trim() ? titleInput.value.trim() : null;
+  var typeNamesArr = [];
+  for (var i = 0; i < types.length; i++) {
+    var nm = types[i].querySelector('.pt-name');
+    if (nm) typeNamesArr.push(nm.textContent);
   }
-  const card = document.createElement('div');
+  var typeNames = customTitle || (typeNamesArr.join(' + ') || 'New Rally');
+  var sortedDates = [];
+  selectedDates.forEach(function(d){ sortedDates.push(d); });
+  sortedDates.sort();
+  var dateLabel = 'TBD';
+  if (sortedDates.length > 0) {
+    var parts = sortedDates[0].split('-').map(Number);
+    var d = new Date(parts[0], parts[1], parts[2]);
+    dateLabel = d.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'});
+  }
+  var timeInput = document.getElementById('rally-time-input');
+  var timeLabel = '8:00pm';
+  if (timeInput && timeInput.value) {
+    var tp = timeInput.value.split(':');
+    var h = parseInt(tp[0], 10);
+    var mn = tp[1];
+    var ampm = h >= 12 ? 'pm' : 'am';
+    var dh = h > 12 ? h - 12 : (h === 0 ? 12 : h);
+    timeLabel = dh + ':' + mn + ampm;
+  }
+  // Save data so Edit Rally screen can pre-fill
+  lastRallyData = {
+    title: customTitle || typeNames,
+    time: timeInput ? timeInput.value : '20:00',
+    dateLabel: dateLabel,
+    typeNames: typeNames,
+    dates: sortedDates.slice()
+  };
+  var card = document.createElement('div');
   card.className = 'rally-card';
-  card.innerHTML = `<div class="card card-pad" style="border-left:3px solid var(--green)">
-    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
-      <div><p class="rally-title-text">\${typeNames}</p><p class="rally-meta">\${dateLabel} · \${timeLabel} · You started</p></div>
-      <span class="badge badge-pending">Pending</span>
-    </div>
-    <hr class="dot-divider">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px">
-      <div class="rally-avatars"><div class="avatar avatar-sm" style="background:#E8F0EC;color:var(--green)">M</div></div>
-      <button onclick="openEditRally()" style="background:none;border:none;font-size:11px;color:var(--green);cursor:pointer;text-decoration:underline;font-family:var(--body)">Edit rally</button>
-    </div>
-  </div>`;
-  const firstSection = feed.querySelector('.section-label');
-  if (firstSection) feed.insertBefore(card, firstSection.parentNode || firstSection);
-  else feed.appendChild(card);
+  card.dataset.cat = 'pending';
+  var html = '<div class="card card-pad" style="border-left:3px solid var(--green)">';
+  html += '<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">';
+  html += '<div><p class="rally-title-text">' + typeNames + '</p>';
+  html += '<p class="rally-meta">' + dateLabel + ' &middot; ' + timeLabel + ' &middot; You started</p></div>';
+  html += '<span class="badge badge-pending">Pending</span></div>';
+  html += '<hr class="dot-divider">';
+  html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px">';
+  html += '<div class="rally-avatars"><div class="avatar avatar-sm" style="background:#E8F0EC;color:var(--green)">M</div></div>';
+  html += '<button onclick="event.stopPropagation();openEditRally()" style="background:none;border:none;font-size:11px;color:var(--green);cursor:pointer;text-decoration:underline;font-family:var(--body)">Edit rally</button>';
+  html += '</div></div>';
+  card.innerHTML = html;
+  var firstSection = feed.querySelector('.section-label');
+  if (firstSection) {
+    var section = firstSection.closest('div');
+    feed.insertBefore(card, section);
+  } else {
+    feed.appendChild(card);
+  }
 }
 
 function openEditRally() {
   go('screen-edit-rally');
+  if (lastRallyData) {
+    var titleField = document.getElementById('edit-rally-title');
+    if (titleField) titleField.value = lastRallyData.title || '';
+    var editScreen = document.getElementById('screen-edit-rally');
+    if (editScreen) {
+      var timeField = editScreen.querySelector('input[type="time"]');
+      if (timeField && lastRallyData.time) timeField.value = lastRallyData.time;
+    }
+  }
 }
 
 // FEED FILTER
@@ -2226,13 +2261,41 @@ function addSuggestedVenue() {
 
 // -- TICKET CONFIRM --
 function confirmTicket(got) {
-  const status = document.getElementById('my-ticket-status');
+  var yesBtn = document.querySelector('.ticket-btn-yes');
+  var noBtn = document.querySelector('.ticket-btn-no');
+  var status = document.getElementById('my-ticket-status');
   if (got) {
-    status.textContent = 'Got ticket ✓';
-    status.className = 'ticket-chip-got';
-    showToast('Great — the group knows you\'re in! 🎟');
+    if (yesBtn) {
+      yesBtn.style.background = 'var(--green)';
+      yesBtn.style.color = 'var(--white)';
+      yesBtn.style.border = 'none';
+    }
+    if (noBtn) {
+      noBtn.style.background = 'transparent';
+      noBtn.style.color = 'var(--text-muted)';
+      noBtn.style.border = '1.5px solid var(--border)';
+    }
+    if (status) {
+      status.textContent = 'Got ticket';
+      status.className = 'ticket-chip-got';
+    }
+    showToast('Ticket confirmed!');
   } else {
-    showToast('Reminder set — get your ticket soon! ⏰');
+    if (noBtn) {
+      noBtn.style.background = 'var(--green)';
+      noBtn.style.color = 'var(--white)';
+      noBtn.style.border = 'none';
+    }
+    if (yesBtn) {
+      yesBtn.style.background = 'transparent';
+      yesBtn.style.color = 'var(--text-muted)';
+      yesBtn.style.border = '1.5px solid var(--border)';
+    }
+    if (status) {
+      status.textContent = 'Needs ticket';
+      status.className = 'ticket-chip';
+    }
+    showToast('Reminder set');
   }
 }
 
@@ -2327,6 +2390,28 @@ function searchFriends(val) {
   const results = document.getElementById('friend-search-results');
   if (!results) return;
   results.style.display = val.trim().length > 0 ? 'block' : 'none';
+}
+
+// PHOTO UPLOAD
+function handlePhotoUpload(input, gridId) {
+  var grid = document.getElementById(gridId);
+  if (!grid) return;
+  grid.style.display = 'grid';
+  for (var i = 0; i < input.files.length; i++) {
+    var file = input.files[i];
+    var reader = new FileReader();
+    reader.onload = (function(f) {
+      return function(e) {
+        var img = document.createElement('img');
+        img.src = e.target.result;
+        img.style.cssText = 'aspect-ratio:1;width:100%;object-fit:cover;border-radius:var(--radius-sm)';
+        grid.appendChild(img);
+      };
+    })(file);
+    reader.readAsDataURL(file);
+  }
+  showToast(input.files.length + ' photo' + (input.files.length > 1 ? 's' : '') + ' added!');
+  input.value = '';
 }
 
 // -- INIT --
