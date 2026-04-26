@@ -147,8 +147,8 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .cal-days-header{display:grid;grid-template-columns:repeat(7,1fr);padding:6px 10px 2px}
 .cal-day-label{font-family:var(--headline);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-light);text-align:center;padding:3px 0}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);padding:0 10px 10px;gap:2px}
-.cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-family:var(--body);font-size:13px;color:var(--text);border-radius:50%;cursor:pointer;border:none;background:none;transition:all .12s}
-.cal-day:hover:not(.empty):not(.past){background:var(--cream-dark)}
+.cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-family:var(--body);font-size:13px;color:var(--text);border-radius:50%;cursor:pointer;border:none;background:none;transition:background .12s, color .12s}
+.cal-day:active:not(.empty):not(.past):not(.selected){background:var(--green);color:var(--white)}
 .cal-day.selected{background:var(--green);color:var(--white);font-weight:500}
 .cal-day.in-range{background:var(--green-pale)}
 .cal-day.today:not(.selected){border:1.5px solid var(--green);font-weight:700;color:var(--green)}
@@ -703,7 +703,26 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
       <div class="cal-selected" id="cal-selected" style="display:none"><p class="cal-selected-text" id="cal-selected-text"></p></div>
     </div>
     <p class="section-label" style="margin-bottom:8px">Propose a time</p>
-    <input class="input-field" type="time" id="rally-time-input" value="20:00" step="1800" style="margin-bottom:6px;font-size:16px">
+    <input class="input-field" type="hidden" id="rally-time-input" value="20:00">
+    <select class="select-field" id="rally-time-select" onchange="document.getElementById('rally-time-input').value=this.value" style="margin-bottom:6px;font-size:16px">
+      <option value="07:00">7:00 AM</option><option value="07:30">7:30 AM</option>
+      <option value="08:00">8:00 AM</option><option value="08:30">8:30 AM</option>
+      <option value="09:00">9:00 AM</option><option value="09:30">9:30 AM</option>
+      <option value="10:00">10:00 AM</option><option value="10:30">10:30 AM</option>
+      <option value="11:00">11:00 AM</option><option value="11:30">11:30 AM</option>
+      <option value="12:00">12:00 PM</option><option value="12:30">12:30 PM</option>
+      <option value="13:00">1:00 PM</option><option value="13:30">1:30 PM</option>
+      <option value="14:00">2:00 PM</option><option value="14:30">2:30 PM</option>
+      <option value="15:00">3:00 PM</option><option value="15:30">3:30 PM</option>
+      <option value="16:00">4:00 PM</option><option value="16:30">4:30 PM</option>
+      <option value="17:00">5:00 PM</option><option value="17:30">5:30 PM</option>
+      <option value="18:00">6:00 PM</option><option value="18:30">6:30 PM</option>
+      <option value="19:00">7:00 PM</option><option value="19:30">7:30 PM</option>
+      <option value="20:00" selected>8:00 PM</option><option value="20:30">8:30 PM</option>
+      <option value="21:00">9:00 PM</option><option value="21:30">9:30 PM</option>
+      <option value="22:00">10:00 PM</option><option value="22:30">10:30 PM</option>
+      <option value="23:00">11:00 PM</option><option value="23:30">11:30 PM</option>
+    </select>
     <p style="font-size:11px;color:var(--text-muted);margin-bottom:14px">30-minute intervals. Friends can confirm or suggest a different time.</p>
 
     <p class="section-label" style="margin-bottom:8px">Response deadline</p>
@@ -1051,7 +1070,26 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 
       <p class="section-label" style="margin-top:18px;margin-bottom:8px">What time works for you?</p>
       <p style="font-size:11px;color:var(--text-muted);margin-bottom:8px">Soumil proposed 8:00pm. Confirm or pick your preferred time.</p>
-      <input class="input-field" type="time" id="resp-time-input" value="20:00" step="1800" style="margin-bottom:6px;font-size:16px">
+      <input class="input-field" type="hidden" id="resp-time-input" value="20:00">
+      <select class="select-field" id="resp-time-select" onchange="document.getElementById('resp-time-input').value=this.value" style="margin-bottom:6px;font-size:16px">
+        <option value="07:00">7:00 AM</option><option value="07:30">7:30 AM</option>
+        <option value="08:00">8:00 AM</option><option value="08:30">8:30 AM</option>
+        <option value="09:00">9:00 AM</option><option value="09:30">9:30 AM</option>
+        <option value="10:00">10:00 AM</option><option value="10:30">10:30 AM</option>
+        <option value="11:00">11:00 AM</option><option value="11:30">11:30 AM</option>
+        <option value="12:00">12:00 PM</option><option value="12:30">12:30 PM</option>
+        <option value="13:00">1:00 PM</option><option value="13:30">1:30 PM</option>
+        <option value="14:00">2:00 PM</option><option value="14:30">2:30 PM</option>
+        <option value="15:00">3:00 PM</option><option value="15:30">3:30 PM</option>
+        <option value="16:00">4:00 PM</option><option value="16:30">4:30 PM</option>
+        <option value="17:00">5:00 PM</option><option value="17:30">5:30 PM</option>
+        <option value="18:00">6:00 PM</option><option value="18:30">6:30 PM</option>
+        <option value="19:00">7:00 PM</option><option value="19:30">7:30 PM</option>
+        <option value="20:00" selected>8:00 PM</option><option value="20:30">8:30 PM</option>
+        <option value="21:00">9:00 PM</option><option value="21:30">9:30 PM</option>
+        <option value="22:00">10:00 PM</option><option value="22:30">10:30 PM</option>
+        <option value="23:00">11:00 PM</option><option value="23:30">11:30 PM</option>
+      </select>
       <p style="font-size:11px;color:var(--text-muted);margin-bottom:16px">No response = flexible. Ties go to the earlier time.</p>
 
       <!-- DINNER / BRUNCH questions -->
@@ -1322,14 +1360,33 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     <p class="section-label" style="margin-bottom:8px">Rally name</p>
     <input class="input-field" id="edit-rally-title" type="text" placeholder="e.g. Bars Friday" style="margin-bottom:14px">
     <p class="section-label" style="margin-bottom:8px">Update time</p>
-    <input class="input-field" type="time" value="20:00" step="1800" style="margin-bottom:6px;font-size:16px">
+    <input type="hidden" id="edit-time-input" value="20:00">
+    <select class="select-field" id="edit-time-select" onchange="document.getElementById('edit-time-input').value=this.value" style="margin-bottom:6px;font-size:16px">
+      <option value="07:00">7:00 AM</option><option value="07:30">7:30 AM</option>
+      <option value="08:00">8:00 AM</option><option value="08:30">8:30 AM</option>
+      <option value="09:00">9:00 AM</option><option value="09:30">9:30 AM</option>
+      <option value="10:00">10:00 AM</option><option value="10:30">10:30 AM</option>
+      <option value="11:00">11:00 AM</option><option value="11:30">11:30 AM</option>
+      <option value="12:00">12:00 PM</option><option value="12:30">12:30 PM</option>
+      <option value="13:00">1:00 PM</option><option value="13:30">1:30 PM</option>
+      <option value="14:00">2:00 PM</option><option value="14:30">2:30 PM</option>
+      <option value="15:00">3:00 PM</option><option value="15:30">3:30 PM</option>
+      <option value="16:00">4:00 PM</option><option value="16:30">4:30 PM</option>
+      <option value="17:00">5:00 PM</option><option value="17:30">5:30 PM</option>
+      <option value="18:00">6:00 PM</option><option value="18:30">6:30 PM</option>
+      <option value="19:00">7:00 PM</option><option value="19:30">7:30 PM</option>
+      <option value="20:00" selected>8:00 PM</option><option value="20:30">8:30 PM</option>
+      <option value="21:00">9:00 PM</option><option value="21:30">9:30 PM</option>
+      <option value="22:00">10:00 PM</option><option value="22:30">10:30 PM</option>
+      <option value="23:00">11:00 PM</option><option value="23:30">11:30 PM</option>
+    </select>
     <p style="font-size:11px;color:var(--text-muted);margin-bottom:14px">Friends who already responded will be notified of the change.</p>
     <p class="section-label" style="margin-bottom:8px">Update dates</p>
     <div class="calendar">
       <div class="cal-header">
-        <button class="cal-nav" onclick="prevMonth()">&#8249;</button>
+        <button class="cal-nav" onclick="prevMonthEdit()">&#8249;</button>
         <span class="cal-month" id="cal-month-label-edit">April 2026</span>
-        <button class="cal-nav" onclick="nextMonth()">&#8250;</button>
+        <button class="cal-nav" onclick="nextMonthEdit()">&#8250;</button>
       </div>
       <div class="cal-days-header">
         <div class="cal-day-label">Su</div><div class="cal-day-label">Mo</div><div class="cal-day-label">Tu</div><div class="cal-day-label">We</div><div class="cal-day-label">Th</div><div class="cal-day-label">Fr</div><div class="cal-day-label">Sa</div>
@@ -1904,12 +1961,81 @@ function openEditRally() {
   if (lastRallyData) {
     var titleField = document.getElementById('edit-rally-title');
     if (titleField) titleField.value = lastRallyData.title || '';
-    var editScreen = document.getElementById('screen-edit-rally');
-    if (editScreen) {
-      var timeField = editScreen.querySelector('input[type="time"]');
-      if (timeField && lastRallyData.time) timeField.value = lastRallyData.time;
+    var timeSelect = document.getElementById('edit-time-select');
+    var timeInput = document.getElementById('edit-time-input');
+    if (timeSelect && lastRallyData.time) {
+      timeSelect.value = lastRallyData.time;
+      if (timeInput) timeInput.value = lastRallyData.time;
+    }
+    // Sync the edit calendar dates with the rally's dates
+    editSelectedDates = new Set();
+    if (lastRallyData.dates && lastRallyData.dates.length) {
+      lastRallyData.dates.forEach(function(d) { editSelectedDates.add(d); });
+      // Set the calendar to the month of the first selected date
+      var firstParts = lastRallyData.dates[0].split('-').map(Number);
+      editCalYear = firstParts[0];
+      editCalMonth = firstParts[1];
     }
   }
+  renderCalEdit();
+}
+
+// EDIT CALENDAR
+var editSelectedDates = new Set();
+var editCalYear = new Date().getFullYear();
+var editCalMonth = new Date().getMonth();
+
+function renderCalEdit() {
+  var grid = document.getElementById('cal-grid-edit');
+  var label = document.getElementById('cal-month-label-edit');
+  if (!grid) return;
+  if (label) label.textContent = months[editCalMonth] + ' ' + editCalYear;
+  grid.innerHTML = '';
+  var firstDay = new Date(editCalYear, editCalMonth, 1).getDay();
+  var daysInMonth = new Date(editCalYear, editCalMonth + 1, 0).getDate();
+  var today = new Date();
+  for (var i = 0; i < firstDay; i++) {
+    var emp = document.createElement('button');
+    emp.className = 'cal-day empty';
+    emp.disabled = true;
+    grid.appendChild(emp);
+  }
+  for (var d = 1; d <= daysInMonth; d++) {
+    var btn = document.createElement('button');
+    btn.className = 'cal-day';
+    btn.textContent = d;
+    var key = editCalYear + '-' + editCalMonth + '-' + d;
+    var isPast = new Date(editCalYear, editCalMonth, d) < new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    if (isPast) btn.classList.add('past');
+    if (d === today.getDate() && editCalMonth === today.getMonth() && editCalYear === today.getFullYear()) btn.classList.add('today');
+    if (editSelectedDates.has(key)) btn.classList.add('selected');
+    if (!isPast) {
+      (function(k, b) {
+        b.onclick = function() {
+          if (editSelectedDates.has(k)) {
+            editSelectedDates.delete(k);
+            b.classList.remove('selected');
+          } else {
+            editSelectedDates.add(k);
+            b.classList.add('selected');
+          }
+        };
+      })(key, btn);
+    }
+    grid.appendChild(btn);
+  }
+}
+
+function prevMonthEdit() {
+  editCalMonth--;
+  if (editCalMonth < 0) { editCalMonth = 11; editCalYear--; }
+  renderCalEdit();
+}
+
+function nextMonthEdit() {
+  editCalMonth++;
+  if (editCalMonth > 11) { editCalMonth = 0; editCalYear++; }
+  renderCalEdit();
 }
 
 // FEED FILTER
