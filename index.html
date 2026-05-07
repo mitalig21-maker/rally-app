@@ -130,6 +130,9 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .plan-type-btn{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:14px;cursor:pointer;text-align:left;transition:all .15s;font-family:var(--body);position:relative}
 .plan-type-btn.selected{border-color:var(--green);background:var(--green-pale)}
 .plan-type-btn.selected::after{content:'✓';position:absolute;top:10px;right:10px;font-size:11px;color:var(--green);font-weight:700}
+.plan-type-btn--trip{background:linear-gradient(180deg,var(--white) 0%,var(--white) 70%,#F5EFE3 100%);border-style:dashed}
+.plan-type-btn--trip.selected{background:linear-gradient(180deg,var(--green-pale) 0%,var(--green-pale) 70%,#E8E0CE 100%);border-style:solid}
+.pt-flag{font-size:9px;color:var(--text-muted);display:block;margin-top:6px;letter-spacing:0.5px;font-weight:500;text-transform:uppercase}
 .pt-icon{font-size:20px;margin-bottom:5px}
 .pt-name{font-size:13px;font-weight:500;color:var(--text);display:block}
 .pt-desc{font-size:11px;color:var(--text-muted);display:block;margin-top:1px}
@@ -584,18 +587,17 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     <span class="step-count">Step 1 of 3</span>
     <div style="width:44px"></div>
   </div>
-  <div class="sheet-header"><p class="sheet-title">Start a Rally</p><p class="sheet-sub">Pick all that apply</p></div>
+  <div class="sheet-header"><p class="sheet-title">What are we doing?</p><p class="sheet-sub">Pick all that apply</p></div>
   <div class="scroll-content" style="padding:14px 20px">
     <p class="section-label" style="margin-bottom:8px">Name your rally</p>
     <input class="input-field" id="rally-title-input" type="text" placeholder="e.g. Bars Friday, Dimple's birthday dinner..." style="margin-bottom:14px">
     <div class="plan-type-grid" id="plan-type-grid" style="margin-bottom:14px">
-      <button class="plan-type-btn" onclick="togglePlanType(this,'dinner')"><div class="pt-icon">🍽</div><span class="pt-name">Dinner</span><span class="pt-desc">Restaurants</span></button>
-      <button class="plan-type-btn" onclick="togglePlanType(this,'bars')"><div class="pt-icon">🍸</div><span class="pt-name">Bars</span><span class="pt-desc">Drinks & nightlife</span></button>
-      <button class="plan-type-btn" onclick="togglePlanType(this,'brunch')"><div class="pt-icon">🥂</div><span class="pt-name">Brunch</span><span class="pt-desc">Weekend morning</span></button>
-      <button class="plan-type-btn" onclick="togglePlanType(this,'activity')" id="btn-activity"><div class="pt-icon">🎉</div><span class="pt-name">Activity</span><span class="pt-desc">Bowling, shows...</span></button>
-      <button class="plan-type-btn" onclick="togglePlanType(this,'trip')" id="btn-trip"><div class="pt-icon">✈️</div><span class="pt-name">Trip</span><span class="pt-desc">Weekend getaway</span></button>
-      <button class="plan-type-btn" onclick="togglePlanType(this,'other')" id="btn-other"><div class="pt-icon">💬</div><span class="pt-name">Other</span><span class="pt-desc">Something else</span></button>
-      <button class="plan-type-btn" onclick="togglePlanType(this,'anything')" id="btn-anything" style="grid-column:span 2"><div class="pt-icon">✨</div><span class="pt-name">Anything else</span><span class="pt-desc">Custom Rally — add your own questions</span></button>
+      <button class="plan-type-btn" onclick="togglePlanType(this,'dinner')"><div class="pt-icon">🍽</div><span class="pt-name">Dinner</span><span class="pt-desc">Pick a restaurant</span></button>
+      <button class="plan-type-btn" onclick="togglePlanType(this,'bars')"><div class="pt-icon">🍸</div><span class="pt-name">Bars</span><span class="pt-desc">Find a spot for drinks</span></button>
+      <button class="plan-type-btn" onclick="togglePlanType(this,'brunch')"><div class="pt-icon">🥂</div><span class="pt-name">Brunch</span><span class="pt-desc">Sunday plans, sorted</span></button>
+      <button class="plan-type-btn" onclick="togglePlanType(this,'activity')" id="btn-activity"><div class="pt-icon">🎉</div><span class="pt-name">Activity</span><span class="pt-desc">Bowling, shows, stuff</span></button>
+      <button class="plan-type-btn plan-type-btn--trip" onclick="togglePlanType(this,'trip')" id="btn-trip"><div class="pt-icon">✈️</div><span class="pt-name">Trip</span><span class="pt-desc">Plan a getaway</span><span class="pt-flag">→ Different flow</span></button>
+      <button class="plan-type-btn" onclick="togglePlanType(this,'custom')" id="btn-custom"><div class="pt-icon">✨</div><span class="pt-name">Custom</span><span class="pt-desc">Your own questions</span></button>
     </div>
 
     <div id="activity-subtypes" style="display:none;margin-bottom:14px">
@@ -622,12 +624,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     </div>
 
     <div id="anything-note" style="display:none;margin-bottom:14px;background:#FEF3C7;border-radius:var(--radius-sm);padding:12px 14px">
-      <p style="font-size:13px;color:#92400E;line-height:1.5">✨ <strong>Anything Rally</strong> — add up to 5 custom questions for your group (poll or free text). Perfect for Halloween outfits, what to bring, or any group decision.</p>
-    </div>
-
-    <div id="other-freetext" style="display:none;margin-bottom:14px">
-      <p class="section-label" style="margin-bottom:8px">What's the plan?</p>
-      <input class="input-field" type="text" placeholder="e.g. Birthday dinner, pottery class, rooftop hangout...">
+      <p style="font-size:13px;color:#92400E;line-height:1.5">✨ <strong>Custom Rally</strong> — add up to 5 custom questions for your group (poll or free text). Perfect for Halloween outfits, what to bring, or any group decision.</p>
     </div>
 
     <p class="section-label" style="margin-bottom:8px">Have a place in mind?</p>
@@ -1825,11 +1822,9 @@ function togglePlanType(btn, type) {
     document.getElementById('btn-activity').classList.contains('selected') ? 'block' : 'none';
   document.getElementById('trip-note').style.display =
     document.getElementById('btn-trip').classList.contains('selected') ? 'block' : 'none';
-  document.getElementById('other-freetext').style.display =
-    document.getElementById('btn-other').classList.contains('selected') ? 'block' : 'none';
   var anythingNote = document.getElementById('anything-note');
   if (anythingNote) anythingNote.style.display =
-    document.getElementById('btn-anything') && document.getElementById('btn-anything').classList.contains('selected') ? 'block' : 'none';
+    document.getElementById('btn-custom') && document.getElementById('btn-custom').classList.contains('selected') ? 'block' : 'none';
 }
 
 function handleStartContinue() {
@@ -1837,7 +1832,7 @@ function handleStartContinue() {
     go('screen-trip-start');
     return;
   }
-  if (document.getElementById('btn-anything') && document.getElementById('btn-anything').classList.contains('selected')) {
+  if (document.getElementById('btn-custom') && document.getElementById('btn-custom').classList.contains('selected')) {
     go('screen-anything-questions');
     return;
   }
