@@ -37,6 +37,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:calc(14px + var(--safe-top)) 20px 14px;border-bottom:1px dotted var(--border-dot);flex-shrink:0;background:var(--cream)}
 .topbar-logo{font-family:var(--headline);font-size:20px;font-weight:700;color:var(--green);letter-spacing:2px;text-transform:uppercase}
 .bottom-nav{position:absolute;bottom:0;left:0;right:0;background:var(--cream);border-top:1px dotted var(--border-dot);display:flex;padding:10px 0 calc(10px + var(--safe-bottom));z-index:100}
+.version-marker{text-align:center;padding:24px 20px 28px;margin-top:8px;border-top:1px dotted var(--border-dot);font-family:var(--headline);font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--text-light)}
 .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;padding:4px 0;font-family:var(--body);font-size:9px;color:var(--text-light)}
 .nav-item.active{color:var(--green);font-weight:500}
 .fab{position:absolute;bottom:calc(70px + var(--safe-bottom));left:50%;transform:translateX(-50%);background:var(--green);color:var(--white);border:none;border-radius:28px;padding:13px 24px;font-family:var(--headline);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;z-index:101;display:flex;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(27,58,45,0.22)}
@@ -154,6 +155,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .cal-day:active:not(.empty):not(.past):not(.selected){background:var(--green);color:var(--white)}
 .cal-day.selected{background:var(--green);color:var(--white);font-weight:500}
 .cal-day.in-range{background:var(--green-pale)}
+.cal-day.range-pending{background:var(--green-pale);border:1.5px dashed var(--green);color:var(--green);font-weight:600}
 .cal-day.today:not(.selected){border:1.5px solid var(--green);font-weight:700;color:var(--green)}
 .cal-day.empty,.cal-day.past{cursor:default;color:var(--text-light)}
 .cal-selected{padding:8px 12px;background:var(--green-pale);border-top:1px dotted var(--border-dot)}
@@ -238,6 +240,47 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .stat-card-value{font-family:var(--headline);font-size:17px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.3px;line-height:1.1}
 .stat-card-label{font-size:11px;font-weight:500;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;font-family:var(--headline)}
 .stat-card-desc{font-size:11px;color:var(--text-light);line-height:1.4}
+
+.profile-recap{padding:24px 20px 16px}
+.recap-eyebrow{font-family:var(--headline);font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--text-light);text-align:center;margin-bottom:14px}
+.recap-headline{text-align:center;padding:4px 8px 26px;border-bottom:1px dotted var(--border-dot)}
+.recap-headline-text{font-family:var(--headline);font-size:30px;font-weight:700;color:var(--green);line-height:1.1;letter-spacing:-0.5px;margin-bottom:12px}
+.recap-headline-sub{font-family:var(--body);font-size:13px;color:var(--text-muted);line-height:1.5;max-width:280px;margin:0 auto;font-style:italic}
+.recap-section{padding:24px 0;border-bottom:1px dotted var(--border-dot)}
+.recap-section:last-child{border-bottom:none}
+.recap-section-label{font-family:var(--headline);font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);margin-bottom:4px}
+.recap-section-sub{font-size:12px;color:var(--text-muted);font-style:italic;margin-bottom:18px}
+.rhythm-chart{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;align-items:end;margin-bottom:10px}
+.rhythm-col{display:flex;flex-direction:column-reverse;gap:4px;align-items:center}
+.rhythm-dot{width:14px;height:14px;border-radius:50%;background:var(--cream-deep);flex-shrink:0}
+.rhythm-dot.filled{background:var(--green)}
+.rhythm-axis{display:flex;justify-content:space-between;font-family:var(--headline);font-size:9px;font-weight:600;letter-spacing:1px;color:var(--text-light);text-transform:uppercase;margin-top:8px}
+.neighborhood-bars{display:flex;flex-direction:column;gap:14px}
+.neighborhood-row{display:flex;flex-direction:column;gap:6px}
+.neighborhood-row-top{display:flex;justify-content:space-between;align-items:baseline}
+.neighborhood-name{font-family:var(--headline);font-size:14px;font-weight:600;color:var(--text);letter-spacing:0.3px}
+.neighborhood-count{font-family:var(--body);font-size:11px;color:var(--text-muted)}
+.neighborhood-bar{height:6px;background:var(--cream-deep);border-radius:3px;overflow:hidden}
+.neighborhood-bar-fill{height:100%;background:var(--green);border-radius:3px}
+.recap-stats{display:flex;justify-content:center;align-items:center;padding:6px 0 4px}
+.recap-stat{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.recap-stat-num{font-family:var(--headline);font-size:24px;font-weight:700;color:var(--green);letter-spacing:-0.5px;line-height:1}
+.recap-stat-label{font-family:var(--headline);font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-light)}
+.recap-stat-divider{width:1px;height:32px;background:var(--border)}
+
+.plan-parts-section{margin-top:18px;padding-top:18px;border-top:1px dotted var(--border-dot)}
+.part-card{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--white);border:1px solid var(--border);border-left:3px solid var(--green);border-radius:var(--radius-sm)}
+.part-num{width:22px;height:22px;border-radius:50%;background:var(--green-pale);color:var(--green);font-family:var(--headline);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.part-icon{font-size:20px;flex-shrink:0}
+.part-body{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0}
+.part-name{font-family:var(--headline);font-size:14px;font-weight:600;color:var(--text);letter-spacing:0.3px}
+.part-time{font-size:12px;color:var(--text-muted)}
+.part-remove{background:none;border:none;color:var(--text-light);font-size:20px;line-height:1;cursor:pointer;padding:4px 8px;flex-shrink:0}
+.part-remove:hover{color:var(--text)}
+.add-part-btn{display:block;width:100%;padding:11px;background:none;border:1.5px dashed var(--border);border-radius:var(--radius-sm);font-family:var(--headline);font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--green);cursor:pointer;margin-top:10px}
+.add-part-btn:hover{border-color:var(--green);background:var(--green-pale)}
+.add-part-form{margin-top:10px;padding:14px;background:var(--cream-dark);border-radius:var(--radius-sm);border:1px solid var(--border)}
+.parts-hint{font-size:11px;color:var(--text-muted);font-style:italic;margin-top:10px}
 
 .menu-item{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px dotted var(--border-dot);cursor:pointer;background:none;border-left:none;border-right:none;border-top:none;width:100%;font-family:var(--body);text-align:left}
 .menu-item-left{display:flex;align-items:center;gap:12px}
@@ -566,7 +609,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         </div>
       </div>
     </div>
-    <div style="height:16px"></div>
+    <div class="version-marker">Rally · v0.6a</div>
   </div>
   <button class="fab" onclick="go('screen-start-1')">
     <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
@@ -587,7 +630,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     <span class="step-count">Step 1 of 3</span>
     <div style="width:44px"></div>
   </div>
-  <div class="sheet-header"><p class="sheet-title">What are we doing?</p><p class="sheet-sub">Pick all that apply</p></div>
+  <div class="sheet-header"><p class="sheet-title">What are we doing?</p><p class="sheet-sub">Pick the main thing</p></div>
   <div class="scroll-content" style="padding:14px 20px">
     <p class="section-label" style="margin-bottom:8px">Name your rally</p>
     <input class="input-field" id="rally-title-input" type="text" placeholder="e.g. Bars Friday, Dimple's birthday dinner..." style="margin-bottom:14px">
@@ -760,7 +803,32 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
       <div class="group-select-check"></div>
     </div>
     <p class="section-label" style="margin:12px 0 10px">Or add individuals</p>
-    <input class="input-field" type="text" placeholder="Search by name or phone" style="margin-bottom:20px">
+    <input class="input-field" type="text" placeholder="Search by name or phone" style="margin-bottom:8px">
+
+    <div class="plan-parts-section">
+      <p class="section-label" style="margin-bottom:10px">Plan parts</p>
+      <div id="rally-parts-list" style="display:flex;flex-direction:column;gap:8px"></div>
+      <button id="add-part-btn" class="add-part-btn" onclick="showAddPartForm()">+ Add another part</button>
+      <div id="add-part-form" class="add-part-form" style="display:none">
+        <p class="section-label" style="margin-bottom:8px">New part</p>
+        <select class="select-field" id="add-part-type" style="margin-bottom:8px;font-size:16px">
+          <option value="">Pick a type...</option>
+          <option value="dinner">🍽 Dinner</option>
+          <option value="bars">🍸 Bars / Drinks</option>
+          <option value="brunch">🥂 Brunch</option>
+          <option value="activity">🎉 Activity</option>
+          <option value="custom">✨ Custom</option>
+        </select>
+        <select class="select-field" id="add-part-time" style="margin-bottom:10px;font-size:16px"></select>
+        <div style="display:flex;gap:8px">
+          <button class="btn-outline" style="flex:1;padding:11px;font-size:12px" onclick="cancelAddPart()">Cancel</button>
+          <button class="btn-primary" style="flex:1;padding:11px;font-size:12px" onclick="confirmAddPart()">Add part</button>
+        </div>
+      </div>
+      <p class="parts-hint">Up to 3 parts. Same date. Each part has its own time, questions, and venue voting.</p>
+    </div>
+
+    <div style="height:18px"></div>
     <button class="btn-primary" onclick="go('screen-home');addRallyToFeed();showToast('Rally sent! 🎉')">Send Rally →</button>
   </div>
 </div>
@@ -778,12 +846,13 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     <label class="form-label" style="margin-top:0">Where are you going?</label>
     <input class="input-field" type="text" placeholder="e.g. Montreal, Mexico City, Miami..." style="margin-bottom:12px">
 
-    <label class="form-label">Date range</label>
+    <label class="form-label">Date ranges</label>
+    <p style="font-size:11px;color:var(--text-muted);margin-bottom:8px;font-style:italic">Tap two dates to set a range. Add as many ranges as you want — the group votes on which one works.</p>
     <div class="calendar">
       <div class="cal-header">
-        <button class="cal-nav" onclick="prevMonth()">‹</button>
+        <button class="cal-nav" onclick="prevMonthTrip()">‹</button>
         <span class="cal-month" id="cal-month-label-trip">May 2026</span>
-        <button class="cal-nav" onclick="nextMonth()">›</button>
+        <button class="cal-nav" onclick="nextMonthTrip()">›</button>
       </div>
       <div class="cal-days-header">
         <div class="cal-day-label">Su</div><div class="cal-day-label">Mo</div><div class="cal-day-label">Tu</div><div class="cal-day-label">We</div><div class="cal-day-label">Th</div><div class="cal-day-label">Fr</div><div class="cal-day-label">Sa</div>
@@ -1250,20 +1319,53 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
       <p class="profile-name" id="profile-name-display">Mita</p>
       <p class="profile-handle">+1 (917) 555-0142</p>
     </div>
-    <div class="stat-grid">
-      <div class="stat-cell"><p class="stat-num">24</p><p class="stat-label">Rallies</p></div>
-      <div class="stat-cell"><p class="stat-num">19</p><p class="stat-label">Attended</p></div>
-      <div class="stat-cell"><p class="stat-num">92%</p><p class="stat-label">Reliability</p></div>
-    </div>
-    <div class="stat-cards-section">
-      <p class="section-label" style="margin-bottom:12px">Your rally stats</p>
-      <div class="stat-cards-grid">
-        <div class="stat-card"><div class="stat-card-icon">🔥</div><p class="stat-card-value">4 weeks</p><p class="stat-card-label">Rally streak</p><p class="stat-card-desc">4 weeks in a row with a plan that happened</p></div>
-        <div class="stat-card"><div class="stat-card-icon">👯</div><p class="stat-card-value">Soumil</p><p class="stat-card-label">Most rallied with</p><p class="stat-card-desc">11 rallies together and counting</p></div>
-        <div class="stat-card"><div class="stat-card-icon">📍</div><p class="stat-card-value">West Village</p><p class="stat-card-label">Top neighborhood</p><p class="stat-card-desc">You end up here more than anywhere else</p></div>
-        <div class="stat-card"><div class="stat-card-icon">⚡</div><p class="stat-card-value">4 min</p><p class="stat-card-label">Fastest RSVP</p><p class="stat-card-desc">Your record response time</p></div>
-        <div class="stat-card"><div class="stat-card-icon">🌙</div><p class="stat-card-value">Night owl</p><p class="stat-card-label">Your vibe</p><p class="stat-card-desc">Most plans kick off after 8pm</p></div>
-        <div class="stat-card"><div class="stat-card-icon">👻</div><p class="stat-card-value">8%</p><p class="stat-card-label">Ghost rate</p><p class="stat-card-desc">Pretty loyal crew — only 2 bails ever</p></div>
+    <div class="profile-recap">
+      <p class="recap-eyebrow">Your Rally year so far</p>
+      <div class="recap-headline">
+        <h2 class="recap-headline-text" id="recap-headline-text">You're a Thursday person.</h2>
+        <p class="recap-headline-sub" id="recap-headline-sub">Most rallies you say yes to land on a Thursday.</p>
+      </div>
+      <div class="recap-section">
+        <p class="recap-section-label">The rhythm</p>
+        <p class="recap-section-sub">Rallies per week, last 8 weeks</p>
+        <div class="rhythm-chart">
+          <div class="rhythm-col"><span class="rhythm-dot filled"></span><span class="rhythm-dot filled"></span><span class="rhythm-dot"></span><span class="rhythm-dot"></span></div>
+          <div class="rhythm-col"><span class="rhythm-dot filled"></span><span class="rhythm-dot"></span><span class="rhythm-dot"></span><span class="rhythm-dot"></span></div>
+          <div class="rhythm-col"><span class="rhythm-dot filled"></span><span class="rhythm-dot filled"></span><span class="rhythm-dot filled"></span><span class="rhythm-dot"></span></div>
+          <div class="rhythm-col"><span class="rhythm-dot filled"></span><span class="rhythm-dot filled"></span><span class="rhythm-dot"></span><span class="rhythm-dot"></span></div>
+          <div class="rhythm-col"><span class="rhythm-dot filled"></span><span class="rhythm-dot filled"></span><span class="rhythm-dot filled"></span><span class="rhythm-dot filled"></span></div>
+          <div class="rhythm-col"><span class="rhythm-dot filled"></span><span class="rhythm-dot filled"></span><span class="rhythm-dot"></span><span class="rhythm-dot"></span></div>
+          <div class="rhythm-col"><span class="rhythm-dot filled"></span><span class="rhythm-dot"></span><span class="rhythm-dot"></span><span class="rhythm-dot"></span></div>
+          <div class="rhythm-col"><span class="rhythm-dot filled"></span><span class="rhythm-dot filled"></span><span class="rhythm-dot filled"></span><span class="rhythm-dot filled"></span></div>
+        </div>
+        <div class="rhythm-axis"><span style="text-align:left">8 weeks ago</span><span style="text-align:right">this week</span></div>
+      </div>
+      <div class="recap-section">
+        <p class="recap-section-label">Where you end up</p>
+        <p class="recap-section-sub">Top neighborhoods, by frequency</p>
+        <div class="neighborhood-bars">
+          <div class="neighborhood-row">
+            <div class="neighborhood-row-top"><span class="neighborhood-name">West Village</span><span class="neighborhood-count">9 rallies · 38%</span></div>
+            <div class="neighborhood-bar"><div class="neighborhood-bar-fill" style="width:100%"></div></div>
+          </div>
+          <div class="neighborhood-row">
+            <div class="neighborhood-row-top"><span class="neighborhood-name">East Village</span><span class="neighborhood-count">6 rallies · 25%</span></div>
+            <div class="neighborhood-bar"><div class="neighborhood-bar-fill" style="width:67%"></div></div>
+          </div>
+          <div class="neighborhood-row">
+            <div class="neighborhood-row-top"><span class="neighborhood-name">Lower East Side</span><span class="neighborhood-count">4 rallies · 17%</span></div>
+            <div class="neighborhood-bar"><div class="neighborhood-bar-fill" style="width:44%"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="recap-section">
+        <div class="recap-stats">
+          <div class="recap-stat"><span class="recap-stat-num">24</span><span class="recap-stat-label">Rallies</span></div>
+          <div class="recap-stat-divider"></div>
+          <div class="recap-stat"><span class="recap-stat-num">19</span><span class="recap-stat-label">Attended</span></div>
+          <div class="recap-stat-divider"></div>
+          <div class="recap-stat"><span class="recap-stat-num">92%</span><span class="recap-stat-label">Reliability</span></div>
+        </div>
       </div>
     </div>
     <div style="padding-top:14px">
@@ -1803,6 +1905,8 @@ function go(id) {
       if (btns && !card.dataset.confirmed) btns.style.display = 'flex';
     }
   }
+  if (id === 'screen-profile') { rotateRecapHeadline(); }
+  if (id === 'screen-start-3') { initRallyPartsForFinalize(); }
 }
 
 function saveNameAndGo(dest) {
@@ -1815,9 +1919,30 @@ function saveNameAndGo(dest) {
   go(dest);
 }
 
+const recapHeadlines = [
+  { headline: "You're a Thursday person.", sub: "Most rallies you say yes to land on a Thursday." },
+  { headline: "Soumil is your closest accomplice.", sub: "Eleven rallies together and counting." },
+  { headline: "West Village is your home turf.", sub: "More rallies end up here than anywhere else." },
+  { headline: "You show up.", sub: "Ninety-two percent reliability across twenty-four rallies." },
+  { headline: "Your nights start at eight.", sub: "Most plans you join kick off after dark." }
+];
+function rotateRecapHeadline() {
+  const pick = recapHeadlines[Math.floor(Math.random() * recapHeadlines.length)];
+  const headlineEl = document.getElementById('recap-headline-text');
+  const subEl = document.getElementById('recap-headline-sub');
+  if (headlineEl) headlineEl.textContent = pick.headline;
+  if (subEl) subEl.textContent = pick.sub;
+}
+
 // -- PLAN TYPE --
 function togglePlanType(btn, type) {
-  btn.classList.toggle('selected');
+  var wasSelected = btn.classList.contains('selected');
+  // Single-select: deselect all siblings first
+  document.querySelectorAll('#screen-start-1 .plan-type-btn.selected').forEach(function(b) {
+    b.classList.remove('selected');
+  });
+  // Toggle this one (allow tap-again-to-deselect)
+  if (!wasSelected) btn.classList.add('selected');
   document.getElementById('activity-subtypes').style.display =
     document.getElementById('btn-activity').classList.contains('selected') ? 'block' : 'none';
   document.getElementById('trip-note').style.display =
@@ -1844,6 +1969,119 @@ function handleStartContinue() {
     go('screen-start-1b');
   } else {
     go('screen-start-2');
+  }
+}
+
+// -- PLAN PARTS (chained Rally) --
+var PLAN_TYPES = {
+  dinner:   { name: 'Dinner', icon: '🍽' },
+  bars:     { name: 'Bars',   icon: '🍸' },
+  brunch:   { name: 'Brunch', icon: '🥂' },
+  activity: { name: 'Activity', icon: '🎉' },
+  custom:   { name: 'Custom', icon: '✨' }
+};
+var rallyParts = [];
+
+function formatTime(val) {
+  if (!val) return '';
+  var tp = val.split(':');
+  var h = parseInt(tp[0], 10);
+  var mn = tp[1];
+  var ampm = h >= 12 ? 'PM' : 'AM';
+  var dh = h > 12 ? h - 12 : (h === 0 ? 12 : h);
+  return dh + ':' + mn + ' ' + ampm;
+}
+
+function populateTimeSelect(selectId, defaultVal) {
+  var sel = document.getElementById(selectId);
+  if (!sel) return;
+  var html = '';
+  for (var h = 7; h < 24; h++) {
+    for (var m = 0; m < 60; m += 30) {
+      var hh = (h < 10 ? '0' : '') + h;
+      var mm = (m < 10 ? '0' : '') + m;
+      var val = hh + ':' + mm;
+      var dh = h > 12 ? h - 12 : (h === 0 ? 12 : h);
+      var ampm = h >= 12 ? 'PM' : 'AM';
+      var label = dh + ':' + mm + ' ' + ampm;
+      var selectedAttr = (val === defaultVal) ? ' selected' : '';
+      html += '<option value="' + val + '"' + selectedAttr + '>' + label + '</option>';
+    }
+  }
+  sel.innerHTML = html;
+}
+
+function initRallyPartsForFinalize() {
+  rallyParts = [];
+  var selectedBtn = document.querySelector('#screen-start-1 .plan-type-btn.selected');
+  if (selectedBtn) {
+    var typeMatch = selectedBtn.getAttribute('onclick').match(/togglePlanType\(this,'(\w+)'\)/);
+    var type = typeMatch ? typeMatch[1] : 'custom';
+    var meta = PLAN_TYPES[type] || PLAN_TYPES.custom;
+    var timeVal = (document.getElementById('rally-time-input') || {}).value || '20:00';
+    rallyParts.push({ type: type, typeName: meta.name, icon: meta.icon, time: timeVal });
+  }
+  renderRallyParts();
+  // Reset and prep the add form
+  var typeSel = document.getElementById('add-part-type');
+  if (typeSel) typeSel.value = '';
+  populateTimeSelect('add-part-time', '21:30');
+  var form = document.getElementById('add-part-form');
+  if (form) form.style.display = 'none';
+}
+
+function renderRallyParts() {
+  var container = document.getElementById('rally-parts-list');
+  if (!container) return;
+  container.innerHTML = '';
+  rallyParts.forEach(function(part, idx) {
+    var card = document.createElement('div');
+    card.className = 'part-card';
+    var html = '<div class="part-num">' + (idx + 1) + '</div>';
+    html += '<div class="part-icon">' + part.icon + '</div>';
+    html += '<div class="part-body">';
+    html += '<p class="part-name">' + part.typeName + '</p>';
+    html += '<p class="part-time">' + formatTime(part.time) + '</p>';
+    html += '</div>';
+    if (idx > 0) {
+      html += '<button class="part-remove" onclick="removeRallyPart(' + idx + ')" aria-label="Remove">×</button>';
+    }
+    card.innerHTML = html;
+    container.appendChild(card);
+  });
+  var addBtn = document.getElementById('add-part-btn');
+  if (addBtn) addBtn.style.display = (rallyParts.length >= 3) ? 'none' : 'block';
+}
+
+function showAddPartForm() {
+  document.getElementById('add-part-form').style.display = 'block';
+  document.getElementById('add-part-btn').style.display = 'none';
+}
+
+function cancelAddPart() {
+  document.getElementById('add-part-form').style.display = 'none';
+  if (rallyParts.length < 3) document.getElementById('add-part-btn').style.display = 'block';
+}
+
+function confirmAddPart() {
+  var typeSel = document.getElementById('add-part-type');
+  var timeSel = document.getElementById('add-part-time');
+  if (!typeSel.value) { showToast('Pick a type for this part'); return; }
+  var meta = PLAN_TYPES[typeSel.value];
+  if (!meta) return;
+  rallyParts.push({ type: typeSel.value, typeName: meta.name, icon: meta.icon, time: timeSel.value });
+  typeSel.value = '';
+  populateTimeSelect('add-part-time', '21:30');
+  document.getElementById('add-part-form').style.display = 'none';
+  renderRallyParts();
+}
+
+function removeRallyPart(idx) {
+  rallyParts.splice(idx, 1);
+  renderRallyParts();
+  if (rallyParts.length < 3) {
+    var btn = document.getElementById('add-part-btn');
+    if (btn) btn.style.display = 'block';
   }
 }
 
@@ -1892,15 +2130,22 @@ function addRallyToFeed() {
   rallyCount++;
   var feed = document.getElementById('rally-feed');
   if (!feed) return;
-  var types = document.querySelectorAll('#screen-start-1 .plan-type-btn.selected');
   var titleInput = document.getElementById('rally-title-input');
   var customTitle = titleInput && titleInput.value.trim() ? titleInput.value.trim() : null;
-  var typeNamesArr = [];
-  for (var i = 0; i < types.length; i++) {
-    var nm = types[i].querySelector('.pt-name');
-    if (nm) typeNamesArr.push(nm.textContent);
+  // Build display label from rallyParts (chained plan parts)
+  var typeNames;
+  if (rallyParts.length > 0) {
+    typeNames = customTitle || rallyParts.map(function(p) { return p.typeName; }).join(' → ');
+  } else {
+    // Fallback (should not happen if user goes through screen-start-3)
+    var types = document.querySelectorAll('#screen-start-1 .plan-type-btn.selected');
+    var typeNamesArr = [];
+    for (var i = 0; i < types.length; i++) {
+      var nm = types[i].querySelector('.pt-name');
+      if (nm) typeNamesArr.push(nm.textContent);
+    }
+    typeNames = customTitle || (typeNamesArr.join(' + ') || 'New Rally');
   }
-  var typeNames = customTitle || (typeNamesArr.join(' + ') || 'New Rally');
   var sortedDates = [];
   selectedDates.forEach(function(d){ sortedDates.push(d); });
   sortedDates.sort();
@@ -1910,23 +2155,33 @@ function addRallyToFeed() {
     var d = new Date(parts[0], parts[1], parts[2]);
     dateLabel = d.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'});
   }
-  var timeInput = document.getElementById('rally-time-input');
-  var timeLabel = '8:00pm';
-  if (timeInput && timeInput.value) {
-    var tp = timeInput.value.split(':');
+  // Time label: single time, or "first → last" for chained
+  function timeShort(val) {
+    if (!val) return '';
+    var tp = val.split(':');
     var h = parseInt(tp[0], 10);
     var mn = tp[1];
     var ampm = h >= 12 ? 'pm' : 'am';
     var dh = h > 12 ? h - 12 : (h === 0 ? 12 : h);
-    timeLabel = dh + ':' + mn + ampm;
+    return dh + ':' + mn + ampm;
+  }
+  var timeLabel;
+  if (rallyParts.length > 1) {
+    timeLabel = timeShort(rallyParts[0].time) + ' → ' + timeShort(rallyParts[rallyParts.length - 1].time);
+  } else if (rallyParts.length === 1) {
+    timeLabel = timeShort(rallyParts[0].time);
+  } else {
+    var timeInput = document.getElementById('rally-time-input');
+    timeLabel = timeInput && timeInput.value ? timeShort(timeInput.value) : '8:00pm';
   }
   // Save data so Edit Rally screen can pre-fill
   lastRallyData = {
     title: customTitle || typeNames,
-    time: timeInput ? timeInput.value : '20:00',
+    time: rallyParts.length > 0 ? rallyParts[0].time : (document.getElementById('rally-time-input') ? document.getElementById('rally-time-input').value : '20:00'),
     dateLabel: dateLabel,
     typeNames: typeNames,
-    dates: sortedDates.slice()
+    dates: sortedDates.slice(),
+    parts: rallyParts.slice()
   };
   var card = document.createElement('div');
   card.className = 'rally-card';
@@ -2497,6 +2752,104 @@ function updateCalSelected() {
 function prevMonth() { calMonth--; if (calMonth < 0) { calMonth = 11; calYear--; } renderCal(); }
 function nextMonth() { calMonth++; if (calMonth > 11) { calMonth = 0; calYear++; } renderCal(); }
 
+let calYearTrip = new Date().getFullYear(), calMonthTrip = new Date().getMonth();
+let selectedRangesTrip = []; // array of {start: 'Y-M-D', end: 'Y-M-D'}
+let currentRangeStartTrip = null; // 'Y-M-D' for in-progress first tap
+function keyToDateTrip(key) { var p = key.split('-').map(Number); return new Date(p[0], p[1], p[2]); }
+function findRangeContainingTrip(key) {
+  var d = keyToDateTrip(key);
+  for (var i = 0; i < selectedRangesTrip.length; i++) {
+    var r = selectedRangesTrip[i];
+    if (d >= keyToDateTrip(r.start) && d <= keyToDateTrip(r.end)) return i;
+  }
+  return -1;
+}
+function makeRangeTrip(keyA, keyB) {
+  return keyToDateTrip(keyA) <= keyToDateTrip(keyB)
+    ? { start: keyA, end: keyB }
+    : { start: keyB, end: keyA };
+}
+function formatRangeTrip(range) {
+  var s = keyToDateTrip(range.start);
+  var e = keyToDateTrip(range.end);
+  var sFmt = s.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  var eFmt = e.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  if (range.start === range.end) return sFmt;
+  // If same month, show "May 9 – 11" instead of "May 9 – May 11"
+  if (s.getMonth() === e.getMonth() && s.getFullYear() === e.getFullYear()) {
+    return sFmt + ' – ' + e.getDate();
+  }
+  return sFmt + ' – ' + eFmt;
+}
+function renderCalTrip() {
+  const grid = document.getElementById('cal-grid-trip');
+  const label = document.getElementById('cal-month-label-trip');
+  if (!grid) return;
+  label.textContent = months[calMonthTrip] + ' ' + calYearTrip;
+  grid.innerHTML = '';
+  const firstDay = new Date(calYearTrip, calMonthTrip, 1).getDay();
+  const daysInMonth = new Date(calYearTrip, calMonthTrip + 1, 0).getDate();
+  const today = new Date();
+  for (let i = 0; i < firstDay; i++) { const e = document.createElement('button'); e.className = 'cal-day empty'; e.disabled = true; grid.appendChild(e); }
+  for (let d = 1; d <= daysInMonth; d++) {
+    const e = document.createElement('button'); e.className = 'cal-day'; e.textContent = d;
+    const key = calYearTrip + '-' + calMonthTrip + '-' + d;
+    const isPast = new Date(calYearTrip, calMonthTrip, d) < new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    if (isPast) e.classList.add('past');
+    if (d === today.getDate() && calMonthTrip === today.getMonth() && calYearTrip === today.getFullYear()) e.classList.add('today');
+    // Range styling
+    const rangeIdx = findRangeContainingTrip(key);
+    if (rangeIdx !== -1) {
+      const r = selectedRangesTrip[rangeIdx];
+      if (key === r.start || key === r.end) e.classList.add('selected');
+      else e.classList.add('in-range');
+    }
+    if (key === currentRangeStartTrip) e.classList.add('range-pending');
+    if (!isPast) e.onclick = () => {
+      const idx = findRangeContainingTrip(key);
+      if (idx !== -1) {
+        // Tap inside an existing range → remove that range
+        selectedRangesTrip.splice(idx, 1);
+        currentRangeStartTrip = null;
+      } else if (currentRangeStartTrip === key) {
+        // Tap the in-progress start again → cancel
+        currentRangeStartTrip = null;
+      } else if (currentRangeStartTrip !== null) {
+        // Complete the range
+        selectedRangesTrip.push(makeRangeTrip(currentRangeStartTrip, key));
+        currentRangeStartTrip = null;
+      } else {
+        // Start a new range
+        currentRangeStartTrip = key;
+      }
+      renderCalTrip();
+      updateCalSelectedTrip();
+    };
+    grid.appendChild(e);
+  }
+  updateCalSelectedTrip();
+}
+function updateCalSelectedTrip() {
+  const sel = document.getElementById('cal-selected-trip');
+  const txt = document.getElementById('cal-selected-text-trip');
+  if (!sel) return;
+  if (selectedRangesTrip.length === 0 && currentRangeStartTrip === null) { sel.style.display = 'none'; return; }
+  sel.style.display = 'block';
+  if (selectedRangesTrip.length === 0 && currentRangeStartTrip !== null) {
+    txt.textContent = 'Tap the end date of this range.';
+    return;
+  }
+  const sorted = selectedRangesTrip.slice().sort(function(a, b) {
+    return keyToDateTrip(a.start) - keyToDateTrip(b.start);
+  });
+  const rangeStrs = sorted.map(formatRangeTrip);
+  const prefix = sorted.length + ' range' + (sorted.length > 1 ? 's' : '') + ' proposed: ';
+  const suffix = currentRangeStartTrip !== null ? ' · tap end of next range' : '';
+  txt.textContent = prefix + rangeStrs.join(' · ') + suffix;
+}
+function prevMonthTrip() { calMonthTrip--; if (calMonthTrip < 0) { calMonthTrip = 11; calYearTrip--; } renderCalTrip(); }
+function nextMonthTrip() { calMonthTrip++; if (calMonthTrip > 11) { calMonthTrip = 0; calYearTrip++; } renderCalTrip(); }
+
 // -- TOAST --
 let toastTimer;
 function showToast(msg) {
@@ -2537,6 +2890,7 @@ function handlePhotoUpload(input, gridId) {
 
 // -- INIT --
 renderCal();
+renderCalTrip();
 initMultiSelects();
 if ('serviceWorker' in navigator) { navigator.serviceWorker.register('service-worker.js').catch(() => {}); }
 </script>
