@@ -89,6 +89,11 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .pill-group{display:flex;flex-wrap:wrap;gap:7px}
 .pill{padding:9px 16px;border-radius:50px;border:1.5px solid var(--border);background:var(--white);font-family:var(--body);font-size:13px;color:var(--text-muted);cursor:pointer;transition:all .15s}
 .pill.selected{background:var(--green);border-color:var(--green);color:var(--white);font-weight:500}
+.chip-group{display:flex;flex-wrap:wrap;gap:6px}
+.chip{padding:7px 13px;border-radius:50px;border:1.5px solid var(--border);background:var(--white);font-family:var(--body);font-size:12px;color:var(--text-muted);cursor:pointer;transition:all .15s}
+.chip.selected{background:var(--green);border-color:var(--green);color:var(--white);font-weight:500}
+.chip--not{background:#FEE2E2;border-color:#FCA5A5;color:#991B1B}
+.chip--not.selected{background:#DC2626;border-color:#DC2626;color:white;font-weight:500}
 
 /* AVATAR */
 .avatar{width:38px;height:38px;border-radius:50%;background:var(--green-pale);display:flex;align-items:center;justify-content:center;font-family:var(--headline);font-size:14px;color:var(--green);font-weight:700;flex-shrink:0}
@@ -627,7 +632,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 <div class="screen" id="screen-start-1">
   <div class="step-indicator">
     <button class="btn-back" onclick="go('screen-home')">← Back</button>
-    <span class="step-count">Step 1 of 3</span>
+    <span class="step-count">Step 1 of 4</span>
     <div style="width:44px"></div>
   </div>
   <div class="sheet-header"><p class="sheet-title">What are we doing?</p><p class="sheet-sub">Pick the main thing</p></div>
@@ -643,23 +648,8 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
       <button class="plan-type-btn" onclick="togglePlanType(this,'custom')" id="btn-custom"><div class="pt-icon">✨</div><span class="pt-name">Custom</span><span class="pt-desc">Your own questions</span></button>
     </div>
 
-    <div id="activity-subtypes" style="display:none;margin-bottom:14px">
-      <p class="section-label" style="margin-bottom:8px">What kind of activity?</p>
-      <div class="activity-grid">
-        <button class="act-btn" onclick="toggleAct(this)">🎳 Bowling</button>
-        <button class="act-btn" onclick="toggleAct(this)">⛳ Mini golf</button>
-        <button class="act-btn" onclick="toggleAct(this)">🔐 Escape room</button>
-        <button class="act-btn" onclick="toggleAct(this)">🎵 Concert</button>
-        <button class="act-btn" onclick="toggleAct(this)">🎭 Comedy show</button>
-        <button class="act-btn" onclick="toggleAct(this)">🏟 Sporting event</button>
-        <button class="act-btn" onclick="toggleAct(this)">🎤 Karaoke</button>
-        <button class="act-btn" onclick="toggleAct(this)">🎨 Museum</button>
-        <button class="act-btn" onclick="toggleAct(this)">🎬 Movie</button>
-        <button class="act-btn" onclick="toggleAct(this)">🧘 Wellness</button>
-        <button class="act-btn" onclick="toggleAct(this)">🏃 Fitness class</button>
-        <button class="act-btn" onclick="toggleAct(this)">🎯 Other</button>
-      </div>
-      <input class="input-field" type="text" placeholder="Describe the activity..." style="margin-top:10px">
+    <div id="activity-note" style="display:none;margin-bottom:14px;background:var(--green-pale);border-radius:var(--radius-sm);padding:12px 14px">
+      <p style="font-size:13px;color:var(--green);line-height:1.5">🎉 <strong>Activity Rally</strong> — tell us what you're up to on the next screen. Concerts, classes, sports, whatever.</p>
     </div>
 
     <div id="trip-note" style="display:none;margin-bottom:14px;background:var(--green-pale);border-radius:var(--radius-sm);padding:12px 14px">
@@ -698,34 +688,54 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
   <div class="scroll-content" style="padding:14px 20px">
     <!-- Dinner / Brunch: cuisine + not about it -->
     <div id="ctx1b-food" style="display:none">
-      <label class="form-label" style="margin-top:0">Not about it tonight?</label>
-      <select class="select-field" style="margin-bottom:12px">
-        <option value="">Feeling everything</option>
-        <option>Italian</option><option>Japanese</option><option>Mexican</option><option>Chinese</option><option>Thai</option><option>Sushi</option><option>Pizza</option><option>Seafood</option>
-      </select>
+      <p class="section-label" style="margin-bottom:8px">Down for <span style="color:var(--text-muted);font-weight:400">(pick any)</span></p>
+      <div class="chip-group" id="chips-food-downfor" style="margin-bottom:14px"></div>
+
+      <p class="section-label" style="margin-bottom:8px;font-size:11px">
+        <span style="cursor:pointer;color:var(--text-muted);text-decoration:underline;text-underline-offset:3px" onclick="toggleNotTonight('food')">＋ Anything you're not feeling tonight?</span>
+      </p>
+      <div class="chip-group" id="chips-food-not" style="margin-bottom:14px;display:none"></div>
     </div>
-    <!-- Vibe (all) -->
-    <label class="form-label" style="margin-top:0">Vibe</label>
-    <select class="select-field" style="margin-bottom:12px" id="ctx1b-vibe">
-      <option value="">Select vibe...</option>
-      <option>Rooftop</option><option>Low key</option><option>Trendy</option><option>Cozy</option><option>Cocktail bar</option><option>Dive bar</option><option>Wine bar</option><option>Sports bar</option><option>Outdoor seating</option><option>Live music</option><option>Whatever</option>
-    </select>
-    <!-- Budget (all) -->
-    <label class="form-label" style="margin-top:0">Budget</label>
-    <div class="pill-group" style="margin-bottom:16px">
-      <button class="pill" onclick="togglePill(this)">Casual</button>
-      <button class="pill selected" onclick="togglePill(this)">Mid-range</button>
-      <button class="pill" onclick="togglePill(this)">Splurge</button>
-      <button class="pill" onclick="togglePill(this)">Don&#39;t care</button>
+
+    <div id="ctx1b-bars" style="display:none">
+      <p class="section-label" style="margin-bottom:8px">Vibe <span style="color:var(--text-muted);font-weight:400">(pick any)</span></p>
+      <div class="chip-group" id="chips-bars-vibe" style="margin-bottom:14px"></div>
     </div>
-    <button class="btn-primary" onclick="go('screen-start-2')">Continue →</button>
+
+    <div id="ctx1b-activity" style="display:none">
+      <p class="section-label" style="margin-bottom:8px">What are we doing?</p>
+      <input class="input-field" id="activity-writein" type="text" placeholder='e.g. Drake at MSG, pottery class, bowling...' style="margin-bottom:8px">
+      <p style="font-size:11px;color:var(--text-muted);margin-bottom:8px">Or tap a starting point:</p>
+      <div class="chip-group" id="chips-activity-accelerators" style="margin-bottom:14px"></div>
+    </div>
+
+    <!-- Vibe (shown for food & activity, hidden for bars which has its own) -->
+    <div id="ctx1b-vibe-block" style="display:none">
+      <p class="section-label" style="margin-bottom:8px">Vibe <span style="color:var(--text-muted);font-weight:400">(pick any)</span></p>
+      <div class="chip-group" id="chips-vibe" style="margin-bottom:14px"></div>
+    </div>
+
+    <!-- Neighborhood (all types) -->
+    <p class="section-label" style="margin-bottom:8px">Neighborhood <span style="color:var(--text-muted);font-weight:400">(pick any)</span></p>
+    <div class="chip-group" id="chips-neighborhood" style="margin-bottom:14px"></div>
+
+    <!-- Budget (all types) -->
+    <p class="section-label" style="margin-bottom:8px">Budget</p>
+    <div class="pill-group" id="ctx1b-budget" style="margin-bottom:16px">
+      <button class="pill" onclick="setBudget(this,'$')">$</button>
+      <button class="pill selected" onclick="setBudget(this,'$$')">$$</button>
+      <button class="pill" onclick="setBudget(this,'$$$')">$$$</button>
+      <button class="pill" onclick="setBudget(this,'whatever')">Whatever</button>
+    </div>
+
+    <button class="btn-primary" onclick="saveCtx1bAndContinue()">Continue →</button>
   </div>
 </div>
 
 <div class="screen" id="screen-start-2">
   <div class="step-indicator">
     <button class="btn-back" onclick="go('screen-start-1')">← Back</button>
-    <span class="step-count">Step 2 of 3</span>
+    <span class="step-count">Step 3 of 4</span>
     <div style="width:44px"></div>
   </div>
   <div class="scroll-content" style="padding:14px 20px">
@@ -786,7 +796,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 <div class="screen" id="screen-start-3">
   <div class="step-indicator">
     <button class="btn-back" onclick="go('screen-start-2')">← Back</button>
-    <span class="step-count">Step 3 of 3</span>
+    <span class="step-count">Step 4 of 4</span>
     <div style="width:44px"></div>
   </div>
   <div class="sheet-header"><p class="sheet-title">Who's in?</p><p class="sheet-sub">Invite your crew</p></div>
@@ -1943,33 +1953,171 @@ function togglePlanType(btn, type) {
   });
   // Toggle this one (allow tap-again-to-deselect)
   if (!wasSelected) btn.classList.add('selected');
-  document.getElementById('activity-subtypes').style.display =
-    document.getElementById('btn-activity').classList.contains('selected') ? 'block' : 'none';
-  document.getElementById('trip-note').style.display =
-    document.getElementById('btn-trip').classList.contains('selected') ? 'block' : 'none';
+  var activityNote = document.getElementById('activity-note');
+  if (activityNote) activityNote.style.display = (type === 'activity' && !wasSelected) ? 'block' : 'none';
+  document.getElementById('trip-note').style.display = (type === 'trip' && !wasSelected) ? 'block' : 'none';
   var anythingNote = document.getElementById('anything-note');
-  if (anythingNote) anythingNote.style.display =
-    document.getElementById('btn-custom') && document.getElementById('btn-custom').classList.contains('selected') ? 'block' : 'none';
+  if (anythingNote) anythingNote.style.display = (type === 'custom' && !wasSelected) ? 'block' : 'none';
+}
+
+function getSelectedPlanType() {
+  var btn = document.querySelector('#screen-start-1 .plan-type-btn.selected');
+  if (!btn) return null;
+  var m = btn.getAttribute('onclick').match(/togglePlanType\(this,'(\w+)'\)/);
+  return m ? m[1] : null;
 }
 
 function handleStartContinue() {
-  if (document.getElementById('btn-trip').classList.contains('selected')) {
-    go('screen-trip-start');
-    return;
+  var type = getSelectedPlanType();
+  if (!type) { showToast('Pick a plan type first'); return; }
+  if (type === 'trip') { go('screen-trip-start'); return; }
+  if (type === 'custom') { go('screen-anything-questions'); return; }
+  // Dinner, Bars, Brunch, Activity all route through adaptive ctx1b screen
+  prepCtx1b(type);
+  go('screen-start-1b');
+}
+
+// ═══ v0.7 ADAPTIVE QUESTIONS ═══
+// rallyPreferences captures the structured answer object — shape matches future Yelp+Claude recommender input
+var rallyPreferences = null;
+
+// Question content by plan type
+var Q_CUISINE_DINNER = ['Italian','Japanese','Mexican','Chinese','Thai','Sushi','Pizza','American','Mediterranean','Indian','Korean','Vietnamese','Steakhouse','Seafood','French','Spanish','Middle Eastern','BBQ','Whatever'];
+var Q_CUISINE_BRUNCH = ['Classic American','Cafe / Bakery','Diner','French','Mediterranean','Mexican','Bottomless spots','Healthy / Bowls','Dim Sum','Cute / Aesthetic','Whatever'];
+var Q_VIBE_FOOD = ['Trendy','Cozy','Outdoor','Low-key','Lively','Quick bite','Group-friendly'];
+var Q_VIBE_BRUNCH = ['Chill','Lively','Boozy / Bottomless','Healthy','Outdoor','Cute / Aesthetic','Group-friendly','Quick'];
+var Q_VIBE_BARS = ['Cocktail','Dive','Wine','Beer / Brewery','Sports','Rooftop','Live music','Low-key','Lively','Club / Dancing','Upscale','Whatever'];
+var Q_VIBE_ACTIVITY = ['Chill','Competitive','Lively','Low-key','Big group'];
+var Q_ACTIVITY_ACCELERATORS = ['Bowling','Concert','Comedy','Museum','Mini golf','Arcade','Karaoke','Escape room','Movie','Sports game','Class / Workshop'];
+var Q_NEIGHBORHOOD = ['Williamsburg','LES','East Village','West Village','Greenpoint','Bushwick','Park Slope','Cobble Hill','Midtown','UWS','UES','Harlem','Astoria','Anywhere'];
+
+function renderChips(containerId, items, opts) {
+  opts = opts || {};
+  var c = document.getElementById(containerId);
+  if (!c) return;
+  c.innerHTML = '';
+  items.forEach(function(label) {
+    var b = document.createElement('button');
+    b.className = 'chip' + (opts.notStyle ? ' chip--not' : '');
+    b.type = 'button';
+    b.textContent = label;
+    b.onclick = function() { b.classList.toggle('selected'); };
+    c.appendChild(b);
+  });
+}
+
+function renderActivityAccelerators() {
+  var c = document.getElementById('chips-activity-accelerators');
+  if (!c) return;
+  c.innerHTML = '';
+  Q_ACTIVITY_ACCELERATORS.forEach(function(label) {
+    var b = document.createElement('button');
+    b.className = 'chip';
+    b.type = 'button';
+    b.textContent = label;
+    b.onclick = function() {
+      // Accelerators fill the text field (single tap = fill, replace prior)
+      var inp = document.getElementById('activity-writein');
+      if (inp) inp.value = label;
+      // Visual confirmation: briefly highlight, then clear after a moment
+      document.querySelectorAll('#chips-activity-accelerators .chip').forEach(function(x){ x.classList.remove('selected'); });
+      b.classList.add('selected');
+    };
+    c.appendChild(b);
+  });
+}
+
+function toggleNotTonight(group) {
+  var el = document.getElementById('chips-' + group + '-not');
+  if (!el) return;
+  el.style.display = (el.style.display === 'none' || !el.style.display) ? 'flex' : 'none';
+}
+
+function setBudget(btn) {
+  document.querySelectorAll('#ctx1b-budget .pill').forEach(function(p){ p.classList.remove('selected'); });
+  btn.classList.add('selected');
+}
+
+function prepCtx1b(type) {
+  // Hide all type-specific sections first
+  var ids = ['ctx1b-food','ctx1b-bars','ctx1b-activity','ctx1b-vibe-block'];
+  ids.forEach(function(id) { var el = document.getElementById(id); if (el) el.style.display = 'none'; });
+  // Reset "not tonight" toggle state
+  var notFood = document.getElementById('chips-food-not');
+  if (notFood) notFood.style.display = 'none';
+  // Reset budget to default mid-range
+  document.querySelectorAll('#ctx1b-budget .pill').forEach(function(p){ p.classList.remove('selected'); });
+  var defaultBudget = document.querySelectorAll('#ctx1b-budget .pill')[1];
+  if (defaultBudget) defaultBudget.classList.add('selected');
+  // Always render neighborhood chips
+  renderChips('chips-neighborhood', Q_NEIGHBORHOOD);
+
+  if (type === 'dinner') {
+    document.getElementById('ctx1b-food').style.display = 'block';
+    document.getElementById('ctx1b-vibe-block').style.display = 'block';
+    renderChips('chips-food-downfor', Q_CUISINE_DINNER);
+    renderChips('chips-food-not', Q_CUISINE_DINNER, { notStyle: true });
+    renderChips('chips-vibe', Q_VIBE_FOOD);
+    document.querySelector('#screen-start-1b .sheet-title').textContent = 'Dinner preferences';
+    document.getElementById('ctx-sub').textContent = 'Tell us what you\u2019re feeling';
+  } else if (type === 'brunch') {
+    document.getElementById('ctx1b-food').style.display = 'block';
+    document.getElementById('ctx1b-vibe-block').style.display = 'block';
+    renderChips('chips-food-downfor', Q_CUISINE_BRUNCH);
+    renderChips('chips-food-not', Q_CUISINE_BRUNCH, { notStyle: true });
+    renderChips('chips-vibe', Q_VIBE_BRUNCH);
+    document.querySelector('#screen-start-1b .sheet-title').textContent = 'Brunch preferences';
+    document.getElementById('ctx-sub').textContent = 'Tell us what you\u2019re feeling';
+  } else if (type === 'bars') {
+    document.getElementById('ctx1b-bars').style.display = 'block';
+    renderChips('chips-bars-vibe', Q_VIBE_BARS);
+    document.querySelector('#screen-start-1b .sheet-title').textContent = 'Bars preferences';
+    document.getElementById('ctx-sub').textContent = 'What kind of night?';
+  } else if (type === 'activity') {
+    document.getElementById('ctx1b-activity').style.display = 'block';
+    document.getElementById('ctx1b-vibe-block').style.display = 'block';
+    var inp = document.getElementById('activity-writein');
+    if (inp) inp.value = '';
+    renderActivityAccelerators();
+    renderChips('chips-vibe', Q_VIBE_ACTIVITY);
+    document.querySelector('#screen-start-1b .sheet-title').textContent = 'Activity details';
+    document.getElementById('ctx-sub').textContent = 'What are we doing?';
   }
-  if (document.getElementById('btn-custom') && document.getElementById('btn-custom').classList.contains('selected')) {
-    go('screen-anything-questions');
-    return;
+}
+
+function getSelectedChipLabels(containerId) {
+  var arr = [];
+  var nodes = document.querySelectorAll('#' + containerId + ' .chip.selected');
+  nodes.forEach(function(n){ arr.push(n.textContent.trim()); });
+  return arr;
+}
+
+function getSelectedBudget() {
+  var p = document.querySelector('#ctx1b-budget .pill.selected');
+  return p ? p.textContent.trim() : null;
+}
+
+function saveCtx1bAndContinue() {
+  var type = getSelectedPlanType();
+  var prefs = { type: type };
+  if (type === 'dinner' || type === 'brunch') {
+    prefs.cuisineDownFor = getSelectedChipLabels('chips-food-downfor');
+    prefs.cuisineNotTonight = getSelectedChipLabels('chips-food-not');
+    prefs.vibe = getSelectedChipLabels('chips-vibe');
+    if (prefs.cuisineDownFor.length === 0) { showToast('Pick at least one cuisine you\u2019re down for'); return; }
+  } else if (type === 'bars') {
+    prefs.vibe = getSelectedChipLabels('chips-bars-vibe');
+    if (prefs.vibe.length === 0) { showToast('Pick at least one vibe'); return; }
+  } else if (type === 'activity') {
+    var inp = document.getElementById('activity-writein');
+    prefs.activity = inp ? inp.value.trim() : '';
+    prefs.vibe = getSelectedChipLabels('chips-vibe');
+    if (!prefs.activity) { showToast('Tell us what the activity is'); return; }
   }
-  // Check if any contextual questions exist (dinner/bars/brunch selected)
-  var hasDinner = document.querySelector('.plan-type-btn[onclick*="dinner"]') && document.querySelector('.plan-type-btn[onclick*="dinner"]').classList.contains('selected');
-  var hasBars = document.querySelector('.plan-type-btn[onclick*="bars"]') && document.querySelector('.plan-type-btn[onclick*="bars"]').classList.contains('selected');
-  var hasBrunch = document.querySelector('.plan-type-btn[onclick*="brunch"]') && document.querySelector('.plan-type-btn[onclick*="brunch"]').classList.contains('selected');
-  if (hasDinner || hasBars || hasBrunch) {
-    go('screen-start-1b');
-  } else {
-    go('screen-start-2');
-  }
+  prefs.neighborhood = getSelectedChipLabels('chips-neighborhood');
+  prefs.budget = getSelectedBudget();
+  rallyPreferences = prefs;
+  go('screen-start-2');
 }
 
 // -- PLAN PARTS (chained Rally) --
