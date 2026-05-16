@@ -633,7 +633,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         </div>
       </div>
     </div>
-    <div class="version-marker">Rally · v0.7a</div>
+    <div class="version-marker">Rally · v0.7b</div>
   </div>
   <button class="fab" onclick="go('screen-start-1')">
     <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
@@ -2265,6 +2265,11 @@ function summarizePrefs(prefs) {
   return bits.join(' \u00B7 ');
 }
 
+function escapeHtml(s) {
+  if (s === null || s === undefined) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
 function togglePartExpand(idx) {
   if (!rallyParts[idx]) return;
   rallyParts[idx]._expanded = !rallyParts[idx]._expanded;
@@ -2315,29 +2320,43 @@ function renderPartQuestions(idx, type, container) {
     html += '<p class="inline-q-hint">Custom parts use the questions you set in the main flow.</p>';
   }
 
-  // Inheritance: neighborhood
-  var nhInherited = (existing.neighborhood === undefined) || arraysEqual(existing.neighborhood, inheritedNeighborhood);
-  html += '<div class="inherit-row">' +
-    '<label><input type="checkbox"' + (nhInherited ? ' checked' : '') + ' onchange="togglePartInherit(' + idx + ',\'neighborhood\',this.checked)"> Same area as Part 1' +
-    (inheritedNeighborhood.length ? ' <span class="inherit-vals">(' + escapeHtml(inheritedNeighborhood.slice(0,2).join(', ')) + (inheritedNeighborhood.length > 2 ? '\u2026' : '') + ')</span>' : ' <span class="inherit-vals">(no preference)</span>') +
-    '</label></div>';
-  if (!nhInherited) {
+  // Neighborhood + Budget
+  if (idx === 0) {
+    // Part 1: full question UI, no inheritance
+    html += '<p class="inline-q-label">Neighborhood</p>';
     html += '<div class="chip-group chip-group--sm" data-part-q="neighborhood">' + chipsHtml(Q_NEIGHBORHOOD, existing.neighborhood || []) + '</div>';
-  }
-
-  // Inheritance: budget
-  var budgetInherited = (existing.budget === undefined) || existing.budget === inheritedBudget;
-  html += '<div class="inherit-row">' +
-    '<label><input type="checkbox"' + (budgetInherited ? ' checked' : '') + ' onchange="togglePartInherit(' + idx + ',\'budget\',this.checked)"> Same budget as Part 1' +
-    (inheritedBudget ? ' <span class="inherit-vals">(' + escapeHtml(inheritedBudget) + ')</span>' : '') +
-    '</label></div>';
-  if (!budgetInherited) {
+    html += '<p class="inline-q-label">Budget</p>';
     html += '<div class="pill-group" data-part-q="budget" style="margin-top:6px">' +
       ['$','$$','$$$','Whatever'].map(function(b) {
         var sel = existing.budget === b ? ' selected' : '';
         return '<button type="button" class="pill' + sel + '" onclick="setPartBudget(' + idx + ',\'' + b + '\',this)">' + b + '</button>';
       }).join('') +
     '</div>';
+  } else {
+    // Inheritance: neighborhood
+    var nhInherited = (existing.neighborhood === undefined) || arraysEqual(existing.neighborhood, inheritedNeighborhood);
+    html += '<div class="inherit-row">' +
+      '<label><input type="checkbox"' + (nhInherited ? ' checked' : '') + ' onchange="togglePartInherit(' + idx + ',\'neighborhood\',this.checked)"> Same area as Part 1' +
+      (inheritedNeighborhood.length ? ' <span class="inherit-vals">(' + escapeHtml(inheritedNeighborhood.slice(0,2).join(', ')) + (inheritedNeighborhood.length > 2 ? '\u2026' : '') + ')</span>' : ' <span class="inherit-vals">(no preference)</span>') +
+      '</label></div>';
+    if (!nhInherited) {
+      html += '<div class="chip-group chip-group--sm" data-part-q="neighborhood">' + chipsHtml(Q_NEIGHBORHOOD, existing.neighborhood || []) + '</div>';
+    }
+
+    // Inheritance: budget
+    var budgetInherited = (existing.budget === undefined) || existing.budget === inheritedBudget;
+    html += '<div class="inherit-row">' +
+      '<label><input type="checkbox"' + (budgetInherited ? ' checked' : '') + ' onchange="togglePartInherit(' + idx + ',\'budget\',this.checked)"> Same budget as Part 1' +
+      (inheritedBudget ? ' <span class="inherit-vals">(' + escapeHtml(inheritedBudget) + ')</span>' : '') +
+      '</label></div>';
+    if (!budgetInherited) {
+      html += '<div class="pill-group" data-part-q="budget" style="margin-top:6px">' +
+        ['$','$$','$$$','Whatever'].map(function(b) {
+          var sel = existing.budget === b ? ' selected' : '';
+          return '<button type="button" class="pill' + sel + '" onclick="setPartBudget(' + idx + ',\'' + b + '\',this)">' + b + '</button>';
+        }).join('') +
+      '</div>';
+    }
   }
 
   // Footer buttons
