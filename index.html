@@ -286,6 +286,25 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .add-part-btn:hover{border-color:var(--green);background:var(--green-pale)}
 .add-part-form{margin-top:10px;padding:14px;background:var(--cream-dark);border-radius:var(--radius-sm);border:1px solid var(--border)}
 .parts-hint{font-size:11px;color:var(--text-muted);font-style:italic;margin-top:10px}
+.part-card--v2{flex-wrap:wrap}
+.part-card--pending{border-left-color:#92400E;background:#FEFCF7}
+.part-card-head{display:flex;align-items:center;gap:12px;width:100%}
+.part-summary{color:var(--text-muted)}
+.part-toggle{background:none;border:none;color:var(--text-muted);font-size:14px;cursor:pointer;padding:4px 8px;flex-shrink:0}
+.part-status-tag{background:#FEF3C7;color:#92400E;font-family:var(--headline);font-size:9px;font-weight:600;letter-spacing:1px;padding:3px 7px;border-radius:999px;flex-shrink:0}
+.part-questions{width:100%;margin-top:10px;padding-top:10px;border-top:1px dotted var(--border-dot)}
+.inline-q-label{font-family:var(--headline);font-size:9px;font-weight:500;letter-spacing:1.5px;color:var(--text-light);margin:8px 0 5px;text-transform:uppercase}
+.inline-q-label:first-child{margin-top:0}
+.inline-q-hint{font-size:12px;color:var(--text-muted);font-style:italic;margin:6px 0 10px}
+.chip-group--sm{gap:4px}
+.chip--sm{padding:5px 10px;font-size:11px}
+.input-field--sm{padding:8px 10px;font-size:13px;margin-bottom:6px}
+.inherit-row{margin:10px 0 4px;font-size:12px;color:var(--text-muted)}
+.inherit-row label{display:flex;align-items:center;gap:6px;cursor:pointer}
+.inherit-row input[type=checkbox]{margin:0}
+.inherit-vals{font-style:italic}
+.part-q-footer{display:flex;gap:8px;margin-top:12px;padding-top:8px;border-top:1px dotted var(--border-dot)}
+.btn-outline--sm,.btn-primary--sm{flex:1;padding:8px;font-size:11px;letter-spacing:0.5px}
 
 .menu-item{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px dotted var(--border-dot);cursor:pointer;background:none;border-left:none;border-right:none;border-top:none;width:100%;font-family:var(--body);text-align:left}
 .menu-item-left{display:flex;align-items:center;gap:12px}
@@ -614,7 +633,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         </div>
       </div>
     </div>
-    <div class="version-marker">Rally · v0.6a</div>
+    <div class="version-marker">Rally · v0.7a</div>
   </div>
   <button class="fab" onclick="go('screen-start-1')">
     <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
@@ -2167,7 +2186,15 @@ function initRallyPartsForFinalize() {
     var type = typeMatch ? typeMatch[1] : 'custom';
     var meta = PLAN_TYPES[type] || PLAN_TYPES.custom;
     var timeVal = (document.getElementById('rally-time-input') || {}).value || '20:00';
-    rallyParts.push({ type: type, typeName: meta.name, icon: meta.icon, time: timeVal });
+    rallyParts.push({
+      type: type,
+      typeName: meta.name,
+      icon: meta.icon,
+      time: timeVal,
+      prefs: (rallyPreferences && rallyPreferences.type === type) ? rallyPreferences : null,
+      _complete: !!(rallyPreferences && rallyPreferences.type === type),
+      _expanded: false
+    });
   }
   renderRallyParts();
   // Reset and prep the add form
@@ -2184,21 +2211,245 @@ function renderRallyParts() {
   container.innerHTML = '';
   rallyParts.forEach(function(part, idx) {
     var card = document.createElement('div');
-    card.className = 'part-card';
-    var html = '<div class="part-num">' + (idx + 1) + '</div>';
-    html += '<div class="part-icon">' + part.icon + '</div>';
-    html += '<div class="part-body">';
-    html += '<p class="part-name">' + part.typeName + '</p>';
-    html += '<p class="part-time">' + formatTime(part.time) + '</p>';
-    html += '</div>';
-    if (idx > 0) {
-      html += '<button class="part-remove" onclick="removeRallyPart(' + idx + ')" aria-label="Remove">×</button>';
+    card.className = 'part-card part-card--v2';
+    if (!part._complete) card.classList.add('part-card--pending');
+
+    // Head row
+    var summary = part._complete ? summarizePrefs(part.prefs) : '';
+    var head = document.createElement('div');
+    head.className = 'part-card-head';
+    var headHtml =
+      '<div class="part-num">' + (idx + 1) + '</div>' +
+      '<div class="part-icon">' + part.icon + '</div>' +
+      '<div class="part-body">' +
+        '<p class="part-name">' + escapeHtml(part.typeName) + '</p>' +
+        '<p class="part-time">' + formatTime(part.time) +
+          (summary ? ' \u00B7 <span class="part-summary">' + escapeHtml(summary) + '</span>' : '') +
+        '</p>' +
+      '</div>';
+    // Status/expand control
+    if (part._complete) {
+      headHtml += '<button class="part-toggle" onclick="togglePartExpand(' + idx + ')" aria-label="Expand">' + (part._expanded ? '\u25B4' : '\u25BE') + '</button>';
+    } else {
+      headHtml += '<span class="part-status-tag">DETAILS</span>';
     }
-    card.innerHTML = html;
+    if (idx > 0) {
+      headHtml += '<button class="part-remove" onclick="removeRallyPart(' + idx + ')" aria-label="Remove">\u00D7</button>';
+    }
+    head.innerHTML = headHtml;
+    card.appendChild(head);
+
+    // Inline questions area — shown for added pending parts (auto) or expanded complete parts
+    var showQuestions = part._expanded || (!part._complete && idx > 0);
+    if (showQuestions) {
+      var qbox = document.createElement('div');
+      qbox.className = 'part-questions';
+      qbox.id = 'part-questions-' + idx;
+      card.appendChild(qbox);
+      renderPartQuestions(idx, part.type, qbox);
+    }
     container.appendChild(card);
   });
   var addBtn = document.getElementById('add-part-btn');
   if (addBtn) addBtn.style.display = (rallyParts.length >= 3) ? 'none' : 'block';
+}
+
+function summarizePrefs(prefs) {
+  if (!prefs) return '';
+  var bits = [];
+  if (prefs.activity) bits.push(prefs.activity);
+  if (prefs.cuisineDownFor && prefs.cuisineDownFor.length) bits.push(prefs.cuisineDownFor.slice(0,2).join(', '));
+  if (prefs.vibe && prefs.vibe.length && !prefs.cuisineDownFor) bits.push(prefs.vibe.slice(0,2).join(', '));
+  if (prefs.neighborhood && prefs.neighborhood.length) bits.push(prefs.neighborhood.slice(0,2).join(', '));
+  if (prefs.budget) bits.push(prefs.budget);
+  return bits.join(' \u00B7 ');
+}
+
+function togglePartExpand(idx) {
+  if (!rallyParts[idx]) return;
+  rallyParts[idx]._expanded = !rallyParts[idx]._expanded;
+  renderRallyParts();
+}
+
+function arraysEqual(a, b) {
+  if (!a || !b) return a === b;
+  if (a.length !== b.length) return false;
+  for (var i = 0; i < a.length; i++) if (a[i] !== b[i]) return false;
+  return true;
+}
+
+function chipsHtml(items, selected) {
+  selected = selected || [];
+  return items.map(function(label) {
+    var sel = selected.indexOf(label) !== -1 ? ' selected' : '';
+    return '<button type="button" class="chip chip--sm' + sel + '">' + escapeHtml(label) + '</button>';
+  }).join('');
+}
+
+function renderPartQuestions(idx, type, container) {
+  var part = rallyParts[idx];
+  var inheritedNeighborhood = (rallyParts[0] && rallyParts[0].prefs && rallyParts[0].prefs.neighborhood) ? rallyParts[0].prefs.neighborhood : [];
+  var inheritedBudget = (rallyParts[0] && rallyParts[0].prefs && rallyParts[0].prefs.budget) ? rallyParts[0].prefs.budget : null;
+  var existing = part.prefs || {};
+
+  var html = '';
+
+  // Type-specific question sections
+  if (type === 'dinner' || type === 'brunch') {
+    var cuisineList = (type === 'brunch') ? Q_CUISINE_BRUNCH : Q_CUISINE_DINNER;
+    var vibeList = (type === 'brunch') ? Q_VIBE_BRUNCH : Q_VIBE_FOOD;
+    html += '<p class="inline-q-label">Down for</p>';
+    html += '<div class="chip-group chip-group--sm" data-part-q="cuisineDownFor">' + chipsHtml(cuisineList, existing.cuisineDownFor) + '</div>';
+    html += '<p class="inline-q-label">Vibe</p>';
+    html += '<div class="chip-group chip-group--sm" data-part-q="vibe">' + chipsHtml(vibeList, existing.vibe) + '</div>';
+  } else if (type === 'bars') {
+    html += '<p class="inline-q-label">Vibe</p>';
+    html += '<div class="chip-group chip-group--sm" data-part-q="vibe">' + chipsHtml(Q_VIBE_BARS, existing.vibe) + '</div>';
+  } else if (type === 'activity') {
+    var activityVal = existing.activity || '';
+    html += '<p class="inline-q-label">What are we doing?</p>';
+    html += '<input class="input-field input-field--sm" type="text" placeholder="e.g. Drake at MSG, pottery class..." value="' + escapeHtml(activityVal) + '" data-part-q="activity">';
+    html += '<p class="inline-q-label">Vibe</p>';
+    html += '<div class="chip-group chip-group--sm" data-part-q="vibe">' + chipsHtml(Q_VIBE_ACTIVITY, existing.vibe) + '</div>';
+  } else if (type === 'custom') {
+    html += '<p class="inline-q-hint">Custom parts use the questions you set in the main flow.</p>';
+  }
+
+  // Inheritance: neighborhood
+  var nhInherited = (existing.neighborhood === undefined) || arraysEqual(existing.neighborhood, inheritedNeighborhood);
+  html += '<div class="inherit-row">' +
+    '<label><input type="checkbox"' + (nhInherited ? ' checked' : '') + ' onchange="togglePartInherit(' + idx + ',\'neighborhood\',this.checked)"> Same area as Part 1' +
+    (inheritedNeighborhood.length ? ' <span class="inherit-vals">(' + escapeHtml(inheritedNeighborhood.slice(0,2).join(', ')) + (inheritedNeighborhood.length > 2 ? '\u2026' : '') + ')</span>' : ' <span class="inherit-vals">(no preference)</span>') +
+    '</label></div>';
+  if (!nhInherited) {
+    html += '<div class="chip-group chip-group--sm" data-part-q="neighborhood">' + chipsHtml(Q_NEIGHBORHOOD, existing.neighborhood || []) + '</div>';
+  }
+
+  // Inheritance: budget
+  var budgetInherited = (existing.budget === undefined) || existing.budget === inheritedBudget;
+  html += '<div class="inherit-row">' +
+    '<label><input type="checkbox"' + (budgetInherited ? ' checked' : '') + ' onchange="togglePartInherit(' + idx + ',\'budget\',this.checked)"> Same budget as Part 1' +
+    (inheritedBudget ? ' <span class="inherit-vals">(' + escapeHtml(inheritedBudget) + ')</span>' : '') +
+    '</label></div>';
+  if (!budgetInherited) {
+    html += '<div class="pill-group" data-part-q="budget" style="margin-top:6px">' +
+      ['$','$$','$$$','Whatever'].map(function(b) {
+        var sel = existing.budget === b ? ' selected' : '';
+        return '<button type="button" class="pill' + sel + '" onclick="setPartBudget(' + idx + ',\'' + b + '\',this)">' + b + '</button>';
+      }).join('') +
+    '</div>';
+  }
+
+  // Footer buttons
+  html += '<div class="part-q-footer">' +
+    '<button class="btn-outline btn-outline--sm" onclick="cancelPartQuestions(' + idx + ')">Cancel</button>' +
+    '<button class="btn-primary btn-primary--sm" onclick="savePartPrefs(' + idx + ')">' + (part._complete ? 'Update' : 'Save part') + '</button>' +
+  '</div>';
+
+  container.innerHTML = html;
+
+  // Wire chip toggles
+  container.querySelectorAll('.chip').forEach(function(c) {
+    c.addEventListener('click', function() { c.classList.toggle('selected'); });
+  });
+}
+
+function togglePartInherit(idx, field, isInherited) {
+  if (!rallyParts[idx]) return;
+  var p1 = (rallyParts[0] && rallyParts[0].prefs) ? rallyParts[0].prefs : {};
+  rallyParts[idx].prefs = rallyParts[idx].prefs || {};
+  if (isInherited) {
+    if (field === 'neighborhood') rallyParts[idx].prefs.neighborhood = (p1.neighborhood || []).slice();
+    else if (field === 'budget') rallyParts[idx].prefs.budget = p1.budget || null;
+  } else {
+    if (field === 'neighborhood') rallyParts[idx].prefs.neighborhood = [];
+    else if (field === 'budget') rallyParts[idx].prefs.budget = null;
+  }
+  renderRallyParts();
+}
+
+function setPartBudget(idx, value, btn) {
+  rallyParts[idx].prefs = rallyParts[idx].prefs || {};
+  rallyParts[idx].prefs.budget = value;
+  var group = btn.parentElement;
+  group.querySelectorAll('.pill').forEach(function(p) { p.classList.remove('selected'); });
+  btn.classList.add('selected');
+}
+
+function cancelPartQuestions(idx) {
+  if (idx === 0) {
+    rallyParts[0]._expanded = false;
+    renderRallyParts();
+    return;
+  }
+  // Pending added parts: cancel removes them
+  if (!rallyParts[idx]._complete) {
+    rallyParts.splice(idx, 1);
+  } else {
+    rallyParts[idx]._expanded = false;
+  }
+  renderRallyParts();
+}
+
+function savePartPrefs(idx) {
+  var box = document.getElementById('part-questions-' + idx);
+  if (!box) return;
+  var part = rallyParts[idx];
+  var prefs = part.prefs || {};
+  var type = part.type;
+
+  function readChips(field) {
+    var g = box.querySelector('[data-part-q="' + field + '"]');
+    if (!g) return null;
+    var arr = [];
+    g.querySelectorAll('.chip.selected').forEach(function(c) { arr.push(c.textContent.trim()); });
+    return arr;
+  }
+
+  if (type === 'dinner' || type === 'brunch') {
+    var downFor = readChips('cuisineDownFor') || [];
+    if (downFor.length === 0) { showToast('Pick at least one cuisine'); return; }
+    prefs.type = type;
+    prefs.cuisineDownFor = downFor;
+    prefs.vibe = readChips('vibe') || [];
+  } else if (type === 'bars') {
+    var vibe = readChips('vibe') || [];
+    if (vibe.length === 0) { showToast('Pick at least one vibe'); return; }
+    prefs.type = type;
+    prefs.vibe = vibe;
+  } else if (type === 'activity') {
+    var actInput = box.querySelector('[data-part-q="activity"]');
+    var act = actInput ? actInput.value.trim() : '';
+    if (!act) { showToast('Tell us what the activity is'); return; }
+    prefs.type = type;
+    prefs.activity = act;
+    prefs.vibe = readChips('vibe') || [];
+  } else if (type === 'custom') {
+    prefs.type = type;
+  }
+
+  // Neighborhood: read inheritance checkbox + chips
+  var nhBox = box.querySelector('[data-part-q="neighborhood"]');
+  if (nhBox) {
+    var nh = [];
+    nhBox.querySelectorAll('.chip.selected').forEach(function(c) { nh.push(c.textContent.trim()); });
+    prefs.neighborhood = nh;
+  } else if (prefs.neighborhood === undefined) {
+    // Inheritance was checked and never overridden — inherit from Part 1
+    var p1 = (rallyParts[0] && rallyParts[0].prefs) ? rallyParts[0].prefs : {};
+    prefs.neighborhood = (p1.neighborhood || []).slice();
+  }
+
+  // Budget: same pattern
+  if (prefs.budget === undefined || prefs.budget === null) {
+    var p1b = (rallyParts[0] && rallyParts[0].prefs) ? rallyParts[0].prefs : {};
+    prefs.budget = p1b.budget || null;
+  }
+
+  part.prefs = prefs;
+  part._complete = true;
+  part._expanded = false;
+  renderRallyParts();
 }
 
 function showAddPartForm() {
@@ -2217,7 +2468,15 @@ function confirmAddPart() {
   if (!typeSel.value) { showToast('Pick a type for this part'); return; }
   var meta = PLAN_TYPES[typeSel.value];
   if (!meta) return;
-  rallyParts.push({ type: typeSel.value, typeName: meta.name, icon: meta.icon, time: timeSel.value });
+  rallyParts.push({
+    type: typeSel.value,
+    typeName: meta.name,
+    icon: meta.icon,
+    time: timeSel.value,
+    prefs: null,
+    _complete: false,
+    _expanded: true
+  });
   typeSel.value = '';
   populateTimeSelect('add-part-time', '21:30');
   document.getElementById('add-part-form').style.display = 'none';
