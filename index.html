@@ -77,8 +77,6 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .ms-tag{background:var(--green);color:var(--white);border-radius:50px;padding:3px 10px;font-size:12px;font-weight:500;display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
 .ms-tag-x{cursor:pointer;opacity:.7;font-size:14px;line-height:1}
 .ms-placeholder{color:var(--text-light);font-size:14px}
-.ms-dropdown{position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--white);border:1.5px solid var(--green);border-radius:var(--radius-sm);z-index:200;max-height:200px;overflow-y:auto;box-shadow:0 4px 16px rgba(0,0,0,0.1)}
-.ms-dropdown::-webkit-scrollbar{display:none}
 .ms-option{padding:11px 15px;font-family:var(--body);font-size:14px;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px dotted var(--border-dot)}
 .ms-option:last-child{border-bottom:none}
 .ms-option:hover{background:var(--cream)}
@@ -94,17 +92,17 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .chip.selected{background:var(--green);border-color:var(--green);color:var(--white);font-weight:500}
 .chip--not{background:#FEE2E2;border-color:#FCA5A5;color:#991B1B}
 .chip--not.selected{background:#DC2626;border-color:#DC2626;color:white;font-weight:500}
-.ms-row{display:flex;gap:6px;align-items:stretch;margin-bottom:14px}
-.ms-dropdown{flex:1;background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:11px 14px;font-family:var(--body);font-size:13px;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px;text-align:left}
-.ms-dropdown.empty{color:var(--text-muted)}
-.ms-dropdown-caret{font-size:10px;color:var(--text-muted);flex-shrink:0}
-.ms-dropdown.open{border-color:var(--green)}
-.ms-dropdown-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ms-panel{display:none;margin:-8px 0 14px;background:var(--white);border:1.5px solid var(--green);border-top:none;border-radius:0 0 var(--radius-sm) var(--radius-sm);padding:12px;max-height:240px;overflow-y:auto}
-.ms-panel.open{display:block}
-.ms-quick{flex-shrink:0;background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:11px 14px;font-family:var(--body);font-size:12px;color:var(--text-muted);cursor:pointer;font-weight:500;white-space:nowrap}
-.ms-quick.selected{background:var(--green);border-color:var(--green);color:var(--white)}
-.ms-done{display:block;width:100%;margin-top:8px;padding:8px;background:var(--green);color:var(--white);border:none;border-radius:50px;font-family:var(--headline);font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;cursor:pointer}
+.mdr-row{display:flex;gap:6px;align-items:stretch;margin-bottom:14px}
+.mdr-trigger{flex:1;background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:11px 14px;font-family:var(--body);font-size:13px;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px;text-align:left}
+.mdr-trigger.empty{color:var(--text-muted)}
+.mdr-trigger-caret{font-size:10px;color:var(--text-muted);flex-shrink:0}
+.mdr-trigger.open{border-color:var(--green)}
+.mdr-trigger-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mdr-panel{display:none;margin:-8px 0 14px;background:var(--white);border:1.5px solid var(--green);border-top:none;border-radius:0 0 var(--radius-sm) var(--radius-sm);padding:12px;max-height:240px;overflow-y:auto}
+.mdr-panel.open{display:block}
+.mdr-quick{flex-shrink:0;background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:11px 14px;font-family:var(--body);font-size:12px;color:var(--text-muted);cursor:pointer;font-weight:500;white-space:nowrap}
+.mdr-quick.selected{background:var(--green);border-color:var(--green);color:var(--white)}
+.mdr-done{display:block;width:100%;margin-top:8px;padding:8px;background:var(--green);color:var(--white);border:none;border-radius:50px;font-family:var(--headline);font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;cursor:pointer}
 
 /* AVATAR */
 .avatar{width:38px;height:38px;border-radius:50%;background:var(--green-pale);display:flex;align-items:center;justify-content:center;font-family:var(--headline);font-size:14px;color:var(--green);font-weight:700;flex-shrink:0}
@@ -644,7 +642,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         </div>
       </div>
     </div>
-    <div class="version-marker">Rally · v0.7c</div>
+    <div class="version-marker">Rally · v0.7d</div>
   </div>
   <button class="fab" onclick="go('screen-start-1')">
     <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
@@ -707,43 +705,43 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     <!-- Dinner / Brunch: cuisine + not about it -->
     <div id="ctx1b-food" style="display:none">
       <p class="section-label" style="margin-bottom:8px">Down for</p>
-      <div class="ms-row">
-        <button type="button" class="ms-dropdown empty" id="trigger-food-downfor" onclick="toggleMsPanel('food-downfor')">
-          <span class="ms-dropdown-label" id="label-food-downfor">Pick cuisines</span>
-          <span class="ms-dropdown-caret">▾</span>
+      <div class="mdr-row">
+        <button type="button" class="mdr-trigger empty" id="trigger-food-downfor" onclick="toggleMsPanel('food-downfor')">
+          <span class="mdr-trigger-label" id="label-food-downfor">Pick cuisines</span>
+          <span class="mdr-trigger-caret">▾</span>
         </button>
-        <button type="button" class="ms-quick" id="quick-food-downfor" onclick="setMsQuick('food-downfor','Whatever')">Whatever</button>
+        <button type="button" class="mdr-quick" id="quick-food-downfor" onclick="setMsQuick('food-downfor','Whatever')">Whatever</button>
       </div>
-      <div class="ms-panel" id="panel-food-downfor">
+      <div class="mdr-panel" id="panel-food-downfor">
         <div class="chip-group" id="chips-food-downfor"></div>
-        <button type="button" class="ms-done" onclick="closeMsPanel('food-downfor')">Done</button>
+        <button type="button" class="mdr-done" onclick="closeMsPanel('food-downfor')">Done</button>
       </div>
 
       <p class="section-label" style="margin-bottom:8px">Not tonight <span style="color:var(--text-muted);font-weight:400">(optional)</span></p>
-      <div class="ms-row">
-        <button type="button" class="ms-dropdown empty" id="trigger-food-not" onclick="toggleMsPanel('food-not')">
-          <span class="ms-dropdown-label" id="label-food-not">Anything you're not feeling?</span>
-          <span class="ms-dropdown-caret">▾</span>
+      <div class="mdr-row">
+        <button type="button" class="mdr-trigger empty" id="trigger-food-not" onclick="toggleMsPanel('food-not')">
+          <span class="mdr-trigger-label" id="label-food-not">Anything you're not feeling?</span>
+          <span class="mdr-trigger-caret">▾</span>
         </button>
       </div>
-      <div class="ms-panel" id="panel-food-not">
+      <div class="mdr-panel" id="panel-food-not">
         <div class="chip-group" id="chips-food-not"></div>
-        <button type="button" class="ms-done" onclick="closeMsPanel('food-not')">Done</button>
+        <button type="button" class="mdr-done" onclick="closeMsPanel('food-not')">Done</button>
       </div>
     </div>
 
     <div id="ctx1b-bars" style="display:none">
       <p class="section-label" style="margin-bottom:8px">Vibe</p>
-      <div class="ms-row">
-        <button type="button" class="ms-dropdown empty" id="trigger-bars-vibe" onclick="toggleMsPanel('bars-vibe')">
-          <span class="ms-dropdown-label" id="label-bars-vibe">Pick a vibe</span>
-          <span class="ms-dropdown-caret">▾</span>
+      <div class="mdr-row">
+        <button type="button" class="mdr-trigger empty" id="trigger-bars-vibe" onclick="toggleMsPanel('bars-vibe')">
+          <span class="mdr-trigger-label" id="label-bars-vibe">Pick a vibe</span>
+          <span class="mdr-trigger-caret">▾</span>
         </button>
-        <button type="button" class="ms-quick" id="quick-bars-vibe" onclick="setMsQuick('bars-vibe','Whatever')">Whatever</button>
+        <button type="button" class="mdr-quick" id="quick-bars-vibe" onclick="setMsQuick('bars-vibe','Whatever')">Whatever</button>
       </div>
-      <div class="ms-panel" id="panel-bars-vibe">
+      <div class="mdr-panel" id="panel-bars-vibe">
         <div class="chip-group" id="chips-bars-vibe"></div>
-        <button type="button" class="ms-done" onclick="closeMsPanel('bars-vibe')">Done</button>
+        <button type="button" class="mdr-done" onclick="closeMsPanel('bars-vibe')">Done</button>
       </div>
     </div>
 
@@ -757,31 +755,31 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     <!-- Vibe (shown for food & activity, hidden for bars which has its own) -->
     <div id="ctx1b-vibe-block" style="display:none">
       <p class="section-label" style="margin-bottom:8px">Vibe</p>
-      <div class="ms-row">
-        <button type="button" class="ms-dropdown empty" id="trigger-vibe" onclick="toggleMsPanel('vibe')">
-          <span class="ms-dropdown-label" id="label-vibe">Pick a vibe</span>
-          <span class="ms-dropdown-caret">▾</span>
+      <div class="mdr-row">
+        <button type="button" class="mdr-trigger empty" id="trigger-vibe" onclick="toggleMsPanel('vibe')">
+          <span class="mdr-trigger-label" id="label-vibe">Pick a vibe</span>
+          <span class="mdr-trigger-caret">▾</span>
         </button>
-        <button type="button" class="ms-quick" id="quick-vibe" onclick="setMsQuick('vibe','Whatever')">Whatever</button>
+        <button type="button" class="mdr-quick" id="quick-vibe" onclick="setMsQuick('vibe','Whatever')">Whatever</button>
       </div>
-      <div class="ms-panel" id="panel-vibe">
+      <div class="mdr-panel" id="panel-vibe">
         <div class="chip-group" id="chips-vibe"></div>
-        <button type="button" class="ms-done" onclick="closeMsPanel('vibe')">Done</button>
+        <button type="button" class="mdr-done" onclick="closeMsPanel('vibe')">Done</button>
       </div>
     </div>
 
     <!-- Neighborhood (all types) -->
     <p class="section-label" style="margin-bottom:8px">Neighborhood</p>
-    <div class="ms-row">
-      <button type="button" class="ms-dropdown empty" id="trigger-neighborhood" onclick="toggleMsPanel('neighborhood')">
-        <span class="ms-dropdown-label" id="label-neighborhood">Pick neighborhood(s)</span>
-        <span class="ms-dropdown-caret">▾</span>
+    <div class="mdr-row">
+      <button type="button" class="mdr-trigger empty" id="trigger-neighborhood" onclick="toggleMsPanel('neighborhood')">
+        <span class="mdr-trigger-label" id="label-neighborhood">Pick neighborhood(s)</span>
+        <span class="mdr-trigger-caret">▾</span>
       </button>
-      <button type="button" class="ms-quick" id="quick-neighborhood" onclick="setMsQuick('neighborhood','Anywhere')">Anywhere</button>
+      <button type="button" class="mdr-quick" id="quick-neighborhood" onclick="setMsQuick('neighborhood','Anywhere')">Anywhere</button>
     </div>
-    <div class="ms-panel" id="panel-neighborhood">
+    <div class="mdr-panel" id="panel-neighborhood">
       <div class="chip-group" id="chips-neighborhood"></div>
-      <button type="button" class="ms-done" onclick="closeMsPanel('neighborhood')">Done</button>
+      <button type="button" class="mdr-done" onclick="closeMsPanel('neighborhood')">Done</button>
     </div>
 
     <!-- Budget (all types) -->
@@ -1932,7 +1930,7 @@ function createMultiSelect(containerId, options, placeholder, preSelected=[], on
 
     if (open) {
       const dropdown = document.createElement('div');
-      dropdown.className = 'ms-dropdown';
+      dropdown.className = 'mdr-trigger';
       options.forEach(opt => {
         const item = document.createElement('div');
         item.className = 'ms-option' + (selected.has(opt) ? ' selected' : '');
@@ -2122,8 +2120,8 @@ function toggleMsPanel(key) {
   if (!panel || !trigger) return;
   var willOpen = !panel.classList.contains('open');
   // Close any other open panels in this screen
-  document.querySelectorAll('.ms-panel.open').forEach(function(p) { p.classList.remove('open'); });
-  document.querySelectorAll('.ms-dropdown.open').forEach(function(t) { t.classList.remove('open'); });
+  document.querySelectorAll('.mdr-panel.open').forEach(function(p) { p.classList.remove('open'); });
+  document.querySelectorAll('.mdr-trigger.open').forEach(function(t) { t.classList.remove('open'); });
   if (willOpen) {
     panel.classList.add('open');
     trigger.classList.add('open');
@@ -2209,10 +2207,10 @@ function prepCtx1b(type) {
   var ids = ['ctx1b-food','ctx1b-bars','ctx1b-activity','ctx1b-vibe-block','ctx1b-suggest-block'];
   ids.forEach(function(id) { var el = document.getElementById(id); if (el) el.style.display = 'none'; });
   // Close any open dropdown panels
-  document.querySelectorAll('#screen-start-1b .ms-panel.open').forEach(function(p) { p.classList.remove('open'); });
-  document.querySelectorAll('#screen-start-1b .ms-dropdown.open').forEach(function(t) { t.classList.remove('open'); });
+  document.querySelectorAll('#screen-start-1b .mdr-panel.open').forEach(function(p) { p.classList.remove('open'); });
+  document.querySelectorAll('#screen-start-1b .mdr-trigger.open').forEach(function(t) { t.classList.remove('open'); });
   // Clear all quick buttons
-  document.querySelectorAll('#screen-start-1b .ms-quick.selected').forEach(function(q) { q.classList.remove('selected'); });
+  document.querySelectorAll('#screen-start-1b .mdr-quick.selected').forEach(function(q) { q.classList.remove('selected'); });
   // Reset budget to default mid-range
   document.querySelectorAll('#ctx1b-budget .pill').forEach(function(p){ p.classList.remove('selected'); });
   var defaultBudget = document.querySelectorAll('#ctx1b-budget .pill')[1];
@@ -2481,20 +2479,20 @@ function renderPartQuestions(idx, type, container) {
     else labelText = actualSelected[0] + ', ' + actualSelected[1] + ' +' + (actualSelected.length - 2);
     var emptyClass = (quickActive || actualSelected.length > 0) ? '' : ' empty';
     var quickHtml = quickLabel ?
-      '<button type="button" class="ms-quick' + (quickActive ? ' selected' : '') + '" data-inline-key="' + key + '" data-inline-quick="' + escapeHtml(quickLabel) + '">' + escapeHtml(quickLabel) + '</button>' : '';
+      '<button type="button" class="mdr-quick' + (quickActive ? ' selected' : '') + '" data-inline-key="' + key + '" data-inline-quick="' + escapeHtml(quickLabel) + '">' + escapeHtml(quickLabel) + '</button>' : '';
     var chips = items.map(function(label) {
       var sel = (!quickActive && actualSelected.indexOf(label) !== -1) ? ' selected' : '';
       return '<button type="button" class="chip chip--sm' + sel + '">' + escapeHtml(label) + '</button>';
     }).join('');
-    return '<div class="ms-row">' +
-      '<button type="button" class="ms-dropdown' + emptyClass + '" data-inline-key="' + key + '" data-inline-toggle="1">' +
-        '<span class="ms-dropdown-label">' + escapeHtml(labelText) + '</span>' +
-        '<span class="ms-dropdown-caret">\u25BE</span>' +
+    return '<div class="mdr-row">' +
+      '<button type="button" class="mdr-trigger' + emptyClass + '" data-inline-key="' + key + '" data-inline-toggle="1">' +
+        '<span class="mdr-trigger-label">' + escapeHtml(labelText) + '</span>' +
+        '<span class="mdr-trigger-caret">\u25BE</span>' +
       '</button>' + quickHtml +
     '</div>' +
-    '<div class="ms-panel" data-inline-panel="' + key + '">' +
+    '<div class="mdr-panel" data-inline-panel="' + key + '">' +
       '<div class="chip-group chip-group--sm" data-inline-chips="' + key + '">' + chips + '</div>' +
-      '<button type="button" class="ms-done" data-inline-close="' + key + '">Done</button>' +
+      '<button type="button" class="mdr-done" data-inline-close="' + key + '">Done</button>' +
     '</div>';
   }
 
@@ -2578,7 +2576,7 @@ function renderPartQuestions(idx, type, container) {
       chip.classList.toggle('selected');
       var key = chip.closest('[data-inline-chips]').dataset.inlineChips;
       // Clear quick button when any chip is picked
-      var quick = container.querySelector('.ms-quick[data-inline-key="' + key + '"]');
+      var quick = container.querySelector('.mdr-quick[data-inline-key="' + key + '"]');
       if (quick) quick.classList.remove('selected');
       updateInlineLabel(container, key);
     });
@@ -2590,8 +2588,8 @@ function renderPartQuestions(idx, type, container) {
       var panel = container.querySelector('[data-inline-panel="' + key + '"]');
       var willOpen = !panel.classList.contains('open');
       // Close other panels in this container
-      container.querySelectorAll('.ms-panel.open').forEach(function(p) { p.classList.remove('open'); });
-      container.querySelectorAll('.ms-dropdown.open').forEach(function(t) { t.classList.remove('open'); });
+      container.querySelectorAll('.mdr-panel.open').forEach(function(p) { p.classList.remove('open'); });
+      container.querySelectorAll('.mdr-trigger.open').forEach(function(t) { t.classList.remove('open'); });
       if (willOpen) {
         panel.classList.add('open');
         btn.classList.add('open');
@@ -2603,13 +2601,13 @@ function renderPartQuestions(idx, type, container) {
     btn.addEventListener('click', function() {
       var key = btn.dataset.inlineClose;
       var panel = container.querySelector('[data-inline-panel="' + key + '"]');
-      var trig = container.querySelector('.ms-dropdown[data-inline-key="' + key + '"]');
+      var trig = container.querySelector('.mdr-trigger[data-inline-key="' + key + '"]');
       if (panel) panel.classList.remove('open');
       if (trig) trig.classList.remove('open');
     });
   });
   // 4. Quick buttons (Whatever/Anywhere)
-  container.querySelectorAll('.ms-quick[data-inline-key]').forEach(function(btn) {
+  container.querySelectorAll('.mdr-quick[data-inline-key]').forEach(function(btn) {
     btn.addEventListener('click', function() {
       var key = btn.dataset.inlineKey;
       var nowSelected = !btn.classList.contains('selected');
@@ -2646,10 +2644,10 @@ function renderPartQuestions(idx, type, container) {
 }
 
 function updateInlineLabel(container, key) {
-  var trigger = container.querySelector('.ms-dropdown[data-inline-key="' + key + '"]');
+  var trigger = container.querySelector('.mdr-trigger[data-inline-key="' + key + '"]');
   if (!trigger) return;
-  var label = trigger.querySelector('.ms-dropdown-label');
-  var quick = container.querySelector('.ms-quick[data-inline-key="' + key + '"]');
+  var label = trigger.querySelector('.mdr-trigger-label');
+  var quick = container.querySelector('.mdr-quick[data-inline-key="' + key + '"]');
   var selected = container.querySelectorAll('[data-inline-chips="' + key + '"] .chip.selected');
   if (quick && quick.classList.contains('selected')) {
     label.textContent = quick.textContent.trim();
@@ -2725,7 +2723,7 @@ function savePartPrefs(idx) {
   function readInlineDropdown(field) {
     var key = 'p' + idx + '-' + field;
     // Quick button (Whatever/Anywhere) overrides chip selection
-    var quick = box.querySelector('.ms-quick[data-inline-key="' + key + '"]');
+    var quick = box.querySelector('.mdr-quick[data-inline-key="' + key + '"]');
     if (quick && quick.classList.contains('selected')) {
       return [quick.textContent.trim()];
     }
@@ -2760,7 +2758,7 @@ function savePartPrefs(idx) {
   // Neighborhood: if this part has an inline neighborhood dropdown, read from it.
   // Otherwise (inheritance checked), inherit from Part 1.
   var nhKey = 'p' + idx + '-neighborhood';
-  var hasNhDropdown = !!box.querySelector('.ms-dropdown[data-inline-key="' + nhKey + '"]');
+  var hasNhDropdown = !!box.querySelector('.mdr-trigger[data-inline-key="' + nhKey + '"]');
   if (hasNhDropdown) {
     prefs.neighborhood = readInlineDropdown('neighborhood');
   } else if (idx > 0) {
