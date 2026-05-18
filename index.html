@@ -67,8 +67,9 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .input-field{width:100%;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:13px 15px;font-family:var(--body);font-size:15px;color:var(--text);background:var(--white);outline:none}
 .input-field:focus{border-color:var(--green)}
 .input-field::placeholder{color:var(--text-light)}
-.select-field{width:100%;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:13px 40px 13px 15px;font-family:var(--body);font-size:14px;color:var(--text);background:var(--white);outline:none;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B6460' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;cursor:pointer}
+.select-field{width:100%;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:13px 40px 13px 15px;font-family:var(--body);font-size:14px;line-height:1.3;color:var(--text);background-color:var(--white);outline:none;appearance:none;-webkit-appearance:none;-moz-appearance:none;box-shadow:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%231B3A2D' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;background-size:14px;cursor:pointer;text-overflow:ellipsis;overflow:hidden;white-space:nowrap}
 .select-field:focus{border-color:var(--green)}
+.select-field::-ms-expand{display:none}
 
 /* MULTI-SELECT CUSTOM */
 .multi-select-wrap{position:relative;margin-bottom:12px}
@@ -95,10 +96,11 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .mdr-row{display:flex;gap:6px;align-items:stretch;margin-bottom:14px}
 .mdr-trigger{flex:1;background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:11px 14px;font-family:var(--body);font-size:13px;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px;text-align:left}
 .mdr-trigger.empty{color:var(--text-muted)}
-.mdr-trigger-caret{font-size:10px;color:var(--text-muted);flex-shrink:0}
-.mdr-trigger.open{border-color:var(--green)}
+.mdr-trigger-caret{font-size:10px;color:var(--text-muted);flex-shrink:0;transition:transform .15s ease}
+.mdr-trigger.open{border-color:var(--green);border-bottom-color:transparent;border-bottom-left-radius:0;border-bottom-right-radius:0;position:relative;z-index:2}
+.mdr-trigger.open .mdr-trigger-caret{transform:rotate(180deg);color:var(--green)}
 .mdr-trigger-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.mdr-panel{display:none;margin:-8px 0 14px;background:var(--white);border:1.5px solid var(--green);border-top:none;border-radius:0 0 var(--radius-sm) var(--radius-sm);padding:12px;max-height:240px;overflow-y:auto}
+.mdr-panel{display:none;margin:-14px 0 14px;background:var(--white);border:1.5px solid var(--green);border-top:none;border-radius:0 0 var(--radius-sm) var(--radius-sm);padding:12px;max-height:240px;overflow-y:auto;position:relative;z-index:1}
 .mdr-panel.open{display:block}
 .mdr-quick{flex-shrink:0;background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:11px 14px;font-family:var(--body);font-size:12px;color:var(--text-muted);cursor:pointer;font-weight:500;white-space:nowrap}
 .mdr-quick.selected{background:var(--green);border-color:var(--green);color:var(--white)}
@@ -131,6 +133,9 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .rally-card{margin:0 20px 10px;cursor:pointer}
 .rally-title-text{font-size:15px;font-weight:500;margin-bottom:2px}
 .rally-meta{font-size:12px;color:var(--text-muted)}
+.rally-parts-detail{margin-top:6px;display:flex;flex-direction:column;gap:2px}
+.rally-parts-line{font-size:11px;color:var(--text-muted);line-height:1.45;opacity:.9}
+.rally-parts-line strong{font-weight:600;color:var(--text)}
 .rally-avatars{display:flex}
 .rally-avatars .avatar-sm{margin-left:-6px;border:2px solid var(--white)}
 .rally-avatars .avatar-sm:first-child{margin-left:0}
@@ -820,7 +825,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     <div class="calendar">
       <div class="cal-header">
         <button class="cal-nav" onclick="prevMonth()">‹</button>
-        <span class="cal-month" id="cal-month-label">April 2026</span>
+        <span class="cal-month" id="cal-month-label"></span>
         <button class="cal-nav" onclick="nextMonth()">›</button>
       </div>
       <div class="cal-days-header">
@@ -1993,7 +1998,40 @@ function go(id) {
     }
   }
   if (id === 'screen-profile') { rotateRecapHeadline(); }
+  if (id === 'screen-start-2') { initRallyDateTimeDefaults(); }
   if (id === 'screen-start-3') { initRallyPartsForFinalize(); }
+}
+
+// Default the propose-dates calendar to current month + today, and time to the next 30-min slot from now
+function initRallyDateTimeDefaults() {
+  var now = new Date();
+  // Reset calendar to current month and select today
+  calYear = now.getFullYear();
+  calMonth = now.getMonth();
+  selectedDates = new Set();
+  selectedDates.add(calYear + '-' + calMonth + '-' + now.getDate());
+  renderCal();
+  // Round time up to the next 30-min slot, clamped to picker range [07:00, 23:30]
+  var h = now.getHours();
+  var m = now.getMinutes();
+  if (m === 0) {
+    // exactly on the hour -> bump to :30 of same hour
+    m = 30;
+  } else if (m <= 30) {
+    m = 30;
+  } else {
+    m = 0;
+    h += 1;
+  }
+  if (h >= 24) { h = 23; m = 30; }
+  if (h < 7) { h = 7; m = 0; }
+  var hh = (h < 10 ? '0' : '') + h;
+  var mm = (m < 10 ? '0' : '') + m;
+  var val = hh + ':' + mm;
+  var sel = document.getElementById('rally-time-select');
+  var inp = document.getElementById('rally-time-input');
+  if (sel) sel.value = val;
+  if (inp) inp.value = val;
 }
 
 function saveNameAndGo(dest) {
@@ -2933,10 +2971,64 @@ function addRallyToFeed() {
   var card = document.createElement('div');
   card.className = 'rally-card';
   card.dataset.cat = 'pending';
+
+  // Helper: extract a readable venue name from a pasted URL
+  function venueFromUrl(url) {
+    if (!url) return '';
+    try {
+      var clean = url.replace(/^https?:\/\//i, '').replace(/^www\./i, '');
+      var host = clean.split('/')[0].split('?')[0];
+      var base = host.replace(/\.(com|net|org|co|io|nyc|us)(\..*)?$/i, '').replace(/\..*$/, '');
+      // Title-case, collapse hyphens
+      return base.split(/[-_]/).map(function(w) { return w ? w.charAt(0).toUpperCase() + w.slice(1) : ''; }).join(' ').trim() || 'Saved venue';
+    } catch (e) { return 'Saved venue'; }
+  }
+
+  // Helper: build the prefs detail string for one part's prefs object
+  function prefsLine(prefs) {
+    if (!prefs) return '';
+    // Venue beats prefs when one was pasted
+    if (prefs.suggestedVenue) {
+      var venueName = venueFromUrl(prefs.suggestedVenue);
+      var bits = [venueName];
+      if (prefs.neighborhood && prefs.neighborhood.length) bits.push(prefs.neighborhood.slice(0,2).join(', '));
+      if (prefs.budget) bits.push(prefs.budget);
+      return bits.join(' \u00B7 ');
+    }
+    var bits2 = [];
+    if (prefs.activity) bits2.push(prefs.activity);
+    if (prefs.cuisineDownFor && prefs.cuisineDownFor.length) bits2.push(prefs.cuisineDownFor.slice(0,3).join(', '));
+    if (prefs.vibe && prefs.vibe.length && !(prefs.cuisineDownFor && prefs.cuisineDownFor.length)) bits2.push(prefs.vibe.slice(0,2).join(', '));
+    if (prefs.neighborhood && prefs.neighborhood.length) bits2.push(prefs.neighborhood.slice(0,2).join(', '));
+    if (prefs.budget) bits2.push(prefs.budget);
+    return bits2.join(' \u00B7 ');
+  }
+
+  // Build the per-part detail block
+  var partsDetail = '';
+  if (rallyParts.length > 1) {
+    // Chained: stacked lines, one per part with icon + time + prefs/venue
+    var partLines = rallyParts.map(function(p) {
+      var line = p.icon + ' <strong>' + escapeHtml(p.typeName) + '</strong> @ ' + timeShort(p.time);
+      var pl = prefsLine(p.prefs);
+      if (pl) line += ' \u00B7 ' + escapeHtml(pl);
+      return '<p class="rally-parts-line">' + line + '</p>';
+    });
+    partsDetail = '<div class="rally-parts-detail">' + partLines.join('') + '</div>';
+  } else if (rallyParts.length === 1) {
+    // Single part: one compact line, no icon/time prefix (already in meta)
+    var pl = prefsLine(rallyParts[0].prefs);
+    if (pl) {
+      partsDetail = '<div class="rally-parts-detail"><p class="rally-parts-line">' + escapeHtml(pl) + '</p></div>';
+    }
+  }
+
   var html = '<div class="card card-pad" style="border-left:3px solid var(--green)">';
   html += '<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">';
-  html += '<div><p class="rally-title-text">' + typeNames + '</p>';
-  html += '<p class="rally-meta">' + dateLabel + ' &middot; ' + timeLabel + ' &middot; You started</p></div>';
+  html += '<div style="flex:1;min-width:0"><p class="rally-title-text">' + escapeHtml(typeNames) + '</p>';
+  html += '<p class="rally-meta">' + dateLabel + ' &middot; ' + timeLabel + ' &middot; You started</p>';
+  html += partsDetail;
+  html += '</div>';
   html += '<span class="badge badge-pending">Pending</span></div>';
   html += '<hr class="dot-divider">';
   html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px">';
@@ -3463,8 +3555,13 @@ document.addEventListener('keydown', function(e) {
 
 // -- CALENDAR --
 const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-let calYear = 2026, calMonth = 3;
+let calYear = new Date().getFullYear(), calMonth = new Date().getMonth();
 let selectedDates = new Set();
+// Auto-select today by default
+(function initTodaySelected(){
+  var t = new Date();
+  selectedDates.add(t.getFullYear() + '-' + t.getMonth() + '-' + t.getDate());
+})();
 function renderCal() {
   const grid = document.getElementById('cal-grid');
   const label = document.getElementById('cal-month-label');
