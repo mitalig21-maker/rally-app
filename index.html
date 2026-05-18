@@ -94,6 +94,17 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .chip.selected{background:var(--green);border-color:var(--green);color:var(--white);font-weight:500}
 .chip--not{background:#FEE2E2;border-color:#FCA5A5;color:#991B1B}
 .chip--not.selected{background:#DC2626;border-color:#DC2626;color:white;font-weight:500}
+.ms-row{display:flex;gap:6px;align-items:stretch;margin-bottom:14px}
+.ms-dropdown{flex:1;background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:11px 14px;font-family:var(--body);font-size:13px;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px;text-align:left}
+.ms-dropdown.empty{color:var(--text-muted)}
+.ms-dropdown-caret{font-size:10px;color:var(--text-muted);flex-shrink:0}
+.ms-dropdown.open{border-color:var(--green)}
+.ms-dropdown-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ms-panel{display:none;margin:-8px 0 14px;background:var(--white);border:1.5px solid var(--green);border-top:none;border-radius:0 0 var(--radius-sm) var(--radius-sm);padding:12px;max-height:240px;overflow-y:auto}
+.ms-panel.open{display:block}
+.ms-quick{flex-shrink:0;background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:11px 14px;font-family:var(--body);font-size:12px;color:var(--text-muted);cursor:pointer;font-weight:500;white-space:nowrap}
+.ms-quick.selected{background:var(--green);border-color:var(--green);color:var(--white)}
+.ms-done{display:block;width:100%;margin-top:8px;padding:8px;background:var(--green);color:var(--white);border:none;border-radius:50px;font-family:var(--headline);font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;cursor:pointer}
 
 /* AVATAR */
 .avatar{width:38px;height:38px;border-radius:50%;background:var(--green-pale);display:flex;align-items:center;justify-content:center;font-family:var(--headline);font-size:14px;color:var(--green);font-weight:700;flex-shrink:0}
@@ -633,7 +644,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         </div>
       </div>
     </div>
-    <div class="version-marker">Rally · v0.7b</div>
+    <div class="version-marker">Rally · v0.7c</div>
   </div>
   <button class="fab" onclick="go('screen-start-1')">
     <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
@@ -679,18 +690,6 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
       <p style="font-size:13px;color:#92400E;line-height:1.5">✨ <strong>Custom Rally</strong> — add up to 5 custom questions for your group (poll or free text). Perfect for Halloween outfits, what to bring, or any group decision.</p>
     </div>
 
-    <p class="section-label" style="margin-bottom:8px">Have a place in mind?</p>
-    <div style="margin-bottom:14px">
-      <button class="suggest-place-btn" id="start-suggest-btn" onclick="toggleStartSuggest()">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-        Add a specific venue
-      </button>
-      <div class="suggest-wrap" id="start-suggest-wrap">
-        <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px">Paste a Google Maps or Yelp link</p>
-        <input class="input-field" type="url" placeholder="https://maps.google.com/..." style="margin-bottom:10px">
-        <button class="btn-sm" onclick="showToast('Venue added!');toggleStartSuggest()">Add venue</button>
-      </div>
-    </div>
     <button class="btn-primary" onclick="handleStartContinue()">Continue →</button>
   </div>
 </div>
@@ -707,18 +706,45 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
   <div class="scroll-content" style="padding:14px 20px">
     <!-- Dinner / Brunch: cuisine + not about it -->
     <div id="ctx1b-food" style="display:none">
-      <p class="section-label" style="margin-bottom:8px">Down for <span style="color:var(--text-muted);font-weight:400">(pick any)</span></p>
-      <div class="chip-group" id="chips-food-downfor" style="margin-bottom:14px"></div>
+      <p class="section-label" style="margin-bottom:8px">Down for</p>
+      <div class="ms-row">
+        <button type="button" class="ms-dropdown empty" id="trigger-food-downfor" onclick="toggleMsPanel('food-downfor')">
+          <span class="ms-dropdown-label" id="label-food-downfor">Pick cuisines</span>
+          <span class="ms-dropdown-caret">▾</span>
+        </button>
+        <button type="button" class="ms-quick" id="quick-food-downfor" onclick="setMsQuick('food-downfor','Whatever')">Whatever</button>
+      </div>
+      <div class="ms-panel" id="panel-food-downfor">
+        <div class="chip-group" id="chips-food-downfor"></div>
+        <button type="button" class="ms-done" onclick="closeMsPanel('food-downfor')">Done</button>
+      </div>
 
-      <p class="section-label" style="margin-bottom:8px;font-size:11px">
-        <span style="cursor:pointer;color:var(--text-muted);text-decoration:underline;text-underline-offset:3px" onclick="toggleNotTonight('food')">＋ Anything you're not feeling tonight?</span>
-      </p>
-      <div class="chip-group" id="chips-food-not" style="margin-bottom:14px;display:none"></div>
+      <p class="section-label" style="margin-bottom:8px">Not tonight <span style="color:var(--text-muted);font-weight:400">(optional)</span></p>
+      <div class="ms-row">
+        <button type="button" class="ms-dropdown empty" id="trigger-food-not" onclick="toggleMsPanel('food-not')">
+          <span class="ms-dropdown-label" id="label-food-not">Anything you're not feeling?</span>
+          <span class="ms-dropdown-caret">▾</span>
+        </button>
+      </div>
+      <div class="ms-panel" id="panel-food-not">
+        <div class="chip-group" id="chips-food-not"></div>
+        <button type="button" class="ms-done" onclick="closeMsPanel('food-not')">Done</button>
+      </div>
     </div>
 
     <div id="ctx1b-bars" style="display:none">
-      <p class="section-label" style="margin-bottom:8px">Vibe <span style="color:var(--text-muted);font-weight:400">(pick any)</span></p>
-      <div class="chip-group" id="chips-bars-vibe" style="margin-bottom:14px"></div>
+      <p class="section-label" style="margin-bottom:8px">Vibe</p>
+      <div class="ms-row">
+        <button type="button" class="ms-dropdown empty" id="trigger-bars-vibe" onclick="toggleMsPanel('bars-vibe')">
+          <span class="ms-dropdown-label" id="label-bars-vibe">Pick a vibe</span>
+          <span class="ms-dropdown-caret">▾</span>
+        </button>
+        <button type="button" class="ms-quick" id="quick-bars-vibe" onclick="setMsQuick('bars-vibe','Whatever')">Whatever</button>
+      </div>
+      <div class="ms-panel" id="panel-bars-vibe">
+        <div class="chip-group" id="chips-bars-vibe"></div>
+        <button type="button" class="ms-done" onclick="closeMsPanel('bars-vibe')">Done</button>
+      </div>
     </div>
 
     <div id="ctx1b-activity" style="display:none">
@@ -730,13 +756,33 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 
     <!-- Vibe (shown for food & activity, hidden for bars which has its own) -->
     <div id="ctx1b-vibe-block" style="display:none">
-      <p class="section-label" style="margin-bottom:8px">Vibe <span style="color:var(--text-muted);font-weight:400">(pick any)</span></p>
-      <div class="chip-group" id="chips-vibe" style="margin-bottom:14px"></div>
+      <p class="section-label" style="margin-bottom:8px">Vibe</p>
+      <div class="ms-row">
+        <button type="button" class="ms-dropdown empty" id="trigger-vibe" onclick="toggleMsPanel('vibe')">
+          <span class="ms-dropdown-label" id="label-vibe">Pick a vibe</span>
+          <span class="ms-dropdown-caret">▾</span>
+        </button>
+        <button type="button" class="ms-quick" id="quick-vibe" onclick="setMsQuick('vibe','Whatever')">Whatever</button>
+      </div>
+      <div class="ms-panel" id="panel-vibe">
+        <div class="chip-group" id="chips-vibe"></div>
+        <button type="button" class="ms-done" onclick="closeMsPanel('vibe')">Done</button>
+      </div>
     </div>
 
     <!-- Neighborhood (all types) -->
-    <p class="section-label" style="margin-bottom:8px">Neighborhood <span style="color:var(--text-muted);font-weight:400">(pick any)</span></p>
-    <div class="chip-group" id="chips-neighborhood" style="margin-bottom:14px"></div>
+    <p class="section-label" style="margin-bottom:8px">Neighborhood</p>
+    <div class="ms-row">
+      <button type="button" class="ms-dropdown empty" id="trigger-neighborhood" onclick="toggleMsPanel('neighborhood')">
+        <span class="ms-dropdown-label" id="label-neighborhood">Pick neighborhood(s)</span>
+        <span class="ms-dropdown-caret">▾</span>
+      </button>
+      <button type="button" class="ms-quick" id="quick-neighborhood" onclick="setMsQuick('neighborhood','Anywhere')">Anywhere</button>
+    </div>
+    <div class="ms-panel" id="panel-neighborhood">
+      <div class="chip-group" id="chips-neighborhood"></div>
+      <button type="button" class="ms-done" onclick="closeMsPanel('neighborhood')">Done</button>
+    </div>
 
     <!-- Budget (all types) -->
     <p class="section-label" style="margin-bottom:8px">Budget</p>
@@ -745,6 +791,20 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
       <button class="pill selected" onclick="setBudget(this,'$$')">$$</button>
       <button class="pill" onclick="setBudget(this,'$$$')">$$$</button>
       <button class="pill" onclick="setBudget(this,'whatever')">Whatever</button>
+    </div>
+
+    <!-- Have a place in mind? (food + bars only) -->
+    <div id="ctx1b-suggest-block" style="display:none;margin-bottom:14px">
+      <p class="section-label" style="margin-bottom:8px">Have a place in mind?</p>
+      <button class="suggest-place-btn" id="ctx-suggest-btn" onclick="toggleCtxSuggest()">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+        Add a specific venue
+      </button>
+      <div class="suggest-wrap" id="ctx-suggest-wrap">
+        <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px">Paste a Google Maps or Yelp link</p>
+        <input class="input-field" id="ctx-suggest-url" type="url" placeholder="https://maps.google.com/..." style="margin-bottom:10px">
+        <button class="btn-sm" onclick="confirmCtxSuggest()">Add venue</button>
+      </div>
     </div>
 
     <button class="btn-primary" onclick="saveCtx1bAndContinue()">Continue →</button>
@@ -2015,14 +2075,25 @@ function renderChips(containerId, items, opts) {
   var c = document.getElementById(containerId);
   if (!c) return;
   c.innerHTML = '';
+  // Infer the dropdown key from the container id pattern: "chips-{key}"
+  var key = containerId.indexOf('chips-') === 0 ? containerId.slice(6) : null;
   items.forEach(function(label) {
     var b = document.createElement('button');
     b.className = 'chip' + (opts.notStyle ? ' chip--not' : '');
     b.type = 'button';
     b.textContent = label;
-    b.onclick = function() { b.classList.toggle('selected'); };
+    b.onclick = function() {
+      b.classList.toggle('selected');
+      // If selecting a real value, also clear the "Whatever/Anywhere" quick state
+      if (key) {
+        var quick = document.getElementById('quick-' + key);
+        if (quick) quick.classList.remove('selected');
+        updateMsLabel(key);
+      }
+    };
     c.appendChild(b);
   });
+  if (key) updateMsLabel(key);
 }
 
 function renderActivityAccelerators() {
@@ -2035,10 +2106,8 @@ function renderActivityAccelerators() {
     b.type = 'button';
     b.textContent = label;
     b.onclick = function() {
-      // Accelerators fill the text field (single tap = fill, replace prior)
       var inp = document.getElementById('activity-writein');
       if (inp) inp.value = label;
-      // Visual confirmation: briefly highlight, then clear after a moment
       document.querySelectorAll('#chips-activity-accelerators .chip').forEach(function(x){ x.classList.remove('selected'); });
       b.classList.add('selected');
     };
@@ -2046,10 +2115,72 @@ function renderActivityAccelerators() {
   });
 }
 
-function toggleNotTonight(group) {
-  var el = document.getElementById('chips-' + group + '-not');
-  if (!el) return;
-  el.style.display = (el.style.display === 'none' || !el.style.display) ? 'flex' : 'none';
+// ═══ MULTI-SELECT DROPDOWN HELPERS ═══
+function toggleMsPanel(key) {
+  var panel = document.getElementById('panel-' + key);
+  var trigger = document.getElementById('trigger-' + key);
+  if (!panel || !trigger) return;
+  var willOpen = !panel.classList.contains('open');
+  // Close any other open panels in this screen
+  document.querySelectorAll('.ms-panel.open').forEach(function(p) { p.classList.remove('open'); });
+  document.querySelectorAll('.ms-dropdown.open').forEach(function(t) { t.classList.remove('open'); });
+  if (willOpen) {
+    panel.classList.add('open');
+    trigger.classList.add('open');
+  }
+}
+
+function closeMsPanel(key) {
+  var panel = document.getElementById('panel-' + key);
+  var trigger = document.getElementById('trigger-' + key);
+  if (panel) panel.classList.remove('open');
+  if (trigger) trigger.classList.remove('open');
+}
+
+function setMsQuick(key, value) {
+  var quick = document.getElementById('quick-' + key);
+  if (!quick) return;
+  var nowSelected = !quick.classList.contains('selected');
+  if (nowSelected) {
+    // Activate quick: deselect all chips
+    document.querySelectorAll('#chips-' + key + ' .chip.selected').forEach(function(c) { c.classList.remove('selected'); });
+    quick.classList.add('selected');
+  } else {
+    quick.classList.remove('selected');
+  }
+  updateMsLabel(key);
+}
+
+function updateMsLabel(key) {
+  var label = document.getElementById('label-' + key);
+  var trigger = document.getElementById('trigger-' + key);
+  if (!label || !trigger) return;
+  var quick = document.getElementById('quick-' + key);
+  var selectedChips = document.querySelectorAll('#chips-' + key + ' .chip.selected');
+  if (quick && quick.classList.contains('selected')) {
+    label.textContent = quick.textContent.trim();
+    trigger.classList.remove('empty');
+  } else if (selectedChips.length === 0) {
+    // Empty placeholder
+    label.textContent = label.dataset.placeholder || label.textContent;
+    trigger.classList.add('empty');
+  } else if (selectedChips.length === 1) {
+    label.textContent = selectedChips[0].textContent.trim();
+    trigger.classList.remove('empty');
+  } else if (selectedChips.length === 2) {
+    label.textContent = selectedChips[0].textContent.trim() + ', ' + selectedChips[1].textContent.trim();
+    trigger.classList.remove('empty');
+  } else {
+    label.textContent = selectedChips[0].textContent.trim() + ', ' + selectedChips[1].textContent.trim() + ' +' + (selectedChips.length - 2);
+    trigger.classList.remove('empty');
+  }
+}
+
+function cachePlaceholders() {
+  // Run once: stash placeholder text on each label so we can restore it when empty
+  document.querySelectorAll('[id^="label-"]').forEach(function(el) {
+    if (!el.dataset.placeholder) el.dataset.placeholder = el.textContent;
+  });
 }
 
 function setBudget(btn) {
@@ -2057,23 +2188,52 @@ function setBudget(btn) {
   btn.classList.add('selected');
 }
 
+// Suggest-place affordance on ctx1b
+var ctxSuggestUrl = null;
+function toggleCtxSuggest() {
+  var wrap = document.getElementById('ctx-suggest-wrap');
+  var btn = document.getElementById('ctx-suggest-btn');
+  if (!wrap || !btn) return;
+  if (wrap.classList.contains('show')) { wrap.classList.remove('show'); btn.style.display = 'flex'; }
+  else { wrap.classList.add('show'); btn.style.display = 'none'; }
+}
+function confirmCtxSuggest() {
+  var input = document.getElementById('ctx-suggest-url');
+  ctxSuggestUrl = input && input.value.trim() ? input.value.trim() : null;
+  if (ctxSuggestUrl) showToast('Venue added!');
+  toggleCtxSuggest();
+}
+
 function prepCtx1b(type) {
   // Hide all type-specific sections first
-  var ids = ['ctx1b-food','ctx1b-bars','ctx1b-activity','ctx1b-vibe-block'];
+  var ids = ['ctx1b-food','ctx1b-bars','ctx1b-activity','ctx1b-vibe-block','ctx1b-suggest-block'];
   ids.forEach(function(id) { var el = document.getElementById(id); if (el) el.style.display = 'none'; });
-  // Reset "not tonight" toggle state
-  var notFood = document.getElementById('chips-food-not');
-  if (notFood) notFood.style.display = 'none';
+  // Close any open dropdown panels
+  document.querySelectorAll('#screen-start-1b .ms-panel.open').forEach(function(p) { p.classList.remove('open'); });
+  document.querySelectorAll('#screen-start-1b .ms-dropdown.open').forEach(function(t) { t.classList.remove('open'); });
+  // Clear all quick buttons
+  document.querySelectorAll('#screen-start-1b .ms-quick.selected').forEach(function(q) { q.classList.remove('selected'); });
   // Reset budget to default mid-range
   document.querySelectorAll('#ctx1b-budget .pill').forEach(function(p){ p.classList.remove('selected'); });
   var defaultBudget = document.querySelectorAll('#ctx1b-budget .pill')[1];
   if (defaultBudget) defaultBudget.classList.add('selected');
-  // Always render neighborhood chips
+  // Reset suggest-place state
+  ctxSuggestUrl = null;
+  var sw = document.getElementById('ctx-suggest-wrap');
+  if (sw) sw.classList.remove('show');
+  var sbtn = document.getElementById('ctx-suggest-btn');
+  if (sbtn) sbtn.style.display = 'flex';
+  var surl = document.getElementById('ctx-suggest-url');
+  if (surl) surl.value = '';
+  // Always render neighborhood
   renderChips('chips-neighborhood', Q_NEIGHBORHOOD);
+  // Cache placeholder labels (first-time render)
+  cachePlaceholders();
 
   if (type === 'dinner') {
     document.getElementById('ctx1b-food').style.display = 'block';
     document.getElementById('ctx1b-vibe-block').style.display = 'block';
+    document.getElementById('ctx1b-suggest-block').style.display = 'block';
     renderChips('chips-food-downfor', Q_CUISINE_DINNER);
     renderChips('chips-food-not', Q_CUISINE_DINNER, { notStyle: true });
     renderChips('chips-vibe', Q_VIBE_FOOD);
@@ -2082,6 +2242,7 @@ function prepCtx1b(type) {
   } else if (type === 'brunch') {
     document.getElementById('ctx1b-food').style.display = 'block';
     document.getElementById('ctx1b-vibe-block').style.display = 'block';
+    document.getElementById('ctx1b-suggest-block').style.display = 'block';
     renderChips('chips-food-downfor', Q_CUISINE_BRUNCH);
     renderChips('chips-food-not', Q_CUISINE_BRUNCH, { notStyle: true });
     renderChips('chips-vibe', Q_VIBE_BRUNCH);
@@ -2089,6 +2250,7 @@ function prepCtx1b(type) {
     document.getElementById('ctx-sub').textContent = 'Tell us what you\u2019re feeling';
   } else if (type === 'bars') {
     document.getElementById('ctx1b-bars').style.display = 'block';
+    document.getElementById('ctx1b-suggest-block').style.display = 'block';
     renderChips('chips-bars-vibe', Q_VIBE_BARS);
     document.querySelector('#screen-start-1b .sheet-title').textContent = 'Bars preferences';
     document.getElementById('ctx-sub').textContent = 'What kind of night?';
@@ -2106,6 +2268,14 @@ function prepCtx1b(type) {
 
 function getSelectedChipLabels(containerId) {
   var arr = [];
+  // Infer key for quick-button check
+  var key = containerId.indexOf('chips-') === 0 ? containerId.slice(6) : null;
+  if (key) {
+    var quick = document.getElementById('quick-' + key);
+    if (quick && quick.classList.contains('selected')) {
+      return [quick.textContent.trim()];
+    }
+  }
   var nodes = document.querySelectorAll('#' + containerId + ' .chip.selected');
   nodes.forEach(function(n){ arr.push(n.textContent.trim()); });
   return arr;
@@ -2123,18 +2293,19 @@ function saveCtx1bAndContinue() {
     prefs.cuisineDownFor = getSelectedChipLabels('chips-food-downfor');
     prefs.cuisineNotTonight = getSelectedChipLabels('chips-food-not');
     prefs.vibe = getSelectedChipLabels('chips-vibe');
-    if (prefs.cuisineDownFor.length === 0) { showToast('Pick at least one cuisine you\u2019re down for'); return; }
+    if (prefs.cuisineDownFor.length === 0) { showToast('Pick at least one cuisine you\u2019re down for (or tap Whatever)'); return; }
   } else if (type === 'bars') {
     prefs.vibe = getSelectedChipLabels('chips-bars-vibe');
-    if (prefs.vibe.length === 0) { showToast('Pick at least one vibe'); return; }
+    if (prefs.vibe.length === 0) { showToast('Pick at least one vibe (or tap Whatever)'); return; }
   } else if (type === 'activity') {
-    var inp = document.getElementById('activity-writein');
-    prefs.activity = inp ? inp.value.trim() : '';
+    var ainp = document.getElementById('activity-writein');
+    prefs.activity = ainp ? ainp.value.trim() : '';
     prefs.vibe = getSelectedChipLabels('chips-vibe');
     if (!prefs.activity) { showToast('Tell us what the activity is'); return; }
   }
   prefs.neighborhood = getSelectedChipLabels('chips-neighborhood');
   prefs.budget = getSelectedBudget();
+  if (ctxSuggestUrl) prefs.suggestedVenue = ctxSuggestUrl;
   rallyPreferences = prefs;
   go('screen-start-2');
 }
@@ -2297,80 +2468,214 @@ function renderPartQuestions(idx, type, container) {
   var inheritedBudget = (rallyParts[0] && rallyParts[0].prefs && rallyParts[0].prefs.budget) ? rallyParts[0].prefs.budget : null;
   var existing = part.prefs || {};
 
+  // Build a compact dropdown for inline use. key is unique per part: e.g. "p1-vibe"
+  function inlineDropdown(key, items, selected, placeholder, quickLabel) {
+    selected = selected || [];
+    var quickActive = quickLabel && selected.length === 1 && selected[0] === quickLabel;
+    var actualSelected = quickActive ? [] : selected;
+    var labelText;
+    if (quickActive) labelText = quickLabel;
+    else if (actualSelected.length === 0) labelText = placeholder;
+    else if (actualSelected.length === 1) labelText = actualSelected[0];
+    else if (actualSelected.length === 2) labelText = actualSelected[0] + ', ' + actualSelected[1];
+    else labelText = actualSelected[0] + ', ' + actualSelected[1] + ' +' + (actualSelected.length - 2);
+    var emptyClass = (quickActive || actualSelected.length > 0) ? '' : ' empty';
+    var quickHtml = quickLabel ?
+      '<button type="button" class="ms-quick' + (quickActive ? ' selected' : '') + '" data-inline-key="' + key + '" data-inline-quick="' + escapeHtml(quickLabel) + '">' + escapeHtml(quickLabel) + '</button>' : '';
+    var chips = items.map(function(label) {
+      var sel = (!quickActive && actualSelected.indexOf(label) !== -1) ? ' selected' : '';
+      return '<button type="button" class="chip chip--sm' + sel + '">' + escapeHtml(label) + '</button>';
+    }).join('');
+    return '<div class="ms-row">' +
+      '<button type="button" class="ms-dropdown' + emptyClass + '" data-inline-key="' + key + '" data-inline-toggle="1">' +
+        '<span class="ms-dropdown-label">' + escapeHtml(labelText) + '</span>' +
+        '<span class="ms-dropdown-caret">\u25BE</span>' +
+      '</button>' + quickHtml +
+    '</div>' +
+    '<div class="ms-panel" data-inline-panel="' + key + '">' +
+      '<div class="chip-group chip-group--sm" data-inline-chips="' + key + '">' + chips + '</div>' +
+      '<button type="button" class="ms-done" data-inline-close="' + key + '">Done</button>' +
+    '</div>';
+  }
+
   var html = '';
 
-  // Type-specific question sections
+  // Type-specific question sections (all use dropdowns now)
   if (type === 'dinner' || type === 'brunch') {
     var cuisineList = (type === 'brunch') ? Q_CUISINE_BRUNCH : Q_CUISINE_DINNER;
     var vibeList = (type === 'brunch') ? Q_VIBE_BRUNCH : Q_VIBE_FOOD;
     html += '<p class="inline-q-label">Down for</p>';
-    html += '<div class="chip-group chip-group--sm" data-part-q="cuisineDownFor">' + chipsHtml(cuisineList, existing.cuisineDownFor) + '</div>';
+    html += inlineDropdown('p' + idx + '-cuisineDownFor', cuisineList, existing.cuisineDownFor, 'Pick cuisines', 'Whatever');
     html += '<p class="inline-q-label">Vibe</p>';
-    html += '<div class="chip-group chip-group--sm" data-part-q="vibe">' + chipsHtml(vibeList, existing.vibe) + '</div>';
+    html += inlineDropdown('p' + idx + '-vibe', vibeList, existing.vibe, 'Pick a vibe', 'Whatever');
   } else if (type === 'bars') {
     html += '<p class="inline-q-label">Vibe</p>';
-    html += '<div class="chip-group chip-group--sm" data-part-q="vibe">' + chipsHtml(Q_VIBE_BARS, existing.vibe) + '</div>';
+    html += inlineDropdown('p' + idx + '-vibe', Q_VIBE_BARS, existing.vibe, 'Pick a vibe', 'Whatever');
   } else if (type === 'activity') {
     var activityVal = existing.activity || '';
     html += '<p class="inline-q-label">What are we doing?</p>';
     html += '<input class="input-field input-field--sm" type="text" placeholder="e.g. Drake at MSG, pottery class..." value="' + escapeHtml(activityVal) + '" data-part-q="activity">';
     html += '<p class="inline-q-label">Vibe</p>';
-    html += '<div class="chip-group chip-group--sm" data-part-q="vibe">' + chipsHtml(Q_VIBE_ACTIVITY, existing.vibe) + '</div>';
+    html += inlineDropdown('p' + idx + '-vibe', Q_VIBE_ACTIVITY, existing.vibe, 'Pick a vibe', 'Whatever');
   } else if (type === 'custom') {
     html += '<p class="inline-q-hint">Custom parts use the questions you set in the main flow.</p>';
   }
 
   // Neighborhood + Budget
   if (idx === 0) {
-    // Part 1: full question UI, no inheritance
     html += '<p class="inline-q-label">Neighborhood</p>';
-    html += '<div class="chip-group chip-group--sm" data-part-q="neighborhood">' + chipsHtml(Q_NEIGHBORHOOD, existing.neighborhood || []) + '</div>';
+    html += inlineDropdown('p' + idx + '-neighborhood', Q_NEIGHBORHOOD, existing.neighborhood, 'Pick neighborhood(s)', 'Anywhere');
     html += '<p class="inline-q-label">Budget</p>';
-    html += '<div class="pill-group" data-part-q="budget" style="margin-top:6px">' +
+    html += '<div class="pill-group" data-inline-budget="' + idx + '" style="margin-top:6px">' +
       ['$','$$','$$$','Whatever'].map(function(b) {
         var sel = existing.budget === b ? ' selected' : '';
-        return '<button type="button" class="pill' + sel + '" onclick="setPartBudget(' + idx + ',\'' + b + '\',this)">' + b + '</button>';
+        return '<button type="button" class="pill' + sel + '" data-budget-val="' + escapeHtml(b) + '">' + b + '</button>';
       }).join('') +
     '</div>';
   } else {
-    // Inheritance: neighborhood
     var nhInherited = (existing.neighborhood === undefined) || arraysEqual(existing.neighborhood, inheritedNeighborhood);
     html += '<div class="inherit-row">' +
-      '<label><input type="checkbox"' + (nhInherited ? ' checked' : '') + ' onchange="togglePartInherit(' + idx + ',\'neighborhood\',this.checked)"> Same area as Part 1' +
+      '<label><input type="checkbox"' + (nhInherited ? ' checked' : '') + ' data-inherit-field="neighborhood" data-inherit-idx="' + idx + '"> Same area as Part 1' +
       (inheritedNeighborhood.length ? ' <span class="inherit-vals">(' + escapeHtml(inheritedNeighborhood.slice(0,2).join(', ')) + (inheritedNeighborhood.length > 2 ? '\u2026' : '') + ')</span>' : ' <span class="inherit-vals">(no preference)</span>') +
       '</label></div>';
     if (!nhInherited) {
-      html += '<div class="chip-group chip-group--sm" data-part-q="neighborhood">' + chipsHtml(Q_NEIGHBORHOOD, existing.neighborhood || []) + '</div>';
+      html += inlineDropdown('p' + idx + '-neighborhood', Q_NEIGHBORHOOD, existing.neighborhood, 'Pick neighborhood(s)', 'Anywhere');
     }
-
-    // Inheritance: budget
     var budgetInherited = (existing.budget === undefined) || existing.budget === inheritedBudget;
     html += '<div class="inherit-row">' +
-      '<label><input type="checkbox"' + (budgetInherited ? ' checked' : '') + ' onchange="togglePartInherit(' + idx + ',\'budget\',this.checked)"> Same budget as Part 1' +
+      '<label><input type="checkbox"' + (budgetInherited ? ' checked' : '') + ' data-inherit-field="budget" data-inherit-idx="' + idx + '"> Same budget as Part 1' +
       (inheritedBudget ? ' <span class="inherit-vals">(' + escapeHtml(inheritedBudget) + ')</span>' : '') +
       '</label></div>';
     if (!budgetInherited) {
-      html += '<div class="pill-group" data-part-q="budget" style="margin-top:6px">' +
+      html += '<div class="pill-group" data-inline-budget="' + idx + '" style="margin-top:6px">' +
         ['$','$$','$$$','Whatever'].map(function(b) {
           var sel = existing.budget === b ? ' selected' : '';
-          return '<button type="button" class="pill' + sel + '" onclick="setPartBudget(' + idx + ',\'' + b + '\',this)">' + b + '</button>';
+          return '<button type="button" class="pill' + sel + '" data-budget-val="' + escapeHtml(b) + '">' + b + '</button>';
         }).join('') +
       '</div>';
     }
   }
 
+  // Have a place in mind? (food + bars + activity)
+  if (type !== 'custom') {
+    var existingVenue = existing.suggestedVenue || '';
+    html += '<p class="inline-q-label">Have a place in mind? <span style="color:var(--text-muted);font-weight:400;text-transform:none;letter-spacing:0">(optional)</span></p>';
+    html += '<input class="input-field input-field--sm" type="url" placeholder="Paste a Google Maps or Yelp link" value="' + escapeHtml(existingVenue) + '" data-part-q="suggestedVenue">';
+  }
+
   // Footer buttons
   html += '<div class="part-q-footer">' +
-    '<button class="btn-outline btn-outline--sm" onclick="cancelPartQuestions(' + idx + ')">Cancel</button>' +
-    '<button class="btn-primary btn-primary--sm" onclick="savePartPrefs(' + idx + ')">' + (part._complete ? 'Update' : 'Save part') + '</button>' +
+    '<button type="button" class="btn-outline btn-outline--sm" data-part-cancel="' + idx + '">Cancel</button>' +
+    '<button type="button" class="btn-primary btn-primary--sm" data-part-save="' + idx + '">' + (part._complete ? 'Update' : 'Save part') + '</button>' +
   '</div>';
 
   container.innerHTML = html;
 
-  // Wire chip toggles
-  container.querySelectorAll('.chip').forEach(function(c) {
-    c.addEventListener('click', function() { c.classList.toggle('selected'); });
+  // Wire interactions
+  // 1. Chip toggles (inside panels) update label live
+  container.querySelectorAll('[data-inline-chips] .chip').forEach(function(chip) {
+    chip.addEventListener('click', function() {
+      chip.classList.toggle('selected');
+      var key = chip.closest('[data-inline-chips]').dataset.inlineChips;
+      // Clear quick button when any chip is picked
+      var quick = container.querySelector('.ms-quick[data-inline-key="' + key + '"]');
+      if (quick) quick.classList.remove('selected');
+      updateInlineLabel(container, key);
+    });
   });
+  // 2. Dropdown toggles
+  container.querySelectorAll('[data-inline-toggle]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var key = btn.dataset.inlineKey;
+      var panel = container.querySelector('[data-inline-panel="' + key + '"]');
+      var willOpen = !panel.classList.contains('open');
+      // Close other panels in this container
+      container.querySelectorAll('.ms-panel.open').forEach(function(p) { p.classList.remove('open'); });
+      container.querySelectorAll('.ms-dropdown.open').forEach(function(t) { t.classList.remove('open'); });
+      if (willOpen) {
+        panel.classList.add('open');
+        btn.classList.add('open');
+      }
+    });
+  });
+  // 3. Done buttons
+  container.querySelectorAll('[data-inline-close]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var key = btn.dataset.inlineClose;
+      var panel = container.querySelector('[data-inline-panel="' + key + '"]');
+      var trig = container.querySelector('.ms-dropdown[data-inline-key="' + key + '"]');
+      if (panel) panel.classList.remove('open');
+      if (trig) trig.classList.remove('open');
+    });
+  });
+  // 4. Quick buttons (Whatever/Anywhere)
+  container.querySelectorAll('.ms-quick[data-inline-key]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var key = btn.dataset.inlineKey;
+      var nowSelected = !btn.classList.contains('selected');
+      if (nowSelected) {
+        // Clear all chips for this key, mark quick
+        container.querySelectorAll('[data-inline-chips="' + key + '"] .chip.selected').forEach(function(c) { c.classList.remove('selected'); });
+        btn.classList.add('selected');
+      } else {
+        btn.classList.remove('selected');
+      }
+      updateInlineLabel(container, key);
+    });
+  });
+  // 5. Inherit checkboxes
+  container.querySelectorAll('input[data-inherit-field]').forEach(function(cb) {
+    cb.addEventListener('change', function() {
+      togglePartInherit(parseInt(cb.dataset.inheritIdx, 10), cb.dataset.inheritField, cb.checked);
+    });
+  });
+  // 6. Budget pills
+  container.querySelectorAll('[data-inline-budget] .pill').forEach(function(p) {
+    p.addEventListener('click', function() {
+      var partIdx = parseInt(p.closest('[data-inline-budget]').dataset.inlineBudget, 10);
+      setPartBudget(partIdx, p.dataset.budgetVal, p);
+    });
+  });
+  // 7. Save / cancel buttons
+  container.querySelectorAll('[data-part-save]').forEach(function(b) {
+    b.addEventListener('click', function() { savePartPrefs(parseInt(b.dataset.partSave, 10)); });
+  });
+  container.querySelectorAll('[data-part-cancel]').forEach(function(b) {
+    b.addEventListener('click', function() { cancelPartQuestions(parseInt(b.dataset.partCancel, 10)); });
+  });
+}
+
+function updateInlineLabel(container, key) {
+  var trigger = container.querySelector('.ms-dropdown[data-inline-key="' + key + '"]');
+  if (!trigger) return;
+  var label = trigger.querySelector('.ms-dropdown-label');
+  var quick = container.querySelector('.ms-quick[data-inline-key="' + key + '"]');
+  var selected = container.querySelectorAll('[data-inline-chips="' + key + '"] .chip.selected');
+  if (quick && quick.classList.contains('selected')) {
+    label.textContent = quick.textContent.trim();
+    trigger.classList.remove('empty');
+  } else if (selected.length === 0) {
+    // Restore placeholder — we need to derive it from the key
+    // Simplest: keep current text if it's empty placeholder, else fall back
+    // Use a data-attr placeholder if set
+    var placeholder = trigger.dataset.placeholder;
+    if (!placeholder) {
+      // First time: cache current text
+      placeholder = label.textContent;
+      trigger.dataset.placeholder = placeholder;
+    }
+    label.textContent = placeholder;
+    trigger.classList.add('empty');
+  } else if (selected.length === 1) {
+    label.textContent = selected[0].textContent.trim();
+    trigger.classList.remove('empty');
+  } else if (selected.length === 2) {
+    label.textContent = selected[0].textContent.trim() + ', ' + selected[1].textContent.trim();
+    trigger.classList.remove('empty');
+  } else {
+    label.textContent = selected[0].textContent.trim() + ', ' + selected[1].textContent.trim() + ' +' + (selected.length - 2);
+    trigger.classList.remove('empty');
+  }
 }
 
 function togglePartInherit(idx, field, isInherited) {
@@ -2417,52 +2722,70 @@ function savePartPrefs(idx) {
   var prefs = part.prefs || {};
   var type = part.type;
 
-  function readChips(field) {
-    var g = box.querySelector('[data-part-q="' + field + '"]');
-    if (!g) return null;
+  function readInlineDropdown(field) {
+    var key = 'p' + idx + '-' + field;
+    // Quick button (Whatever/Anywhere) overrides chip selection
+    var quick = box.querySelector('.ms-quick[data-inline-key="' + key + '"]');
+    if (quick && quick.classList.contains('selected')) {
+      return [quick.textContent.trim()];
+    }
+    var chips = box.querySelectorAll('[data-inline-chips="' + key + '"] .chip.selected');
     var arr = [];
-    g.querySelectorAll('.chip.selected').forEach(function(c) { arr.push(c.textContent.trim()); });
+    chips.forEach(function(c) { arr.push(c.textContent.trim()); });
     return arr;
   }
 
   if (type === 'dinner' || type === 'brunch') {
-    var downFor = readChips('cuisineDownFor') || [];
-    if (downFor.length === 0) { showToast('Pick at least one cuisine'); return; }
+    var downFor = readInlineDropdown('cuisineDownFor');
+    if (downFor.length === 0) { showToast('Pick at least one cuisine (or tap Whatever)'); return; }
     prefs.type = type;
     prefs.cuisineDownFor = downFor;
-    prefs.vibe = readChips('vibe') || [];
+    prefs.vibe = readInlineDropdown('vibe');
   } else if (type === 'bars') {
-    var vibe = readChips('vibe') || [];
-    if (vibe.length === 0) { showToast('Pick at least one vibe'); return; }
+    var barsVibe = readInlineDropdown('vibe');
+    if (barsVibe.length === 0) { showToast('Pick at least one vibe (or tap Whatever)'); return; }
     prefs.type = type;
-    prefs.vibe = vibe;
+    prefs.vibe = barsVibe;
   } else if (type === 'activity') {
     var actInput = box.querySelector('[data-part-q="activity"]');
     var act = actInput ? actInput.value.trim() : '';
     if (!act) { showToast('Tell us what the activity is'); return; }
     prefs.type = type;
     prefs.activity = act;
-    prefs.vibe = readChips('vibe') || [];
+    prefs.vibe = readInlineDropdown('vibe');
   } else if (type === 'custom') {
     prefs.type = type;
   }
 
-  // Neighborhood: read inheritance checkbox + chips
-  var nhBox = box.querySelector('[data-part-q="neighborhood"]');
-  if (nhBox) {
-    var nh = [];
-    nhBox.querySelectorAll('.chip.selected').forEach(function(c) { nh.push(c.textContent.trim()); });
-    prefs.neighborhood = nh;
-  } else if (prefs.neighborhood === undefined) {
-    // Inheritance was checked and never overridden — inherit from Part 1
+  // Neighborhood: if this part has an inline neighborhood dropdown, read from it.
+  // Otherwise (inheritance checked), inherit from Part 1.
+  var nhKey = 'p' + idx + '-neighborhood';
+  var hasNhDropdown = !!box.querySelector('.ms-dropdown[data-inline-key="' + nhKey + '"]');
+  if (hasNhDropdown) {
+    prefs.neighborhood = readInlineDropdown('neighborhood');
+  } else if (idx > 0) {
     var p1 = (rallyParts[0] && rallyParts[0].prefs) ? rallyParts[0].prefs : {};
     prefs.neighborhood = (p1.neighborhood || []).slice();
+  } else {
+    prefs.neighborhood = prefs.neighborhood || [];
   }
 
-  // Budget: same pattern
-  if (prefs.budget === undefined || prefs.budget === null) {
+  // Budget: if there's an inline pill group for this idx, read it. Otherwise inherit from Part 1.
+  var budgetGroup = box.querySelector('[data-inline-budget="' + idx + '"]');
+  if (budgetGroup) {
+    var selPill = budgetGroup.querySelector('.pill.selected');
+    if (selPill) prefs.budget = selPill.dataset.budgetVal;
+  } else if (idx > 0) {
     var p1b = (rallyParts[0] && rallyParts[0].prefs) ? rallyParts[0].prefs : {};
     prefs.budget = p1b.budget || null;
+  }
+
+  // Suggested venue (optional URL on food/bars/activity)
+  var venueInput = box.querySelector('[data-part-q="suggestedVenue"]');
+  if (venueInput) {
+    var v = venueInput.value.trim();
+    if (v) prefs.suggestedVenue = v;
+    else delete prefs.suggestedVenue;
   }
 
   part.prefs = prefs;
