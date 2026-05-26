@@ -229,7 +229,10 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .bopt-tally{font-size:12px;color:var(--text-muted)}
 .bopt-tally strong{color:var(--green);font-weight:600}
 .bopt-link{font-size:11px;color:var(--green);text-decoration:underline;cursor:pointer}
-.bopt-winning{position:absolute;top:-8px;right:14px;background:var(--green);color:var(--white);font-family:var(--headline);font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:50px}
+.bopt-winning{position:absolute;top:10px;right:12px;background:var(--green);color:var(--white);font-family:var(--headline);font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:4px 9px;border-radius:50px}
+.bopt--leading .bopt-name{padding-right:74px}
+.rally-vote-summary{font-size:11px;color:var(--green);margin-top:4px;line-height:1.4;font-weight:500}
+.rally-vote-summary.muted{color:var(--text-muted);font-weight:400}
 .ballot-nopref{margin:6px 20px 4px}
 .ballot-nopref-btn{width:100%;background:none;border:1.5px dashed var(--border);border-radius:var(--radius);padding:13px;font-family:var(--body);font-size:13px;color:var(--text-muted);cursor:pointer}
 .ballot-nopref-btn.on{border-style:solid;border-color:var(--green);background:var(--green-pale);color:var(--green);font-weight:500}
@@ -670,7 +673,8 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     <div class="rally-card" data-cat="vote" onclick="openBrunchSundayBallot()">
       <div class="card card-pad">
         <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
-          <div><p class="rally-title-text">Brunch Sunday</p><p class="rally-meta">Sunday, Apr 13 · Started by Jess</p></div>
+          <div><p class="rally-title-text">Brunch Sunday</p><p class="rally-meta">Sunday, Apr 13 · Started by Jess</p>
+          <p class="rally-vote-summary" id="brunch-vote-summary" style="display:none"></p></div>
           <span class="badge badge-voting">Vote now</span>
         </div>
         <hr class="dot-divider">
@@ -724,7 +728,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         </div>
       </div>
     </div>
-    <div class="version-marker">Rally · v0.8d.2</div>
+    <div class="version-marker">Rally · v0.8d.3</div>
   </div>
   <button class="fab" onclick="go('screen-start-1')">
     <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
@@ -2143,6 +2147,7 @@ function go(id) {
   if (id === 'screen-start-3') { initRallyPartsForFinalize(); }
   if (id === 'screen-ballot') { renderBallot(currentBallotLeg); }
   if (id === 'screen-notif-inbox') { renderNotifInbox(); }
+  if (id === 'screen-home') { updateBrunchCardSummary(); }
 }
 
 // Default the propose-dates calendar to current month + today, and time to the next 30-min slot from now
@@ -2714,12 +2719,13 @@ function renderBallot(legIndex) {
   } else {
     b.options.forEach(function(opt) {
       var approved = opt.votes.indexOf(BALLOT_ME) !== -1;
+      var isLeading = winners.length === 1 && winners[0] === opt.id;
       var card = document.createElement('div');
-      card.className = 'bopt' + (approved ? ' approved' : '');
+      card.className = 'bopt' + (approved ? ' approved' : '') + (isLeading ? ' bopt--leading' : '');
       card.setAttribute('data-opt', opt.id);
       card.onclick = (function(id) { return function() { toggleApproval(id); }; })(opt.id);
       var html = '';
-      if (winners.length === 1 && winners[0] === opt.id) {
+      if (isLeading) {
         html += '<div class="bopt-winning">Leading</div>';
       }
       html += '<div class="bopt-check"><svg width="12" height="12" fill="none" stroke="white" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>';
@@ -2733,8 +2739,8 @@ function renderBallot(legIndex) {
         html += '<p class="bopt-ai">Rally pick</p>';
       }
       var tally = opt.votes.length;
-      var tallyText = tally === 0 ? 'No approvals yet'
-        : '<strong>' + tally + (tally === 1 ? ' approval' : ' approvals') + '</strong>';
+      var tallyText = tally === 0 ? 'No votes yet'
+        : '<strong>' + tally + (tally === 1 ? ' vote' : ' votes') + '</strong>';
       html += '<div class="bopt-foot"><p class="bopt-tally">' + tallyText + '</p>';
       if (opt.link) {
         html += '<span class="bopt-link" onclick="event.stopPropagation();window.open(' + JSON.stringify(opt.link) + ',\'_blank\')">Open link \u2192</span>';
@@ -2748,14 +2754,17 @@ function renderBallot(legIndex) {
   var noPrefWrap = document.getElementById('ballot-nopref-wrap');
   var noPrefBtn = document.getElementById('ballot-nopref-btn');
   var userApprovedSomething = hasApproved(legIndex, BALLOT_ME);
+  var noPrefOn = !!(ballotNoPref[legIndex] && ballotNoPref[legIndex].indexOf(BALLOT_ME) !== -1);
   if (userApprovedSomething || !b || b.options.length === 0) {
     noPrefWrap.style.display = 'none';
   } else {
     noPrefWrap.style.display = '';
-    var noPrefOn = !!(ballotNoPref[legIndex] && ballotNoPref[legIndex].indexOf(BALLOT_ME) !== -1);
     noPrefBtn.classList.toggle('on', noPrefOn);
     noPrefBtn.textContent = noPrefOn ? "You're in \u2014 no preference \u2713" : "I'm in \u2014 fine with any of these";
   }
+  // v0.8d.3 — hide "Suggest a place" when the user has said no preference
+  var suggestBlock = document.getElementById('ballot-suggest-block');
+  if (suggestBlock) suggestBlock.style.display = noPrefOn ? 'none' : '';
   // Voting status
   renderBallotStatus(legIndex);
   // v0.8d — suggest button cap state + late-suggestion banner
@@ -2931,7 +2940,7 @@ function seedNotifications() {
   addNotification('locked', 'Plan locked: Dinner in the West Village',
     'Buvette won the vote. Saturday 7:30pm.', { time: '2h ago' });
   addNotification('voting', 'Voting open: Brunch Sunday',
-    'Rally matched 3 spots \u2014 cast your approvals.', { time: '5h ago', legIndex: 0 });
+    'Rally matched 3 spots \u2014 cast your votes.', { time: '5h ago', legIndex: 0 });
   addNotification('invite', 'Soumil started a Rally',
     'Bars Friday \u2014 add your preferences.', { time: 'Yesterday' });
   // Mark the oldest as already read so unread state is visible
@@ -3166,6 +3175,41 @@ function openBrunchSundayBallot() {
     if (b.ok) { b.option.votes = ['Diana']; }
   }
   openBallot(0);
+}
+
+// v0.8d.3 — reflect the user's voting state on the Brunch Sunday feed card.
+// Called when returning to the home screen.
+function updateBrunchCardSummary() {
+  var el = document.getElementById('brunch-vote-summary');
+  if (!el) return;
+  // Only meaningful if the brunch ballot is the currently-seeded one.
+  var b = getBallot(0);
+  var isBrunch = b && rallyParts[0] && rallyParts[0].type === 'brunch';
+  if (!isBrunch) { el.style.display = 'none'; return; }
+  // What did the user pick?
+  var myPicks = b.options.filter(function(o) { return o.votes.indexOf(BALLOT_ME) !== -1; });
+  var noPrefOn = !!(ballotNoPref[0] && ballotNoPref[0].indexOf(BALLOT_ME) !== -1);
+  el.style.display = '';
+  if (myPicks.length > 0) {
+    el.classList.remove('muted');
+    var names = myPicks.map(function(o) { return o.venueName; });
+    var shown = names.slice(0, 2).join(', ');
+    if (names.length > 2) shown += ' +' + (names.length - 2);
+    // Leading venue
+    var winners = computeBallotWinner(0);
+    var leadTxt = '';
+    if (winners.length === 1) {
+      var lead = b.options.filter(function(o) { return o.id === winners[0]; })[0];
+      if (lead) leadTxt = ' \u00B7 Leading: ' + lead.venueName;
+    }
+    el.textContent = "You're voting for " + shown + leadTxt;
+  } else if (noPrefOn) {
+    el.classList.remove('muted');
+    el.textContent = "You're in \u2014 no preference";
+  } else {
+    el.classList.add('muted');
+    el.textContent = "You haven't voted yet";
+  }
 }
 // ═══ end v0.8d ═══
 
