@@ -137,6 +137,10 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .rally-parts-detail{margin-top:6px;display:flex;flex-direction:column;gap:2px}
 .rally-parts-line{font-size:11px;color:var(--text-muted);line-height:1.45;opacity:.9}
 .rally-parts-line strong{font-weight:600;color:var(--text)}
+.leg-rsvp{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:50px;font-size:10px;font-weight:700;letter-spacing:0.3px}
+.leg-rsvp-in{background:var(--green-pale);color:var(--green)}
+.leg-rsvp-maybe{background:#FEF3C7;color:#92400E}
+.leg-rsvp-out{background:#FEE2E2;color:#B91C1C}
 .rally-avatars{display:flex}
 .rally-avatars .avatar-sm{margin-left:-6px;border:2px solid var(--white)}
 .rally-avatars .avatar-sm:first-child{margin-left:0}
@@ -317,6 +321,8 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .rsvp-opt.sel-out{border-color:var(--border);background:var(--cream-dark);color:var(--text-muted)}
 .ballot-collapsed{margin:6px 20px 4px;padding:18px 16px;background:var(--cream-dark);border-radius:var(--radius);text-align:center;font-size:13px;color:var(--text-muted);line-height:1.5}
 .ballot-collapsed strong{color:var(--text);font-weight:600;display:block;margin-bottom:4px}
+.ballot-collapsed.is-out{background:#FEE2E2}
+.ballot-collapsed.is-out strong{color:#B91C1C}
 .ballot-collapsed-link{color:var(--green);text-decoration:underline;cursor:pointer;font-size:12px;display:inline-block;margin-top:8px}
 /* ═══ end v0.8f CSS ═══ */
 
@@ -338,6 +344,12 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .ballot-next{display:block;width:calc(100% - 40px);margin:16px 20px 4px;background:var(--green);color:var(--white);border:none;border-radius:50px;padding:15px;font-family:var(--headline);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer}
 .ballot-leg-progress{font-size:11px;color:var(--text-muted);text-align:center;padding:8px 20px 0;letter-spacing:0.5px}
 /* ═══ end v0.8g CSS ═══ */
+
+/* ═══ v0.8g.2 — DELETE A RALLY ═══ */
+.ballot-delete{display:block;width:calc(100% - 40px);margin:10px 20px 4px;background:none;border:none;color:#B91C1C;font-family:var(--body);font-size:12px;font-weight:500;text-decoration:underline;cursor:pointer;text-align:center;padding:8px}
+.btn-danger{display:block;width:100%;background:#B91C1C;color:var(--white);border:none;border-radius:50px;padding:14px;font-family:var(--headline);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;text-align:center}
+/* ═══ end v0.8g.2 CSS ═══ */
+
 
 
 
@@ -784,7 +796,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         </div>
       </div>
     </div>
-    <div class="version-marker">Rally · v0.8g</div>
+    <div class="version-marker">Rally · v0.8g.2</div>
   </div>
   <button class="fab" onclick="go('screen-start-1')">
     <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
@@ -1328,6 +1340,20 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     <div class="ballot-status" id="ballot-status"></div>
     <!-- v0.8g — chained Rally: advance to the next leg (or finish) -->
     <button class="ballot-next" id="ballot-next" style="display:none" onclick="advanceBallotLeg()">Next</button>
+    <!-- v0.8g.2 — delete a Rally you created -->
+    <button class="ballot-delete" id="ballot-delete" style="display:none" onclick="openDeleteConfirm()">Delete this Rally</button>
+  </div>
+  <!-- v0.8g.2 delete-confirm overlay -->
+  <div class="revote-overlay" id="delete-overlay" style="display:none" onclick="deleteBackdrop(event)">
+    <div class="revote-sheet">
+      <div class="revote-head">
+        <p class="revote-title">Delete this Rally?</p>
+        <button class="revote-close" onclick="closeDeleteConfirm()">✕</button>
+      </div>
+      <p class="revote-sub">This removes the Rally and everyone's votes for it. This can't be undone.</p>
+      <button class="btn-danger" onclick="confirmDeleteRally()">Delete Rally</button>
+      <button class="btn-outline" style="margin-top:8px" onclick="closeDeleteConfirm()">Keep it</button>
+    </div>
   </div>
   <nav class="bottom-nav">
     <button class="nav-item active" onclick="go('screen-home')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Plans</button>
@@ -2217,7 +2243,7 @@ function go(id) {
   if (id === 'screen-start-3') { initRallyPartsForFinalize(); }
   if (id === 'screen-ballot') { renderBallot(currentBallotLeg); }
   if (id === 'screen-notif-inbox') { renderNotifInbox(); }
-  if (id === 'screen-home') { updateBrunchCardSummary(); }
+  if (id === 'screen-home') { updateBrunchCardSummary(); refreshActiveRallyCard(); }
 }
 
 // Default the propose-dates calendar to current month + today, and time to the next 30-min slot from now
@@ -2612,6 +2638,9 @@ function prepCtx1b(type) {
     document.querySelector('#screen-start-1b .sheet-title').textContent = 'Activity details';
     document.getElementById('ctx-sub').textContent = 'What are we doing?';
   }
+  // v0.8g.1 — reset the "I'm easy" button to off; nothing is whatever on a fresh screen.
+  // (Runs after the ctx blocks are visible so visibleWhateverKeys sees the right buttons.)
+  refreshEasyAllBtn();
 }
 
 function getSelectedChipLabels(containerId) {
@@ -2637,14 +2666,16 @@ function getSelectedBudget() {
 function saveCtx1bAndContinue() {
   var type = getSelectedPlanType();
   var prefs = { type: type };
+  // v0.8g — skip-AI locks one venue; the AI never runs, so cuisine/vibe prefs are moot.
+  var isSkipAI = (ctxVenueName && ctxVenueMode === 'skip-ai');
   if (type === 'dinner' || type === 'brunch') {
     prefs.cuisineDownFor = getSelectedChipLabels('chips-food-downfor');
     prefs.cuisineNotTonight = getSelectedChipLabels('chips-food-not');
     prefs.vibe = getSelectedChipLabels('chips-vibe');
-    if (prefs.cuisineDownFor.length === 0) { showToast('Pick at least one cuisine you\u2019re down for (or tap Whatever)'); return; }
+    if (!isSkipAI && prefs.cuisineDownFor.length === 0) { showToast('Pick at least one cuisine you\u2019re down for (or tap Whatever)'); return; }
   } else if (type === 'bars') {
     prefs.vibe = getSelectedChipLabels('chips-bars-vibe');
-    if (prefs.vibe.length === 0) { showToast('Pick at least one vibe (or tap Whatever)'); return; }
+    if (!isSkipAI && prefs.vibe.length === 0) { showToast('Pick at least one vibe (or tap Whatever)'); return; }
   } else if (type === 'activity') {
     var ainp = document.getElementById('activity-writein');
     prefs.activity = ainp ? ainp.value.trim() : '';
@@ -2675,6 +2706,10 @@ var PLAN_TYPES = {
   custom:   { name: 'Custom', icon: '✨' }
 };
 var rallyParts = [];
+// v0.8g.1 — the live state of the active feed Rally, preserved across global resets.
+var activeRallyState = null;
+// True while the ballot screen is showing the active feed Rally (not the Brunch demo).
+var ballotIsActiveRally = false;
 
 // ═══ v0.8a — VOTING BALLOT DATA LAYER ═══
 // Per-leg ballot model. No UI yet (wired in v0.8b). See D-015.
@@ -3062,6 +3097,10 @@ function renderBallot(legIndex) {
   currentBallotLeg = legIndex;
   var b = getBallot(legIndex);
   var part = rallyParts[legIndex];
+  // v0.8g.2 — the Delete button shows only for a Rally you created (the active feed
+  // Rally), never on the Brunch demo or a friend-started Rally.
+  var delBtn = document.getElementById('ballot-delete');
+  if (delBtn) delBtn.style.display = ballotIsActiveRally ? '' : 'none';
   // Header
   var titleEl = document.getElementById('ballot-leg-title');
   var subEl = document.getElementById('ballot-leg-sub');
@@ -3100,6 +3139,7 @@ function renderBallot(legIndex) {
     document.getElementById('rsvp-out').classList.toggle('sel-out', lr === 'out');
     renderBallotStatus(legIndex);
     refreshBallotBanner();
+    syncActiveRallyState();
     return;
   }
   // Non-locked leg: ensure the locked view is hidden and the badge is normal.
@@ -3188,10 +3228,13 @@ function renderBallot(legIndex) {
     voteSection.style.display = 'none';
     collapsed.style.display = '';
     if (myRSVP === 'maybe') {
+      collapsed.className = 'ballot-collapsed';
       collapsed.innerHTML = '<strong>You said maybe</strong>You\u2019re not voting on this part. Tap <em>In</em> above if you decide to join.';
     } else if (myRSVP === 'out') {
+      collapsed.className = 'ballot-collapsed is-out';
       collapsed.innerHTML = '<strong>You\u2019re not going to this</strong>The vote is hidden. Tap <em>In</em> above if you change your mind.';
     } else {
+      collapsed.className = 'ballot-collapsed';
       collapsed.innerHTML = '<strong>Let the group know</strong>Pick In, Maybe, or Out above to get started.';
     }
   }
@@ -3200,6 +3243,7 @@ function renderBallot(legIndex) {
   // v0.8d — suggest button cap state + late-suggestion banner
   refreshSuggestButton();
   refreshBallotBanner();
+  syncActiveRallyState();
 }
 
 // Render the participation status + per-person chips. v0.8f keys off RSVP state.
@@ -3313,6 +3357,33 @@ function advanceBallotLeg() {
     return;
   }
   openBallot(parseInt(target, 10));
+}
+
+// ═══ v0.8g.2 — DELETE A RALLY ═══
+// Only a Rally you created (the active feed Rally) can be deleted, via a confirm dialog.
+function openDeleteConfirm() {
+  document.getElementById('delete-overlay').style.display = '';
+}
+function closeDeleteConfirm() {
+  document.getElementById('delete-overlay').style.display = 'none';
+}
+// Close when tapping the backdrop (outside the sheet).
+function deleteBackdrop(e) {
+  if (e.target === document.getElementById('delete-overlay')) closeDeleteConfirm();
+}
+// Tear down the active Rally: remove its feed card, clear its state + ballots, go home.
+function confirmDeleteRally() {
+  var card = document.getElementById('active-rally-card');
+  if (card && card.parentNode) card.parentNode.removeChild(card);
+  activeRallyState = null;
+  ballotIsActiveRally = false;
+  resetBallots();
+  rallyParts = [];
+  ballotRSVP = {};
+  ballotWhatever = {};
+  closeDeleteConfirm();
+  go('screen-home');
+  showToast('Rally deleted');
 }
 
 // ═══ v0.8c — NOTIFICATION INBOX ═══
@@ -3668,6 +3739,8 @@ function closeRevote() {
 // Demo: the static "Brunch Sunday" feed card opens a real v0.8 ballot.
 // Seeds a single-leg Rally + ballot so the demo card lands on the ballot screen.
 function openBrunchSundayBallot() {
+  // The Brunch demo is not the active feed Rally — don't let it pollute activeRallyState.
+  ballotIsActiveRally = false;
   // Re-seed if no brunch ballot is currently set up (e.g. a real Rally cleared it).
   var existing = getBallot(0);
   var isBrunch = existing && rallyParts[0] && rallyParts[0].type === 'brunch';
@@ -3729,6 +3802,48 @@ function updateBrunchCardSummary() {
   }
 }
 // ═══ end v0.8d ═══
+
+// v0.8g.1 — write the live ballot globals back into the active Rally's state holder,
+// so votes/RSVPs survive when another Rally later wipes the globals. No-op for the
+// Brunch demo (ballotIsActiveRally is false there).
+function syncActiveRallyState() {
+  if (!ballotIsActiveRally || !activeRallyState) return;
+  activeRallyState.parts = JSON.parse(JSON.stringify(rallyParts));
+  activeRallyState.ballots = JSON.parse(JSON.stringify(rallyBallots));
+  activeRallyState.rsvp = JSON.parse(JSON.stringify(ballotRSVP));
+  activeRallyState.whatever = JSON.parse(JSON.stringify(ballotWhatever));
+}
+
+// v0.8g.1 — refresh the per-leg RSVP tags on the active (chained) Rally feed card.
+// Called on every return to the home screen, so each leg's in/out/maybe stays current.
+// Reads from activeRallyState, not the live globals — those may belong to the Brunch demo.
+function refreshActiveRallyCard() {
+  var card = document.getElementById('active-rally-card');
+  if (!card || !activeRallyState) return;
+  var rsvpState = activeRallyState.rsvp || {};
+  var lines = card.querySelectorAll('.rally-parts-line[data-leg]');
+  lines.forEach(function(line) {
+    var li = parseInt(line.getAttribute('data-leg'), 10);
+    var slot = line.querySelector('.leg-rsvp-slot');
+    if (!slot) return;
+    var legRsvp = rsvpState[li] || {};
+    var rsvp = legRsvp[BALLOT_ME] || null;
+    if (rsvp === 'in') {
+      slot.className = 'leg-rsvp-slot leg-rsvp leg-rsvp-in';
+      slot.textContent = "You\u2019re in";
+    } else if (rsvp === 'maybe') {
+      slot.className = 'leg-rsvp-slot leg-rsvp leg-rsvp-maybe';
+      slot.textContent = 'Maybe';
+    } else if (rsvp === 'out') {
+      slot.className = 'leg-rsvp-slot leg-rsvp leg-rsvp-out';
+      slot.textContent = 'Not going';
+    } else {
+      slot.className = 'leg-rsvp-slot';
+      slot.textContent = '';
+    }
+  });
+}
+
 
 function formatTime(val) {
   if (!val) return '';
@@ -4346,6 +4461,7 @@ function addRallyToFeed() {
   var card = document.createElement('div');
   card.className = 'rally-card';
   card.dataset.cat = 'pending';
+  card.id = 'active-rally-card';   // v0.8g.1 — stable id so RSVP status can re-render
 
   // v0.8d/v0.8g — create a ballot per leg so this Rally is votable.
   // Each part may name a venue with a mode:
@@ -4369,8 +4485,27 @@ function addRallyToFeed() {
       addPreseed(li, venueFromUrl(pf.suggestedVenue), pf.suggestedVenue);
     }
   }
-  // Route the card to the v0.8 ballot when tapped.
-  card.onclick = function() { openBallot(0); };
+  // v0.8g.1 — Route the card to the v0.8 ballot when tapped.
+  // The ballot reads leg structure from the rallyParts / rallyBallots globals, but those
+  // get wiped when the user starts another Rally (initRallyPartsForFinalize) or opens the
+  // Brunch demo. So this Rally keeps its own state holder: restored into the globals on
+  // tap, and written back when the user leaves the ballot, so votes/RSVPs persist.
+  activeRallyState = {
+    parts: JSON.parse(JSON.stringify(rallyParts)),
+    ballots: JSON.parse(JSON.stringify(rallyBallots)),
+    rsvp: JSON.parse(JSON.stringify(ballotRSVP)),
+    whatever: JSON.parse(JSON.stringify(ballotWhatever))
+  };
+  card.onclick = function() {
+    if (activeRallyState) {
+      rallyParts = JSON.parse(JSON.stringify(activeRallyState.parts));
+      rallyBallots = JSON.parse(JSON.stringify(activeRallyState.ballots));
+      ballotRSVP = JSON.parse(JSON.stringify(activeRallyState.rsvp));
+      ballotWhatever = JSON.parse(JSON.stringify(activeRallyState.whatever));
+    }
+    ballotIsActiveRally = true;
+    openBallot(0);
+  };
 
   // Helper: extract a readable venue name from a pasted URL
   function venueFromUrl(url) {
@@ -4407,12 +4542,14 @@ function addRallyToFeed() {
   // Build the per-part detail block
   var partsDetail = '';
   if (rallyParts.length > 1) {
-    // Chained: stacked lines, one per part with icon + time + prefs/venue
-    var partLines = rallyParts.map(function(p) {
+    // Chained: stacked lines, one per part with icon + time + prefs/venue + your RSVP
+    var partLines = rallyParts.map(function(p, li) {
       var line = p.icon + ' <strong>' + escapeHtml(p.typeName) + '</strong> @ ' + timeShort(p.time);
       var pl = prefsLine(p.prefs);
       if (pl) line += ' \u00B7 ' + escapeHtml(pl);
-      return '<p class="rally-parts-line">' + line + '</p>';
+      // v0.8g.1 — per-leg RSVP tag; refreshable via refreshActiveRallyCard().
+      return '<p class="rally-parts-line" data-leg="' + li + '">' + line +
+        '<span class="leg-rsvp-slot"></span></p>';
     });
     partsDetail = '<div class="rally-parts-detail">' + partLines.join('') + '</div>';
   } else if (rallyParts.length === 1) {

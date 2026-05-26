@@ -1,4 +1,4 @@
-const CACHE = 'rally-v32';
+const CACHE = 'rally-v34';
 const FILES = [
   '/rally-app/',
   '/rally-app/index.html',
