@@ -647,7 +647,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         </div>
       </div>
     </div>
-    <div class="version-marker">Rally · v0.7e</div>
+    <div class="version-marker">Rally · v0.8a</div>
   </div>
   <button class="fab" onclick="go('screen-start-1')">
     <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
@@ -2356,6 +2356,114 @@ var PLAN_TYPES = {
 };
 var rallyParts = [];
 
+// ═══ v0.8a — VOTING BALLOT DATA LAYER ═══
+// Per-leg ballot model. No UI yet (wired in v0.8b). See D-015.
+// A chained Rally holds one ballot per leg, indexed by legIndex.
+var SUGGESTION_CAP_PER_PERSON = 2;   // human suggestions one person can add to a leg
+var SUGGESTION_CAP_PER_LEG = 5;      // total human suggestions per leg (preseed exempt)
+var rallyBallots = [];               // array of leg ballots
+
+// Create a fresh ballot for a leg. Idempotent-ish: returns existing if already present.
+function createBallot(legIndex) {
+  if (rallyBallots[legIndex]) return rallyBallots[legIndex];
+  var ballot = {
+    legIndex: legIndex,
+    phase: 'preferences',            // 'preferences' | 'voting' | 'locked'
+    aiGenerated: false,
+    options: []                      // each: {id, source, venueName, link, suggestedBy, votes:[]}
+  };
+  rallyBallots[legIndex] = ballot;
+  return ballot;
+}
+
+function getBallot(legIndex) {
+  return rallyBallots[legIndex] || null;
+}
+
+// Count human-source suggestions on a leg (preseed + ai excluded)
+function countHumanSuggestions(legIndex) {
+  var b = getBallot(legIndex);
+  if (!b) return 0;
+  return b.options.filter(function(o) { return o.source === 'human'; }).length;
+}
+
+// Count human suggestions on a leg attributed to one person
+function countHumanSuggestionsBy(legIndex, person) {
+  var b = getBallot(legIndex);
+  if (!b) return 0;
+  return b.options.filter(function(o) {
+    return o.source === 'human' && o.suggestedBy === person;
+  }).length;
+}
+
+var _ballotOptionSeq = 0;
+function _nextOptionId() {
+  _ballotOptionSeq += 1;
+  return 'opt-' + _ballotOptionSeq;
+}
+
+// Add a human suggestion to a leg's ballot. Enforces both caps.
+// Returns { ok:true, option } or { ok:false, reason }.
+function addSuggestion(legIndex, venueName, link, suggestedBy) {
+  if (!venueName || !String(venueName).trim()) {
+    return { ok: false, reason: 'empty-name' };
+  }
+  if (!suggestedBy || !String(suggestedBy).trim()) {
+    return { ok: false, reason: 'no-attribution' };
+  }
+  var ballot = createBallot(legIndex);
+  if (countHumanSuggestionsBy(legIndex, suggestedBy) >= SUGGESTION_CAP_PER_PERSON) {
+    return { ok: false, reason: 'per-person-cap' };
+  }
+  if (countHumanSuggestions(legIndex) >= SUGGESTION_CAP_PER_LEG) {
+    return { ok: false, reason: 'per-leg-cap' };
+  }
+  var option = {
+    id: _nextOptionId(),
+    source: 'human',
+    venueName: String(venueName).trim(),
+    link: (link && String(link).trim()) ? String(link).trim() : null,
+    suggestedBy: String(suggestedBy).trim(),
+    votes: []
+  };
+  ballot.options.push(option);
+  return { ok: true, option: option };
+}
+
+// Add a creator pre-seed option. Exempt from both caps. See D-015.
+function addPreseed(legIndex, venueName, link) {
+  if (!venueName || !String(venueName).trim()) {
+    return { ok: false, reason: 'empty-name' };
+  }
+  var ballot = createBallot(legIndex);
+  var option = {
+    id: _nextOptionId(),
+    source: 'preseed',
+    venueName: String(venueName).trim(),
+    link: (link && String(link).trim()) ? String(link).trim() : null,
+    suggestedBy: null,
+    votes: []
+  };
+  ballot.options.push(option);
+  return { ok: true, option: option };
+}
+
+// Remove an option by id (used when a suggester withdraws). Returns bool.
+function removeOption(legIndex, optionId) {
+  var b = getBallot(legIndex);
+  if (!b) return false;
+  var before = b.options.length;
+  b.options = b.options.filter(function(o) { return o.id !== optionId; });
+  return b.options.length < before;
+}
+
+// Reset all ballots (called when a new Rally is started)
+function resetBallots() {
+  rallyBallots = [];
+  _ballotOptionSeq = 0;
+}
+// ═══ end v0.8a ballot data layer ═══
+
 function formatTime(val) {
   if (!val) return '';
   var tp = val.split(':');
@@ -2387,6 +2495,7 @@ function populateTimeSelect(selectId, defaultVal) {
 
 function initRallyPartsForFinalize() {
   rallyParts = [];
+  resetBallots();
   var selectedBtn = document.querySelector('#screen-start-1 .plan-type-btn.selected');
   if (selectedBtn) {
     var typeMatch = selectedBtn.getAttribute('onclick').match(/togglePlanType\(this,'(\w+)'\)/);
