@@ -59,6 +59,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .badge-voting{background:var(--green-pale);color:var(--green)}
 .badge-tonight{background:var(--green);color:var(--white)}
 .badge-trip{background:#EDE9FE;color:#5B21B6}
+.badge-locked{background:var(--green);color:var(--white)}
 .badge-ticket{background:#FEE2E2;color:#991B1B}
 
 .dot-divider{border:none;border-top:1px dotted var(--border-dot)}
@@ -318,6 +319,26 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .ballot-collapsed strong{color:var(--text);font-weight:600;display:block;margin-bottom:4px}
 .ballot-collapsed-link{color:var(--green);text-decoration:underline;cursor:pointer;font-size:12px;display:inline-block;margin-top:8px}
 /* ═══ end v0.8f CSS ═══ */
+
+/* ═══ v0.8g — PRE-SEED / SKIP-AI + CHAINED FLOW ═══ */
+.venue-mode{background:var(--white);border:1.5px solid var(--green);border-radius:var(--radius);padding:14px;margin-top:4px}
+.venue-mode-name{font-family:var(--headline);font-size:15px;font-weight:700;color:var(--green);margin-bottom:2px}
+.venue-mode-q{font-size:12px;color:var(--text-muted);margin-bottom:10px}
+.venue-mode-opt{display:block;width:100%;text-align:left;background:none;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:11px 12px;margin-bottom:8px;cursor:pointer}
+.venue-mode-opt.sel{border-color:var(--green);background:var(--green-pale)}
+.venue-mode-opt strong{display:block;font-family:var(--body);font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px}
+.venue-mode-opt.sel strong{color:var(--green)}
+.venue-mode-opt span{display:block;font-size:11px;color:var(--text-muted);line-height:1.4}
+.venue-mode-clear{background:none;border:none;color:var(--text-muted);font-family:var(--body);font-size:12px;text-decoration:underline;cursor:pointer;padding:4px 0;margin-top:2px}
+.ballot-locked{margin:14px 20px;padding:20px;background:var(--green);border-radius:var(--radius);color:var(--white);position:relative;overflow:hidden}
+.ballot-locked::before{content:'';position:absolute;top:-30px;right:-30px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,0.06)}
+.ballot-locked-eyebrow{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;opacity:.7;margin-bottom:5px;font-family:var(--headline)}
+.ballot-locked-name{font-family:var(--headline);font-size:22px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px}
+.ballot-locked-sub{font-size:12px;opacity:.85;line-height:1.4}
+.ballot-next{display:block;width:calc(100% - 40px);margin:16px 20px 4px;background:var(--green);color:var(--white);border:none;border-radius:50px;padding:15px;font-family:var(--headline);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer}
+.ballot-leg-progress{font-size:11px;color:var(--text-muted);text-align:center;padding:8px 20px 0;letter-spacing:0.5px}
+/* ═══ end v0.8g CSS ═══ */
+
 
 
 
@@ -763,7 +784,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         </div>
       </div>
     </div>
-    <div class="version-marker">Rally · v0.8f.1</div>
+    <div class="version-marker">Rally · v0.8g</div>
   </div>
   <button class="fab" onclick="go('screen-start-1')">
     <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
@@ -916,7 +937,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
       <button class="pill" onclick="setBudget(this,'whatever')">Whatever</button>
     </div>
 
-    <!-- Have a place in mind? (food + bars only) -->
+    <!-- Have a place in mind? (food + bars + activity) -->
     <div id="ctx1b-suggest-block" style="display:none;margin-bottom:14px">
       <p class="section-label" style="margin-bottom:8px">Have a place in mind?</p>
       <button class="suggest-place-btn" id="ctx-suggest-btn" onclick="toggleCtxSuggest()">
@@ -924,9 +945,23 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         Add a specific venue
       </button>
       <div class="suggest-wrap" id="ctx-suggest-wrap">
-        <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px">Paste a Google Maps or Yelp link</p>
-        <input class="input-field" id="ctx-suggest-url" type="url" placeholder="https://maps.google.com/..." style="margin-bottom:10px">
+        <input class="input-field" id="ctx-suggest-name" type="text" placeholder="Place name" style="margin-bottom:8px">
+        <input class="input-field" id="ctx-suggest-url" type="url" placeholder="Link (optional)" style="margin-bottom:10px">
         <button class="btn-sm" onclick="confirmCtxSuggest()">Add venue</button>
+      </div>
+      <!-- After a venue is named: choose pre-seed vs skip-AI -->
+      <div class="venue-mode" id="ctx-venue-mode" style="display:none">
+        <p class="venue-mode-name" id="ctx-venue-mode-name"></p>
+        <p class="venue-mode-q">How should this work?</p>
+        <button class="venue-mode-opt" id="ctx-mode-preseed" onclick="setVenueMode('preseed')">
+          <strong>Add it to the vote</strong>
+          <span>The group still votes — your place is one of the options, alongside Rally's picks.</span>
+        </button>
+        <button class="venue-mode-opt" id="ctx-mode-skip" onclick="setVenueMode('skip-ai')">
+          <strong>Just go here — skip the vote</strong>
+          <span>No voting. The plan is locked to this place; everyone just RSVPs.</span>
+        </button>
+        <button class="venue-mode-clear" onclick="clearCtxVenue()">Remove venue</button>
       </div>
     </div>
 
@@ -1293,7 +1328,16 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     <p class="ballot-leg-sub" id="ballot-leg-sub"></p>
   </div>
   <div class="scroll-content" style="padding-top:4px">
+    <p class="ballot-leg-progress" id="ballot-leg-progress" style="display:none"></p>
     <div id="ballot-banner" class="ballot-banner" style="display:none" onclick="openRevoteFromBanner()"></div>
+    <!-- v0.8g — locked-venue view (skip-AI legs): shown instead of the ballot + vote section -->
+    <div id="ballot-locked-view" style="display:none">
+      <div class="ballot-locked">
+        <p class="ballot-locked-eyebrow">The plan</p>
+        <p class="ballot-locked-name" id="ballot-locked-name"></p>
+        <p class="ballot-locked-sub" id="ballot-locked-sub">No voting on this one — just let everyone know if you're in.</p>
+      </div>
+    </div>
     <!-- v0.8f RSVP control -->
     <div class="rsvp-control" id="rsvp-control">
       <p class="rsvp-q">Are you Rallying?</p>
@@ -1322,6 +1366,8 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     <div class="ballot-collapsed" id="ballot-collapsed" style="display:none"></div>
     <button class="ballot-dev-btn" data-dev="1" onclick="devSimulateLateSuggestion()">⚙ DEV: simulate teammate suggestion</button>
     <div class="ballot-status" id="ballot-status"></div>
+    <!-- v0.8g — chained Rally: advance to the next leg (or finish) -->
+    <button class="ballot-next" id="ballot-next" style="display:none" onclick="advanceBallotLeg()">Next</button>
   </div>
   <nav class="bottom-nav">
     <button class="nav-item active" onclick="go('screen-home')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Plans</button>
@@ -2494,8 +2540,10 @@ function setBudget(btn) {
   refreshEasyAllBtn();
 }
 
-// Suggest-place affordance on ctx1b
+// Suggest-place affordance on ctx1b (v0.8g: venue name + link + preseed/skip-AI mode)
 var ctxSuggestUrl = null;
+var ctxVenueName = null;
+var ctxVenueMode = null;   // 'preseed' | 'skip-ai' | null
 function toggleCtxSuggest() {
   var wrap = document.getElementById('ctx-suggest-wrap');
   var btn = document.getElementById('ctx-suggest-btn');
@@ -2504,10 +2552,38 @@ function toggleCtxSuggest() {
   else { wrap.classList.add('show'); btn.style.display = 'none'; }
 }
 function confirmCtxSuggest() {
-  var input = document.getElementById('ctx-suggest-url');
-  ctxSuggestUrl = input && input.value.trim() ? input.value.trim() : null;
-  if (ctxSuggestUrl) showToast('Venue added!');
-  toggleCtxSuggest();
+  var nameInput = document.getElementById('ctx-suggest-name');
+  var urlInput = document.getElementById('ctx-suggest-url');
+  var name = nameInput && nameInput.value.trim() ? nameInput.value.trim() : '';
+  if (!name) { showToast('Add a place name'); return; }
+  ctxVenueName = name;
+  ctxSuggestUrl = urlInput && urlInput.value.trim() ? urlInput.value.trim() : null;
+  ctxVenueMode = null;   // not yet chosen
+  // Collapse the form, hide the add button, reveal the mode chooser.
+  document.getElementById('ctx-suggest-wrap').classList.remove('show');
+  document.getElementById('ctx-suggest-btn').style.display = 'none';
+  var modeBlock = document.getElementById('ctx-venue-mode');
+  document.getElementById('ctx-venue-mode-name').textContent = ctxVenueName;
+  document.getElementById('ctx-mode-preseed').classList.remove('sel');
+  document.getElementById('ctx-mode-skip').classList.remove('sel');
+  modeBlock.style.display = 'block';
+}
+// Choose how the named venue behaves: 'preseed' (on the ballot) or 'skip-ai' (locked).
+function setVenueMode(mode) {
+  ctxVenueMode = mode;
+  document.getElementById('ctx-mode-preseed').classList.toggle('sel', mode === 'preseed');
+  document.getElementById('ctx-mode-skip').classList.toggle('sel', mode === 'skip-ai');
+  showToast(mode === 'skip-ai' ? 'Locked to ' + ctxVenueName : ctxVenueName + ' added to the vote');
+}
+// Remove the named venue and return to the "add a venue" affordance.
+function clearCtxVenue() {
+  ctxVenueName = null;
+  ctxSuggestUrl = null;
+  ctxVenueMode = null;
+  document.getElementById('ctx-venue-mode').style.display = 'none';
+  document.getElementById('ctx-suggest-btn').style.display = 'flex';
+  var n = document.getElementById('ctx-suggest-name'); if (n) n.value = '';
+  var u = document.getElementById('ctx-suggest-url'); if (u) u.value = '';
 }
 
 function prepCtx1b(type) {
@@ -2523,14 +2599,20 @@ function prepCtx1b(type) {
   document.querySelectorAll('#ctx1b-budget .pill').forEach(function(p){ p.classList.remove('selected'); });
   var defaultBudget = document.querySelectorAll('#ctx1b-budget .pill')[1];
   if (defaultBudget) defaultBudget.classList.add('selected');
-  // Reset suggest-place state
+  // Reset suggest-place state (v0.8g)
   ctxSuggestUrl = null;
+  ctxVenueName = null;
+  ctxVenueMode = null;
   var sw = document.getElementById('ctx-suggest-wrap');
   if (sw) sw.classList.remove('show');
   var sbtn = document.getElementById('ctx-suggest-btn');
   if (sbtn) sbtn.style.display = 'flex';
+  var sname = document.getElementById('ctx-suggest-name');
+  if (sname) sname.value = '';
   var surl = document.getElementById('ctx-suggest-url');
   if (surl) surl.value = '';
+  var vmode = document.getElementById('ctx-venue-mode');
+  if (vmode) vmode.style.display = 'none';
   // Always render neighborhood
   renderChips('chips-neighborhood', Q_NEIGHBORHOOD);
   // Cache placeholder labels (first-time render)
@@ -2611,7 +2693,15 @@ function saveCtx1bAndContinue() {
   }
   prefs.neighborhood = getSelectedChipLabels('chips-neighborhood');
   prefs.budget = getSelectedBudget();
-  if (ctxSuggestUrl) prefs.suggestedVenue = ctxSuggestUrl;
+  // v0.8g — a named venue with its chosen mode (preseed = on the ballot, skip-ai = locked).
+  if (ctxVenueName && ctxVenueMode) {
+    prefs.venueName = ctxVenueName;
+    prefs.venueMode = ctxVenueMode;
+    if (ctxSuggestUrl) prefs.venueLink = ctxSuggestUrl;
+  } else if (ctxSuggestUrl) {
+    // Link pasted but no name/mode chosen — keep legacy suggestedVenue behavior.
+    prefs.suggestedVenue = ctxSuggestUrl;
+  }
   rallyPreferences = prefs;
   go('screen-start-2');
 }
@@ -2640,6 +2730,7 @@ function createBallot(legIndex) {
     legIndex: legIndex,
     phase: 'preferences',            // 'preferences' | 'voting' | 'locked'
     aiGenerated: false,
+    locked: false,                   // v0.8g — true for skip-AI legs (single venue, RSVP-only)
     options: []                      // each: {id, source, venueName, link, suggestedBy, votes:[]}
   };
   rallyBallots[legIndex] = ballot;
@@ -3024,6 +3115,38 @@ function renderBallot(legIndex) {
     titleEl.textContent = 'Vote';
     subEl.textContent = '';
   }
+  // v0.8g — leg progress indicator + Next button for chained Rallies
+  renderChainedControls(legIndex);
+
+  var lockedView = document.getElementById('ballot-locked-view');
+  var voteSectionEl = document.getElementById('ballot-vote-section');
+  var collapsedEl = document.getElementById('ballot-collapsed');
+  var suggestDevBtn = document.querySelector('#screen-ballot .ballot-dev-btn');
+  var badge = document.getElementById('ballot-badge');
+
+  // ── v0.8g — LOCKED LEG (skip-AI): single venue, RSVP only, no voting ──
+  if (b && b.locked) {
+    lockedView.style.display = '';
+    voteSectionEl.style.display = 'none';
+    collapsedEl.style.display = 'none';
+    if (suggestDevBtn) suggestDevBtn.style.display = 'none';
+    if (badge) { badge.textContent = 'Locked'; badge.className = 'badge badge-locked'; }
+    var venue = b.options[0];
+    document.getElementById('ballot-locked-name').textContent = venue ? venue.venueName : 'TBD';
+    // RSVP control stays active — people still say if they're coming.
+    var lr = getRSVP(legIndex, BALLOT_ME);
+    document.getElementById('rsvp-in').classList.toggle('sel-in', lr === 'in');
+    document.getElementById('rsvp-maybe').classList.toggle('sel-maybe', lr === 'maybe');
+    document.getElementById('rsvp-out').classList.toggle('sel-out', lr === 'out');
+    renderBallotStatus(legIndex);
+    refreshBallotBanner();
+    return;
+  }
+  // Non-locked leg: ensure the locked view is hidden and the badge is normal.
+  lockedView.style.display = 'none';
+  if (suggestDevBtn) suggestDevBtn.style.display = '';
+  if (badge) { badge.textContent = 'Voting'; badge.className = 'badge badge-voting'; }
+
   // Options
   var optWrap = document.getElementById('ballot-options');
   optWrap.innerHTML = '';
@@ -3160,9 +3283,11 @@ function renderBallotStatus(legIndex) {
 function openBallot(legIndex) {
   currentBallotLeg = legIndex || 0;
   var b = getBallot(currentBallotLeg);
-  if (b) b.phase = 'voting';
+  // Locked legs (skip-AI) keep phase 'locked'; only a real ballot moves to 'voting'.
+  if (b && !b.locked) b.phase = 'voting';
   go('screen-ballot');
   // v0.8e — first open of a leg: run AI generation behind a branded loading moment.
+  // Locked legs have aiGenerated forced true at creation, so they skip this entirely.
   if (b && !b.aiGenerated) {
     var loader = document.getElementById('ai-loading');
     if (loader) loader.classList.add('show');
@@ -3178,6 +3303,57 @@ function openBallot(legIndex) {
   }
 }
 // ═══ end v0.8b ballot screen ═══
+
+// ═══ v0.8g — CHAINED PER-LEG BALLOT FLOW ═══
+// Each leg of a chained Rally is its own ballot. The responder moves leg→leg via a
+// "Next" button (navigation, not commit — votes stay editable, D-016 holds). Legs the
+// user has RSVP'd Out on are skipped in the advance sequence.
+
+// Find the next leg index after `from` that the user hasn't RSVP'd Out on.
+// Returns -1 if there is no such leg (i.e. this is effectively the last one).
+function nextActiveLeg(from) {
+  for (var i = from + 1; i < rallyParts.length; i++) {
+    if (getRSVP(i, BALLOT_ME) !== 'out') return i;
+  }
+  return -1;
+}
+
+// Render the leg-progress line + the Next/Done button for chained Rallies.
+function renderChainedControls(legIndex) {
+  var progress = document.getElementById('ballot-leg-progress');
+  var nextBtn = document.getElementById('ballot-next');
+  // Single-leg Rally — no chained controls at all.
+  if (rallyParts.length <= 1) {
+    progress.style.display = 'none';
+    nextBtn.style.display = 'none';
+    return;
+  }
+  progress.style.display = '';
+  progress.textContent = 'Leg ' + (legIndex + 1) + ' of ' + rallyParts.length;
+  nextBtn.style.display = '';
+  var nextLeg = nextActiveLeg(legIndex);
+  if (nextLeg === -1) {
+    // No further active legs — this is the finish button.
+    nextBtn.textContent = 'Done';
+    nextBtn.dataset.target = '';
+  } else {
+    var np = rallyParts[nextLeg];
+    nextBtn.textContent = 'Next: ' + np.typeName + '  \u2192';
+    nextBtn.dataset.target = String(nextLeg);
+  }
+}
+
+// Advance handler for the Next/Done button.
+function advanceBallotLeg() {
+  var nextBtn = document.getElementById('ballot-next');
+  var target = nextBtn.dataset.target;
+  if (target === '' || target == null) {
+    // Done — return home.
+    go('screen-home');
+    return;
+  }
+  openBallot(parseInt(target, 10));
+}
 
 // ═══ v0.8c — NOTIFICATION INBOX ═══
 // Type registry. Each notification type maps 1:1 to a settings toggle (screen-notifications).
@@ -4212,13 +4388,25 @@ function addRallyToFeed() {
   card.className = 'rally-card';
   card.dataset.cat = 'pending';
 
-  // v0.8d — create a ballot per leg so this Rally is votable.
-  // If a part has a pasted suggested venue, seed it as the creator's pre-seed option.
+  // v0.8d/v0.8g — create a ballot per leg so this Rally is votable.
+  // Each part may name a venue with a mode:
+  //   'preseed'  → the venue joins the ballot as the creator's pre-seed option (still a vote)
+  //   'skip-ai'  → the leg is LOCKED to that one venue: no ballot vote, no AI, RSVP only
+  // Legacy: a part with only a pasted suggestedVenue URL still pre-seeds (v0.8d behavior).
   resetBallots();
   for (var li = 0; li < rallyParts.length; li++) {
     createBallot(li);
     var pf = rallyParts[li].prefs;
-    if (pf && pf.suggestedVenue) {
+    if (pf && pf.venueName && pf.venueMode === 'skip-ai') {
+      // Locked leg: single venue, no AI generation, no suggestions.
+      var lb = getBallot(li);
+      addPreseed(li, pf.venueName, pf.venueLink || null);
+      lb.locked = true;
+      lb.phase = 'locked';
+      lb.aiGenerated = true;   // suppress the AI-generation path entirely
+    } else if (pf && pf.venueName && pf.venueMode === 'preseed') {
+      addPreseed(li, pf.venueName, pf.venueLink || null);
+    } else if (pf && pf.suggestedVenue) {
       addPreseed(li, venueFromUrl(pf.suggestedVenue), pf.suggestedVenue);
     }
   }
