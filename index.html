@@ -242,6 +242,22 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .ballot-voter .avatar-sm{width:20px;height:20px;font-size:9px}
 /* ═══ end v0.8b ballot CSS ═══ */
 
+/* ═══ v0.8c — NOTIFICATION INBOX ═══ */
+.notif-badge{position:absolute;top:-4px;right:-4px;min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:#DC2626;color:#fff;font-family:var(--body);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;line-height:1;box-sizing:border-box}
+.notif-item{display:flex;gap:12px;align-items:flex-start;padding:14px 20px;border-bottom:1px dotted var(--border-dot);cursor:pointer;background:var(--cream)}
+.notif-item.unread{background:var(--white)}
+.notif-dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0;margin-top:6px}
+.notif-dot.read{background:transparent}
+.notif-icon{width:34px;height:34px;border-radius:50%;background:var(--green-pale);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px}
+.notif-body{flex:1;min-width:0}
+.notif-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:1px}
+.notif-text{font-size:12px;color:var(--text-muted);line-height:1.4}
+.notif-time{font-size:10px;color:var(--text-light);margin-top:3px;text-transform:uppercase;letter-spacing:0.5px}
+.notif-empty{text-align:center;padding:50px 20px;color:var(--text-muted);font-size:13px}
+.notif-inbox-actions{padding:10px 20px;border-bottom:1px dotted var(--border-dot);text-align:right}
+/* ═══ end v0.8c inbox CSS ═══ */
+
+
 
 /* LOCKED */
 .locked-venue{background:var(--green);margin:14px 20px;border-radius:var(--radius);padding:20px;color:var(--white);position:relative;overflow:hidden}
@@ -576,7 +592,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 <div class="screen" id="screen-home">
   <div class="topbar">
     <span class="topbar-logo">Rally</span>
-    <button style="background:none;border:none;cursor:pointer;color:var(--text)"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></button>
+    <button style="background:none;border:none;cursor:pointer;color:var(--text);position:relative" onclick="openNotifInbox()"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="notif-badge" id="notif-badge" style="display:none">0</span></button>
   </div>
   <div class="scroll-content" id="rally-feed">
     <div class="home-header">
@@ -681,7 +697,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         </div>
       </div>
     </div>
-    <div class="version-marker">Rally · v0.8b</div>
+    <div class="version-marker">Rally · v0.8c</div>
   </div>
   <button class="fab" onclick="go('screen-start-1')">
     <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
@@ -1527,7 +1543,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         <svg width="12" height="12" fill="none" stroke="var(--text-light)" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
       </button>
       <button class="menu-item" onclick="go('screen-notifications')">
-        <div class="menu-item-left"><div class="menu-item-icon"><svg width="14" height="14" fill="none" stroke="var(--green)" stroke-width="1.8" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div><div><p class="menu-item-label">Notifications</p><p class="menu-item-sub">Rally invites, reminders</p></div></div>
+        <div class="menu-item-left"><div class="menu-item-icon"><svg width="14" height="14" fill="none" stroke="var(--green)" stroke-width="1.8" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div><div><p class="menu-item-label">Notification Settings</p><p class="menu-item-sub">Rally invites, reminders</p></div></div>
         <svg width="12" height="12" fill="none" stroke="var(--text-light)" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
       </button>
       <button class="menu-item" onclick="go('screen-help')" style="border-bottom:none">
@@ -1578,7 +1594,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 
 <!-- ══ NOTIFICATIONS ══ -->
 <div class="screen" id="screen-notifications">
-  <div class="topbar"><button class="btn-back" onclick="go('screen-profile')">← Back</button><span class="topbar-logo" style="font-size:15px">Notifications</span><div style="width:60px"></div></div>
+  <div class="topbar"><button class="btn-back" onclick="go('screen-profile')">← Back</button><span class="topbar-logo" style="font-size:15px">Notification Settings</span><div style="width:60px"></div></div>
   <div class="scroll-content">
     <div style="padding:14px 20px 6px"><p class="section-label">Rally alerts</p></div>
     <div class="toggle-row"><div><p class="toggle-label">New Rally invite</p><p class="toggle-sub">When someone starts a Rally with you</p></div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
@@ -1589,6 +1605,13 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     <div class="toggle-row"><div><p class="toggle-label">Day before reminder</p></div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
     <div class="toggle-row" style="border:none"><div><p class="toggle-label">2-hour reminder</p></div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
   </div>
+</div>
+
+<!-- ══ v0.8c NOTIFICATION INBOX ══ -->
+<div class="screen" id="screen-notif-inbox">
+  <div class="topbar"><button class="btn-back" onclick="go('screen-home')">← Back</button><span class="topbar-logo" style="font-size:15px">Notifications</span><div style="width:60px"></div></div>
+  <div class="notif-inbox-actions" id="notif-inbox-actions"><button class="btn-ghost-sm" onclick="markAllNotifsRead()">Mark all read</button></div>
+  <div class="scroll-content" id="notif-inbox-list"></div>
 </div>
 
 <!-- ══ HELP ══ -->
@@ -2058,6 +2081,7 @@ function go(id) {
   if (id === 'screen-start-2') { initRallyDateTimeDefaults(); }
   if (id === 'screen-start-3') { initRallyPartsForFinalize(); }
   if (id === 'screen-ballot') { renderBallot(currentBallotLeg); }
+  if (id === 'screen-notif-inbox') { renderNotifInbox(); }
 }
 
 // Default the propose-dates calendar to current month + today, and time to the next 30-min slot from now
@@ -2712,6 +2736,140 @@ function openBallot(legIndex) {
   go('screen-ballot');
 }
 // ═══ end v0.8b ballot screen ═══
+
+// ═══ v0.8c — NOTIFICATION INBOX ═══
+// Type registry. Each notification type maps 1:1 to a settings toggle (screen-notifications).
+// destination: screen id to route to on tap. null -> route to home as a safe fallback.
+var NOTIF_TYPES = {
+  invite:      { label: 'New Rally invite', icon: '\uD83D\uDCE8', destination: 'screen-home' },
+  voting:      { label: 'Voting open',      icon: '\uD83D\uDDF3\uFE0F', destination: 'screen-ballot' },
+  locked:      { label: 'Plan locked',      icon: '\uD83D\uDCCD', destination: 'screen-locked' },
+  ticket:      { label: 'Ticket reminder',  icon: '\uD83C\uDFAB', destination: 'screen-home' },
+  reminder:    { label: 'Reminder',         icon: '\u23F0', destination: 'screen-home' }
+  // v0.8d adds: suggestion -> { label:'New suggestion added', destination:'screen-ballot' }
+};
+
+var notifications = [];      // each: {id, type, title, text, time, read, legIndex}
+var _notifSeq = 0;
+
+function _nextNotifId() { _notifSeq += 1; return 'ntf-' + _notifSeq; }
+
+// Add a notification. type must be a key of NOTIF_TYPES. Returns the notification.
+function addNotification(type, title, text, opts) {
+  opts = opts || {};
+  var t = NOTIF_TYPES[type];
+  if (!t) { return null; }
+  var ntf = {
+    id: _nextNotifId(),
+    type: type,
+    title: title || t.label,
+    text: text || '',
+    time: opts.time || 'Just now',
+    read: false,
+    legIndex: (typeof opts.legIndex === 'number') ? opts.legIndex : null
+  };
+  notifications.unshift(ntf);   // newest first
+  updateNotifBadge();
+  return ntf;
+}
+
+function unreadNotifCount() {
+  return notifications.filter(function(n) { return !n.read; }).length;
+}
+
+function updateNotifBadge() {
+  var badge = document.getElementById('notif-badge');
+  if (!badge) return;
+  var count = unreadNotifCount();
+  if (count > 0) {
+    badge.textContent = count > 99 ? '99+' : String(count);
+    badge.style.display = '';
+  } else {
+    badge.style.display = 'none';
+  }
+}
+
+function markAllNotifsRead() {
+  notifications.forEach(function(n) { n.read = true; });
+  updateNotifBadge();
+  renderNotifInbox();
+}
+
+// Tapping a notification: mark read, route to its destination.
+function openNotification(notifId) {
+  var ntf = null;
+  for (var i = 0; i < notifications.length; i++) {
+    if (notifications[i].id === notifId) { ntf = notifications[i]; break; }
+  }
+  if (!ntf) return;
+  ntf.read = true;
+  updateNotifBadge();
+  var t = NOTIF_TYPES[ntf.type];
+  var dest = (t && t.destination) ? t.destination : 'screen-home';
+  // Route. For ballot, open the relevant leg if the notification carries one.
+  if (dest === 'screen-ballot') {
+    if (typeof ntf.legIndex === 'number' && getBallot(ntf.legIndex)) {
+      openBallot(ntf.legIndex);
+    } else if (getBallot(0)) {
+      openBallot(0);
+    } else {
+      go('screen-home');
+    }
+  } else {
+    go(dest);
+  }
+}
+
+function renderNotifInbox() {
+  var list = document.getElementById('notif-inbox-list');
+  if (!list) return;
+  list.innerHTML = '';
+  if (notifications.length === 0) {
+    list.innerHTML = '<div class="notif-empty">No notifications yet.</div>';
+    document.getElementById('notif-inbox-actions').style.display = 'none';
+    return;
+  }
+  document.getElementById('notif-inbox-actions').style.display = unreadNotifCount() > 0 ? '' : 'none';
+  notifications.forEach(function(n) {
+    var t = NOTIF_TYPES[n.type] || { icon: '\uD83D\uDD14' };
+    var item = document.createElement('div');
+    item.className = 'notif-item' + (n.read ? '' : ' unread');
+    item.onclick = (function(id) { return function() { openNotification(id); }; })(n.id);
+    var html = '';
+    html += '<div class="notif-dot' + (n.read ? ' read' : '') + '"></div>';
+    html += '<div class="notif-icon">' + t.icon + '</div>';
+    html += '<div class="notif-body">';
+    html += '<p class="notif-title">' + escapeHtml(n.title) + '</p>';
+    if (n.text) html += '<p class="notif-text">' + escapeHtml(n.text) + '</p>';
+    html += '<p class="notif-time">' + escapeHtml(n.time) + '</p>';
+    html += '</div>';
+    item.innerHTML = html;
+    list.appendChild(item);
+  });
+}
+
+// Open the inbox. Opening marks nothing read automatically (user taps to read),
+// but the badge reflects unread state live.
+function openNotifInbox() {
+  renderNotifInbox();
+  go('screen-notif-inbox');
+}
+
+// Dummy seed so the inbox feels populated in the single-device prototype.
+function seedNotifications() {
+  notifications = [];
+  _notifSeq = 0;
+  addNotification('locked', 'Plan locked: Dinner in the West Village',
+    'Buvette won the vote. Saturday 7:30pm.', { time: '2h ago' });
+  addNotification('voting', 'Voting open: Brunch Sunday',
+    'Rally matched 3 spots \u2014 cast your approvals.', { time: '5h ago', legIndex: 0 });
+  addNotification('invite', 'Soumil started a Rally',
+    'Bars Friday \u2014 add your preferences.', { time: 'Yesterday' });
+  // Mark the oldest as already read so unread state is visible
+  notifications[notifications.length - 1].read = true;
+  updateNotifBadge();
+}
+// ═══ end v0.8c notification inbox ═══
 
 function formatTime(val) {
   if (!val) return '';
@@ -4094,6 +4252,7 @@ function handlePhotoUpload(input, gridId) {
 renderCal();
 renderCalTrip();
 initMultiSelects();
+seedNotifications();
 if ('serviceWorker' in navigator) { navigator.serviceWorker.register('service-worker.js').catch(() => {}); }
 </script>
 </body>
