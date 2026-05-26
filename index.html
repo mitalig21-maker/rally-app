@@ -667,7 +667,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     </div>
 
     <div style="padding:6px 20px 0" data-cat-section="vote"><p class="section-label" style="margin-bottom:10px">Needs your vote</p></div>
-    <div class="rally-card" data-cat="vote" onclick="go('screen-vote')">
+    <div class="rally-card" data-cat="vote" onclick="openBrunchSundayBallot()">
       <div class="card card-pad">
         <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
           <div><p class="rally-title-text">Brunch Sunday</p><p class="rally-meta">Sunday, Apr 13 · Started by Jess</p></div>
@@ -724,7 +724,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         </div>
       </div>
     </div>
-    <div class="version-marker">Rally · v0.8d</div>
+    <div class="version-marker">Rally · v0.8d.2</div>
   </div>
   <button class="fab" onclick="go('screen-start-1')">
     <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
@@ -1257,16 +1257,10 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
       <button class="ballot-nopref-btn" id="ballot-nopref-btn" onclick="toggleNoPreference()">I'm in — fine with any of these</button>
     </div>
     <div class="ballot-suggest" id="ballot-suggest-block">
-      <button class="suggest-place-btn" id="ballot-suggest-btn" onclick="toggleBallotSuggest()">
+      <button class="suggest-place-btn" id="ballot-suggest-btn" onclick="openSuggestSheet()">
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
         <span id="ballot-suggest-btn-label">Suggest a place</span>
       </button>
-      <div class="suggest-wrap" id="ballot-suggest-wrap">
-        <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px">Add a spot for the group to vote on.</p>
-        <input class="input-field" id="ballot-suggest-name" type="text" placeholder="Place name" style="margin-bottom:8px">
-        <input class="input-field" id="ballot-suggest-link" type="url" placeholder="Link (optional)" style="margin-bottom:10px">
-        <button class="btn-sm" onclick="confirmBallotSuggest()">Add to ballot</button>
-      </div>
     </div>
     <button class="ballot-dev-btn" data-dev="1" onclick="devSimulateLateSuggestion()">⚙ DEV: simulate teammate suggestion</button>
     <div class="ballot-status" id="ballot-status"></div>
@@ -1278,7 +1272,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     <button class="nav-item" onclick="go('screen-profile')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</button>
   </nav>
   <!-- v0.8d revote pop-up overlay -->
-  <div class="revote-overlay" id="revote-overlay" style="display:none">
+  <div class="revote-overlay" id="revote-overlay" style="display:none" onclick="revoteBackdrop(event)">
     <div class="revote-sheet">
       <div class="revote-head">
         <p class="revote-title">A new place was added</p>
@@ -1287,6 +1281,19 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
       <p class="revote-sub" id="revote-sub">Update your picks if you'd like — or leave them as they are.</p>
       <div id="revote-options"></div>
       <button class="btn-primary" style="margin-top:6px" onclick="closeRevote()">Done</button>
+    </div>
+  </div>
+  <!-- v0.8d.2 suggest-a-place bottom sheet -->
+  <div class="revote-overlay" id="suggest-overlay" style="display:none" onclick="suggestBackdrop(event)">
+    <div class="revote-sheet">
+      <div class="revote-head">
+        <p class="revote-title">Suggest a place</p>
+        <button class="revote-close" onclick="closeSuggestSheet()">✕</button>
+      </div>
+      <p class="revote-sub">Add a spot for the group to vote on.</p>
+      <input class="input-field" id="ballot-suggest-name" type="text" placeholder="Place name" style="margin-bottom:10px">
+      <input class="input-field" id="ballot-suggest-link" type="url" placeholder="Link (optional)" style="margin-bottom:14px">
+      <button class="btn-primary" onclick="confirmBallotSuggest()">Add to ballot</button>
     </div>
   </div>
 </div>
@@ -2936,12 +2943,31 @@ function seedNotifications() {
 // ═══ v0.8d — SUGGESTIONS ON THE BALLOT + Q3 LATE-SUGGESTION FLOW ═══
 var revoteNewOptionId = null;   // id of the option the revote pop-up highlights
 
-// Toggle the suggest panel open/closed.
-function toggleBallotSuggest() {
+// Open the suggest-a-place bottom sheet.
+function openSuggestSheet() {
   var btn = document.getElementById('ballot-suggest-btn');
   if (btn && btn.classList.contains('disabled')) return;
-  var wrap = document.getElementById('ballot-suggest-wrap');
-  if (wrap) wrap.classList.toggle('show');
+  // Clear any stale input each time it opens
+  var nameInp = document.getElementById('ballot-suggest-name');
+  var linkInp = document.getElementById('ballot-suggest-link');
+  if (nameInp) nameInp.value = '';
+  if (linkInp) linkInp.value = '';
+  document.getElementById('suggest-overlay').style.display = '';
+}
+
+// Close the suggest sheet.
+function closeSuggestSheet() {
+  document.getElementById('suggest-overlay').style.display = 'none';
+}
+
+// Backdrop tap closes the suggest sheet (tap inside the sheet does not).
+function suggestBackdrop(e) {
+  if (e.target && e.target.id === 'suggest-overlay') closeSuggestSheet();
+}
+
+// Backdrop tap closes the revote sheet.
+function revoteBackdrop(e) {
+  if (e.target && e.target.id === 'revote-overlay') closeRevote();
 }
 
 // Add the current user's suggestion to the current leg's ballot.
@@ -2962,7 +2988,7 @@ function confirmBallotSuggest() {
   res.option.votes.push(BALLOT_ME);
   nameInp.value = '';
   linkInp.value = '';
-  document.getElementById('ballot-suggest-wrap').classList.remove('show');
+  closeSuggestSheet();
   renderBallot(currentBallotLeg);
   showToast('Added to the ballot');
 }
@@ -2974,15 +3000,14 @@ function refreshSuggestButton() {
   if (!btn || !label) return;
   var mine = countHumanSuggestionsBy(currentBallotLeg, BALLOT_ME);
   var legTotal = countHumanSuggestions(currentBallotLeg);
-  var wrap = document.getElementById('ballot-suggest-wrap');
   if (mine >= SUGGESTION_CAP_PER_PERSON) {
     btn.classList.add('disabled');
     label.textContent = "You've used both your suggestions";
-    if (wrap) wrap.classList.remove('show');
+    closeSuggestSheet();
   } else if (legTotal >= SUGGESTION_CAP_PER_LEG) {
     btn.classList.add('disabled');
     label.textContent = 'Ballot is full for this part';
-    if (wrap) wrap.classList.remove('show');
+    closeSuggestSheet();
   } else {
     btn.classList.remove('disabled');
     label.textContent = 'Suggest a place';
@@ -3119,6 +3144,28 @@ function closeRevote() {
   delete ballotPendingBanner[currentBallotLeg];
   revoteNewOptionId = null;
   renderBallot(currentBallotLeg);
+}
+
+// Demo: the static "Brunch Sunday" feed card now opens a real v0.8 ballot.
+// Seeds a single-leg Rally + ballot so the legacy dummy card lands on the new screen.
+// (Quick-fix repoint; legacy screen-vote left dormant. See session notes.)
+function openBrunchSundayBallot() {
+  // Re-seed if no brunch ballot is currently set up (e.g. a real Rally cleared it).
+  var existing = getBallot(0);
+  var isBrunch = existing && rallyParts[0] && rallyParts[0].type === 'brunch';
+  if (!isBrunch) {
+    resetBallots();
+    rallyParts = [{ type: 'brunch', typeName: 'Brunch', icon: '\uD83E\uDD42', time: '11:30',
+      prefs: null, _complete: true, _expanded: false }];
+    ballotNoPref = {};
+    ballotPendingBanner = {};
+    createBallot(0);
+    var a = addPreseed(0, 'Buvette', 'https://www.yelp.com/biz/buvette-new-york');
+    if (a.ok) { a.option.votes = ['Soumil', 'Romit']; }
+    var b = addSuggestion(0, 'Via Carota', 'https://www.yelp.com/biz/via-carota-new-york', 'Romit');
+    if (b.ok) { b.option.votes = ['Diana']; }
+  }
+  openBallot(0);
 }
 // ═══ end v0.8d ═══
 
