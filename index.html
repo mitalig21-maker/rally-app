@@ -233,10 +233,10 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .bopt--leading .bopt-name{padding-right:74px}
 .rally-vote-summary{font-size:11px;color:var(--green);margin-top:4px;line-height:1.4;font-weight:500}
 .rally-vote-summary.muted{color:var(--text-muted);font-weight:400}
-.ballot-nopref{margin:6px 20px 4px}
-.ballot-nopref-btn{width:100%;background:none;border:1.5px dashed var(--border);border-radius:var(--radius);padding:13px;font-family:var(--body);font-size:13px;color:var(--text-muted);cursor:pointer}
-.ballot-nopref-btn.on{border-style:solid;border-color:var(--green);background:var(--green-pale);color:var(--green);font-weight:500}
-.ballot-nopref-btn.suggested{border-style:solid;border-color:var(--green)}
+.ballot-nopref{margin:10px 20px 4px}
+.ballot-nopref-btn{width:100%;padding:12px;border:1.5px dashed var(--green);border-radius:var(--radius-sm);background:none;font-family:var(--body);font-size:13px;font-weight:500;color:var(--green);cursor:pointer}
+.ballot-nopref-btn.on{border-style:solid;background:var(--green-pale)}
+.ballot-nopref-btn.suggested{border-style:solid}
 .ballot-nopref-hint{font-size:11px;color:var(--green);text-align:center;margin:4px 20px 0}
 .easy-all-btn{width:100%;padding:12px;margin-bottom:16px;border:1.5px dashed var(--green);border-radius:var(--radius-sm);background:none;font-family:var(--body);font-size:13px;font-weight:500;color:var(--green);cursor:pointer}
 .easy-all-btn.on{border-style:solid;background:var(--green-pale)}
@@ -763,7 +763,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         </div>
       </div>
     </div>
-    <div class="version-marker">Rally · v0.8f</div>
+    <div class="version-marker">Rally · v0.8f.1</div>
   </div>
   <button class="fab" onclick="go('screen-start-1')">
     <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
@@ -1296,7 +1296,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     <div id="ballot-banner" class="ballot-banner" style="display:none" onclick="openRevoteFromBanner()"></div>
     <!-- v0.8f RSVP control -->
     <div class="rsvp-control" id="rsvp-control">
-      <p class="rsvp-q">Are you in for this?</p>
+      <p class="rsvp-q">Are you Rallying?</p>
       <div class="rsvp-seg">
         <button class="rsvp-opt" id="rsvp-in" onclick="setMyRSVP('in')">In</button>
         <button class="rsvp-opt" id="rsvp-maybe" onclick="setMyRSVP('maybe')">Maybe</button>
@@ -1305,12 +1305,12 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     </div>
     <!-- Voting section — collapses when the user is Maybe/Out -->
     <div id="ballot-vote-section">
-      <p class="ballot-hint">Tap every place you'd be happy with — pick as many as you like.</p>
-      <div id="ballot-options"></div>
       <div class="ballot-nopref" id="ballot-nopref-wrap" style="display:none">
         <button class="ballot-nopref-btn" id="ballot-nopref-btn" onclick="toggleWhatever()">Fine with whatever</button>
         <p class="ballot-nopref-hint" id="ballot-nopref-hint" style="display:none">Matches what you said earlier — tap to confirm</p>
       </div>
+      <p class="ballot-hint">Tap every place you'd be happy with — pick as many as you like.</p>
+      <div id="ballot-options"></div>
       <div class="ballot-suggest" id="ballot-suggest-block">
         <button class="suggest-place-btn" id="ballot-suggest-btn" onclick="openSuggestSheet()">
           <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
