@@ -236,6 +236,10 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .ballot-nopref{margin:6px 20px 4px}
 .ballot-nopref-btn{width:100%;background:none;border:1.5px dashed var(--border);border-radius:var(--radius);padding:13px;font-family:var(--body);font-size:13px;color:var(--text-muted);cursor:pointer}
 .ballot-nopref-btn.on{border-style:solid;border-color:var(--green);background:var(--green-pale);color:var(--green);font-weight:500}
+.ballot-nopref-btn.suggested{border-style:solid;border-color:var(--green)}
+.ballot-nopref-hint{font-size:11px;color:var(--green);text-align:center;margin:4px 20px 0}
+.easy-all-btn{width:100%;padding:12px;margin-bottom:16px;border:1.5px dashed var(--green);border-radius:var(--radius-sm);background:none;font-family:var(--body);font-size:13px;font-weight:500;color:var(--green);cursor:pointer}
+.easy-all-btn.on{border-style:solid;background:var(--green-pale)}
 .ballot-status{margin:14px 20px 0;padding:14px 0 4px;border-top:1px dotted var(--border-dot)}
 .ballot-status-line{font-size:12px;color:var(--text-muted);margin-bottom:8px}
 .ballot-status-line strong{color:var(--green);font-weight:600}
@@ -301,6 +305,20 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 @keyframes aiDot{0%,100%{opacity:.25;transform:translateY(0)}50%{opacity:1;transform:translateY(-4px)}}
 .bopt-ai-tag{display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:var(--green);background:var(--green-pale);padding:2px 6px;border-radius:4px;margin-top:3px}
 /* ═══ end v0.8e CSS ═══ */
+
+/* ═══ v0.8f — PER-LEG RSVP ═══ */
+.rsvp-control{margin:10px 20px 14px;padding:14px;background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius)}
+.rsvp-q{font-size:13px;font-weight:600;color:var(--text);margin-bottom:10px}
+.rsvp-seg{display:flex;gap:6px}
+.rsvp-opt{flex:1;padding:10px;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--white);font-family:var(--body);font-size:13px;font-weight:500;color:var(--text-muted);cursor:pointer}
+.rsvp-opt.sel-in{border-color:var(--green);background:var(--green);color:var(--white)}
+.rsvp-opt.sel-maybe{border-color:#B8860B;background:#FEF3C7;color:#92400E}
+.rsvp-opt.sel-out{border-color:var(--border);background:var(--cream-dark);color:var(--text-muted)}
+.ballot-collapsed{margin:6px 20px 4px;padding:18px 16px;background:var(--cream-dark);border-radius:var(--radius);text-align:center;font-size:13px;color:var(--text-muted);line-height:1.5}
+.ballot-collapsed strong{color:var(--text);font-weight:600;display:block;margin-bottom:4px}
+.ballot-collapsed-link{color:var(--green);text-decoration:underline;cursor:pointer;font-size:12px;display:inline-block;margin-top:8px}
+/* ═══ end v0.8f CSS ═══ */
+
 
 
 
@@ -745,7 +763,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         </div>
       </div>
     </div>
-    <div class="version-marker">Rally · v0.8e</div>
+    <div class="version-marker">Rally · v0.8f</div>
   </div>
   <button class="fab" onclick="go('screen-start-1')">
     <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
@@ -805,6 +823,10 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
   </div>
   <div class="sheet-header"><p class="sheet-title">Your preferences</p><p class="sheet-sub" id="ctx-sub">What are you feeling?</p></div>
   <div class="scroll-content" style="padding:14px 20px">
+    <!-- v0.8f — whatever-for-all shortcut -->
+    <button type="button" class="easy-all-btn" id="easy-all-btn" onclick="setAllWhatever()">
+      <span id="easy-all-label">I'm easy — whatever works</span>
+    </button>
     <!-- Dinner / Brunch: cuisine + not about it -->
     <div id="ctx1b-food" style="display:none">
       <p class="section-label" style="margin-bottom:8px">Down for</p>
@@ -1272,17 +1294,32 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
   </div>
   <div class="scroll-content" style="padding-top:4px">
     <div id="ballot-banner" class="ballot-banner" style="display:none" onclick="openRevoteFromBanner()"></div>
-    <p class="ballot-hint">Tap every place you'd be happy with — pick as many as you like.</p>
-    <div id="ballot-options"></div>
-    <div class="ballot-nopref" id="ballot-nopref-wrap" style="display:none">
-      <button class="ballot-nopref-btn" id="ballot-nopref-btn" onclick="toggleNoPreference()">I'm in — fine with any of these</button>
+    <!-- v0.8f RSVP control -->
+    <div class="rsvp-control" id="rsvp-control">
+      <p class="rsvp-q">Are you in for this?</p>
+      <div class="rsvp-seg">
+        <button class="rsvp-opt" id="rsvp-in" onclick="setMyRSVP('in')">In</button>
+        <button class="rsvp-opt" id="rsvp-maybe" onclick="setMyRSVP('maybe')">Maybe</button>
+        <button class="rsvp-opt" id="rsvp-out" onclick="setMyRSVP('out')">Out</button>
+      </div>
     </div>
-    <div class="ballot-suggest" id="ballot-suggest-block">
-      <button class="suggest-place-btn" id="ballot-suggest-btn" onclick="openSuggestSheet()">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-        <span id="ballot-suggest-btn-label">Suggest a place</span>
-      </button>
+    <!-- Voting section — collapses when the user is Maybe/Out -->
+    <div id="ballot-vote-section">
+      <p class="ballot-hint">Tap every place you'd be happy with — pick as many as you like.</p>
+      <div id="ballot-options"></div>
+      <div class="ballot-nopref" id="ballot-nopref-wrap" style="display:none">
+        <button class="ballot-nopref-btn" id="ballot-nopref-btn" onclick="toggleWhatever()">Fine with whatever</button>
+        <p class="ballot-nopref-hint" id="ballot-nopref-hint" style="display:none">Matches what you said earlier — tap to confirm</p>
+      </div>
+      <div class="ballot-suggest" id="ballot-suggest-block">
+        <button class="suggest-place-btn" id="ballot-suggest-btn" onclick="openSuggestSheet()">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+          <span id="ballot-suggest-btn-label">Suggest a place</span>
+        </button>
+      </div>
     </div>
+    <!-- Shown instead of the voting section when Maybe/Out -->
+    <div class="ballot-collapsed" id="ballot-collapsed" style="display:none"></div>
     <button class="ballot-dev-btn" data-dev="1" onclick="devSimulateLateSuggestion()">⚙ DEV: simulate teammate suggestion</button>
     <div class="ballot-status" id="ballot-status"></div>
   </div>
@@ -2300,6 +2337,7 @@ function renderChips(containerId, items, opts) {
         var quick = document.getElementById('quick-' + key);
         if (quick) quick.classList.remove('selected');
         updateMsLabel(key);
+        refreshEasyAllBtn();
       }
     };
     c.appendChild(b);
@@ -2360,6 +2398,62 @@ function setMsQuick(key, value) {
     quick.classList.remove('selected');
   }
   updateMsLabel(key);
+  refreshEasyAllBtn();
+}
+
+// v0.8f — "I'm easy" shortcut: drives every visible per-item quick button + budget at once.
+// Returns the visible quick-button keys for the current plan type.
+function visibleWhateverKeys() {
+  var keys = [];
+  ['food-downfor', 'bars-vibe', 'vibe', 'neighborhood'].forEach(function(key) {
+    var quick = document.getElementById('quick-' + key);
+    // A quick button counts if it exists and its containing ctx block is visible.
+    if (quick && quick.offsetParent !== null) keys.push(key);
+  });
+  return keys;
+}
+
+function setAllWhatever() {
+  var keys = visibleWhateverKeys();
+  var budgetWhatever = document.querySelector('#ctx1b-budget .pill:last-child');
+  // Determine current state: are all visible quick buttons + budget already "whatever"?
+  var allOn = keys.length > 0 && keys.every(function(key) {
+    var q = document.getElementById('quick-' + key);
+    return q && q.classList.contains('selected');
+  }) && budgetWhatever && budgetWhatever.classList.contains('selected');
+  if (allOn) {
+    // Toggle everything off.
+    keys.forEach(function(key) {
+      var q = document.getElementById('quick-' + key);
+      if (q && q.classList.contains('selected')) setMsQuick(key, null);
+    });
+  } else {
+    // Turn every not-yet-on quick button on.
+    keys.forEach(function(key) {
+      var q = document.getElementById('quick-' + key);
+      if (q && !q.classList.contains('selected')) setMsQuick(key, null);
+    });
+    // Budget -> Whatever (last pill).
+    if (budgetWhatever && !budgetWhatever.classList.contains('selected')) {
+      setBudget(budgetWhatever, 'whatever');
+    }
+  }
+  refreshEasyAllBtn();
+}
+
+// Reflect the "I'm easy" button's on/off state from the underlying controls.
+function refreshEasyAllBtn() {
+  var btn = document.getElementById('easy-all-btn');
+  if (!btn) return;
+  var keys = visibleWhateverKeys();
+  var budgetWhatever = document.querySelector('#ctx1b-budget .pill:last-child');
+  var allOn = keys.length > 0 && keys.every(function(key) {
+    var q = document.getElementById('quick-' + key);
+    return q && q.classList.contains('selected');
+  }) && budgetWhatever && budgetWhatever.classList.contains('selected');
+  btn.classList.toggle('on', !!allOn);
+  document.getElementById('easy-all-label').textContent = allOn
+    ? "You're easy \u2014 whatever works \u2713" : "I'm easy \u2014 whatever works";
 }
 
 function updateMsLabel(key) {
@@ -2397,6 +2491,7 @@ function cachePlaceholders() {
 function setBudget(btn) {
   document.querySelectorAll('#ctx1b-budget .pill').forEach(function(p){ p.classList.remove('selected'); });
   btn.classList.add('selected');
+  refreshEasyAllBtn();
 }
 
 // Suggest-place affordance on ctx1b
@@ -2756,8 +2851,48 @@ var BALLOT_ROSTER = [
 ];
 var BALLOT_ME = 'You';                 // current user's vote attribution
 var currentBallotLeg = 0;              // which leg the ballot screen is showing
-// Per-leg "in, no preference" attendance signal (Path A+). Keyed by legIndex -> Set of names.
-var ballotNoPref = {};
+
+// ═══ v0.8f — PER-LEG RSVP ═══
+// Per-leg RSVP state per person. ballotRSVP[legIndex][person] = 'in' | 'maybe' | 'out'.
+// Absent = no response yet. Only 'in' people participate (vote / suggest / preferences).
+// 'maybe' and 'out' are functionally identical (no participation); they differ only as
+// an intent signal. Switching to 'in' restores participation while the leg is still open.
+var ballotRSVP = {};
+// "Fine with whatever" — an In person who explicitly has no venue opinion. Per-leg set of names.
+var ballotWhatever = {};
+
+// Get a person's RSVP for a leg ('in' | 'maybe' | 'out' | null if no response).
+function getRSVP(legIndex, person) {
+  var leg = ballotRSVP[legIndex];
+  return (leg && leg[person]) ? leg[person] : null;
+}
+
+// Set a person's RSVP for a leg. Switching away from 'in' clears their votes +
+// "fine with whatever" flag for that leg (they stop participating).
+function setRSVP(legIndex, person, state) {
+  if (!ballotRSVP[legIndex]) ballotRSVP[legIndex] = {};
+  ballotRSVP[legIndex][person] = state;
+  if (state !== 'in') {
+    // Leaving 'in' — strip participation for this person on this leg.
+    var b = getBallot(legIndex);
+    if (b) {
+      b.options.forEach(function(o) {
+        var vi = o.votes.indexOf(person);
+        if (vi !== -1) o.votes.splice(vi, 1);
+      });
+    }
+    var wset = ballotWhatever[legIndex];
+    if (wset) {
+      var wi = wset.indexOf(person);
+      if (wi !== -1) wset.splice(wi, 1);
+    }
+  }
+}
+
+// Is this person "in" on this leg?
+function isInOnLeg(legIndex, person) {
+  return getRSVP(legIndex, person) === 'in';
+}
 
 // Did this person cast any approval on this leg?
 function hasApproved(legIndex, person) {
@@ -2766,14 +2901,38 @@ function hasApproved(legIndex, person) {
   return b.options.some(function(o) { return o.votes.indexOf(person) !== -1; });
 }
 
-// Is this person "in" on this leg? (approved something OR tapped no-preference)
-function isInOnLeg(legIndex, person) {
-  if (hasApproved(legIndex, person)) return true;
-  var s = ballotNoPref[legIndex];
-  return !!(s && s.indexOf(person) !== -1);
+// Is this person "in, fine with whatever" on this leg?
+function isWhatever(legIndex, person) {
+  if (getRSVP(legIndex, person) !== 'in') return false;
+  var wset = ballotWhatever[legIndex];
+  return !!(wset && wset.indexOf(person) !== -1);
+}
+
+// Did the user pick "whatever / anywhere" for every preference field at Rally creation?
+// If so, the ballot pre-highlights "Fine with whatever" (they tap to confirm — D this session).
+// Sentinels left by the v0.7c quick-tap buttons: 'Whatever' in cuisine/vibe, 'Anywhere' in
+// neighborhood, 'Whatever' for budget.
+function prefsAreAllWhatever(prefs) {
+  if (!prefs) return false;
+  function isWhateverList(arr) {
+    return !!(arr && arr.length === 1 && /^(whatever|anywhere)$/i.test(arr[0]));
+  }
+  var checks = [];
+  if (prefs.type === 'dinner' || prefs.type === 'brunch') {
+    checks.push(isWhateverList(prefs.cuisineDownFor));
+    checks.push(isWhateverList(prefs.vibe));
+  } else if (prefs.type === 'bars') {
+    checks.push(isWhateverList(prefs.vibe));
+  } else {
+    return false; // activity/custom — no clean "all whatever" signal
+  }
+  checks.push(isWhateverList(prefs.neighborhood));
+  checks.push(!prefs.budget || /^whatever$/i.test(prefs.budget));
+  return checks.every(function(c) { return c; });
 }
 
 // Toggle the current user's approval on an option.
+// Approving requires being 'in' — auto-sets RSVP to 'in' as a convenience.
 function toggleApproval(optionId) {
   var b = getBallot(currentBallotLeg);
   if (!b) return;
@@ -2784,12 +2943,16 @@ function toggleApproval(optionId) {
   if (!opt) return;
   var idx = opt.votes.indexOf(BALLOT_ME);
   if (idx === -1) {
+    // Approving a venue means you're in.
+    if (getRSVP(currentBallotLeg, BALLOT_ME) !== 'in') {
+      setRSVP(currentBallotLeg, BALLOT_ME, 'in');
+    }
     opt.votes.push(BALLOT_ME);
-    // Approving a venue means you're in — clear any no-preference flag
-    var s = ballotNoPref[currentBallotLeg];
-    if (s) {
-      var si = s.indexOf(BALLOT_ME);
-      if (si !== -1) s.splice(si, 1);
+    // Voting clears "fine with whatever" — you have an opinion now.
+    var wset = ballotWhatever[currentBallotLeg];
+    if (wset) {
+      var wi = wset.indexOf(BALLOT_ME);
+      if (wi !== -1) wset.splice(wi, 1);
     }
   } else {
     opt.votes.splice(idx, 1);
@@ -2797,15 +2960,34 @@ function toggleApproval(optionId) {
   renderBallot(currentBallotLeg);
 }
 
-// Toggle the "I'm in, no preference" flag for the current user.
-function toggleNoPreference() {
-  if (!ballotNoPref[currentBallotLeg]) ballotNoPref[currentBallotLeg] = [];
-  var s = ballotNoPref[currentBallotLeg];
-  var i = s.indexOf(BALLOT_ME);
-  if (i === -1) s.push(BALLOT_ME);
-  else s.splice(i, 1);
+// Set the current user's RSVP for the current leg.
+function setMyRSVP(state) {
+  setRSVP(currentBallotLeg, BALLOT_ME, state);
   renderBallot(currentBallotLeg);
 }
+
+// Toggle "fine with whatever" for the current user (only meaningful when 'in').
+function toggleWhatever() {
+  if (getRSVP(currentBallotLeg, BALLOT_ME) !== 'in') return;
+  if (!ballotWhatever[currentBallotLeg]) ballotWhatever[currentBallotLeg] = [];
+  var wset = ballotWhatever[currentBallotLeg];
+  var i = wset.indexOf(BALLOT_ME);
+  if (i === -1) {
+    // Choosing "fine with whatever" clears any venue approvals — no opinion.
+    var b = getBallot(currentBallotLeg);
+    if (b) {
+      b.options.forEach(function(o) {
+        var vi = o.votes.indexOf(BALLOT_ME);
+        if (vi !== -1) o.votes.splice(vi, 1);
+      });
+    }
+    wset.push(BALLOT_ME);
+  } else {
+    wset.splice(i, 1);
+  }
+  renderBallot(currentBallotLeg);
+}
+// ═══ end v0.8f RSVP layer ═══
 
 // Compute the winning option(s) for a leg. Returns array of option ids.
 // Most approvals wins. Tie -> creator's pick breaks it (preseed source). See D-015.
@@ -2882,21 +3064,54 @@ function renderBallot(legIndex) {
       optWrap.appendChild(card);
     });
   }
-  // "I'm in, no preference" button — only shown if user has approved nothing
-  var noPrefWrap = document.getElementById('ballot-nopref-wrap');
-  var noPrefBtn = document.getElementById('ballot-nopref-btn');
-  var userApprovedSomething = hasApproved(legIndex, BALLOT_ME);
-  var noPrefOn = !!(ballotNoPref[legIndex] && ballotNoPref[legIndex].indexOf(BALLOT_ME) !== -1);
-  if (userApprovedSomething || !b || b.options.length === 0) {
-    noPrefWrap.style.display = 'none';
+  // v0.8f — RSVP control state
+  var myRSVP = getRSVP(legIndex, BALLOT_ME);
+  var rsvpIn = document.getElementById('rsvp-in');
+  var rsvpMaybe = document.getElementById('rsvp-maybe');
+  var rsvpOut = document.getElementById('rsvp-out');
+  rsvpIn.classList.toggle('sel-in', myRSVP === 'in');
+  rsvpMaybe.classList.toggle('sel-maybe', myRSVP === 'maybe');
+  rsvpOut.classList.toggle('sel-out', myRSVP === 'out');
+  // Voting section vs collapsed state
+  var voteSection = document.getElementById('ballot-vote-section');
+  var collapsed = document.getElementById('ballot-collapsed');
+  if (myRSVP === 'in') {
+    voteSection.style.display = '';
+    collapsed.style.display = 'none';
+    // "Fine with whatever" — shown when In and hasn't approved anything
+    var noPrefWrap = document.getElementById('ballot-nopref-wrap');
+    var noPrefBtn = document.getElementById('ballot-nopref-btn');
+    var noPrefHint = document.getElementById('ballot-nopref-hint');
+    var userApprovedSomething = hasApproved(legIndex, BALLOT_ME);
+    var whateverOn = isWhatever(legIndex, BALLOT_ME);
+    if (userApprovedSomething || !b || b.options.length === 0) {
+      noPrefWrap.style.display = 'none';
+    } else {
+      noPrefWrap.style.display = '';
+      noPrefBtn.classList.toggle('on', whateverOn);
+      noPrefBtn.textContent = whateverOn ? "Fine with whatever \u2713" : "Fine with whatever";
+      // v0.8f — pre-highlight if the user picked "whatever" for everything in preferences.
+      // Suggestion only, not auto-selected: they still tap to confirm.
+      var part = rallyParts[legIndex];
+      var suggestWhatever = !whateverOn && part && prefsAreAllWhatever(part.prefs);
+      noPrefBtn.classList.toggle('suggested', !!suggestWhatever);
+      noPrefHint.style.display = suggestWhatever ? '' : 'none';
+    }
+    // Hide "Suggest a place" when the user is fine with whatever
+    var suggestBlock = document.getElementById('ballot-suggest-block');
+    if (suggestBlock) suggestBlock.style.display = whateverOn ? 'none' : '';
   } else {
-    noPrefWrap.style.display = '';
-    noPrefBtn.classList.toggle('on', noPrefOn);
-    noPrefBtn.textContent = noPrefOn ? "You're in \u2014 no preference \u2713" : "I'm in \u2014 fine with any of these";
+    // Maybe / Out / no-response — collapse the voting section
+    voteSection.style.display = 'none';
+    collapsed.style.display = '';
+    if (myRSVP === 'maybe') {
+      collapsed.innerHTML = '<strong>You said maybe</strong>You\u2019re not voting on this part. Tap <em>In</em> above if you decide to join.';
+    } else if (myRSVP === 'out') {
+      collapsed.innerHTML = '<strong>You\u2019re not going to this</strong>The vote is hidden. Tap <em>In</em> above if you change your mind.';
+    } else {
+      collapsed.innerHTML = '<strong>Let the group know</strong>Pick In, Maybe, or Out above to get started.';
+    }
   }
-  // v0.8d.3 — hide "Suggest a place" when the user has said no preference
-  var suggestBlock = document.getElementById('ballot-suggest-block');
-  if (suggestBlock) suggestBlock.style.display = noPrefOn ? 'none' : '';
   // Voting status
   renderBallotStatus(legIndex);
   // v0.8d — suggest button cap state + late-suggestion banner
@@ -2904,21 +3119,28 @@ function renderBallot(legIndex) {
   refreshBallotBanner();
 }
 
-// Render the "X of Y voted" status + per-voter chips.
+// Render the participation status + per-person chips. v0.8f keys off RSVP state.
 function renderBallotStatus(legIndex) {
   var statusEl = document.getElementById('ballot-status');
-  var voted = [], inNoPref = [], waiting = [];
+  var voted = [], inNoOpinion = [], maybeList = [], outList = [], waiting = [];
   BALLOT_ROSTER.forEach(function(p) {
-    if (hasApproved(legIndex, p.name)) voted.push(p);
-    else if (isInOnLeg(legIndex, p.name)) inNoPref.push(p);
-    else waiting.push(p);
+    var rsvp = getRSVP(legIndex, p.name);
+    if (rsvp === 'in') {
+      if (hasApproved(legIndex, p.name)) voted.push(p);
+      else inNoOpinion.push(p);
+    } else if (rsvp === 'maybe') {
+      maybeList.push(p);
+    } else if (rsvp === 'out') {
+      outList.push(p);
+    } else {
+      waiting.push(p);
+    }
   });
-  var total = BALLOT_ROSTER.length;
-  var responded = voted.length + inNoPref.length;
-  var html = '<p class="ballot-status-line"><strong>' + responded + ' of ' + total + '</strong> responded';
-  if (waiting.length > 0) {
-    html += ' \u00B7 ' + waiting.map(function(p) { return escapeHtml(p.name); }).join(', ') + ' not yet';
-  }
+  var inTotal = voted.length + inNoOpinion.length;
+  var html = '<p class="ballot-status-line"><strong>' + inTotal + ' in</strong>';
+  if (voted.length > 0) html += ' \u00B7 ' + voted.length + ' voted';
+  if (maybeList.length > 0) html += ' \u00B7 ' + maybeList.length + ' maybe';
+  if (outList.length > 0) html += ' \u00B7 ' + outList.length + ' out';
   html += '</p><div class="ballot-voter-row">';
   function chip(p, cls, label) {
     return '<span class="ballot-voter ' + cls + '">' +
@@ -2926,7 +3148,9 @@ function renderBallotStatus(legIndex) {
       escapeHtml(label) + '</span>';
   }
   voted.forEach(function(p) { html += chip(p, 'done', (p.isMe ? 'You' : p.name) + ' voted'); });
-  inNoPref.forEach(function(p) { html += chip(p, 'done', (p.isMe ? 'You' : p.name) + ' — in'); });
+  inNoOpinion.forEach(function(p) { html += chip(p, 'done', (p.isMe ? 'You' : p.name) + ' \u2014 in'); });
+  maybeList.forEach(function(p) { html += chip(p, '', (p.isMe ? 'You' : p.name) + ' \u2014 maybe'); });
+  outList.forEach(function(p) { html += chip(p, '', (p.isMe ? 'You' : p.name) + ' \u2014 out'); });
   waiting.forEach(function(p) { html += chip(p, '', (p.isMe ? 'You' : p.name)); });
   html += '</div>';
   statusEl.innerHTML = html;
@@ -3283,9 +3507,14 @@ function revoteToggle(optionId) {
   if (!opt) return;
   var idx = opt.votes.indexOf(BALLOT_ME);
   if (idx === -1) {
+    // Approving via the revote pop-up means you're in for this leg.
+    if (getRSVP(currentBallotLeg, BALLOT_ME) !== 'in') {
+      setRSVP(currentBallotLeg, BALLOT_ME, 'in');
+    }
     opt.votes.push(BALLOT_ME);
-    var s = ballotNoPref[currentBallotLeg];
-    if (s) { var si = s.indexOf(BALLOT_ME); if (si !== -1) s.splice(si, 1); }
+    // Voting clears "fine with whatever".
+    var wset = ballotWhatever[currentBallotLeg];
+    if (wset) { var wi = wset.indexOf(BALLOT_ME); if (wi !== -1) wset.splice(wi, 1); }
   } else {
     opt.votes.splice(idx, 1);
   }
@@ -3311,13 +3540,18 @@ function openBrunchSundayBallot() {
     resetBallots();
     rallyParts = [{ type: 'brunch', typeName: 'Brunch', icon: '\uD83E\uDD42', time: '11:30',
       prefs: null, _complete: true, _expanded: false }];
-    ballotNoPref = {};
+    ballotRSVP = {};
+    ballotWhatever = {};
     ballotPendingBanner = {};
     createBallot(0);
     var a = addPreseed(0, 'Buvette', 'https://www.yelp.com/biz/buvette-new-york');
     if (a.ok) { a.option.votes = ['Soumil', 'Romit']; }
     var b = addSuggestion(0, 'Via Carota', 'https://www.yelp.com/biz/via-carota-new-york', 'Romit');
     if (b.ok) { b.option.votes = ['Diana']; }
+    // Seeded voters are "in" on this leg (their votes imply attendance).
+    setRSVP(0, 'Soumil', 'in');
+    setRSVP(0, 'Romit', 'in');
+    setRSVP(0, 'Diana', 'in');
   }
   openBallot(0);
 }
@@ -3333,7 +3567,7 @@ function updateBrunchCardSummary() {
   if (!isBrunch) { el.style.display = 'none'; return; }
   // What did the user pick?
   var myPicks = b.options.filter(function(o) { return o.votes.indexOf(BALLOT_ME) !== -1; });
-  var noPrefOn = !!(ballotNoPref[0] && ballotNoPref[0].indexOf(BALLOT_ME) !== -1);
+  var noPrefOn = isWhatever(0, BALLOT_ME);
   el.style.display = '';
   if (myPicks.length > 0) {
     el.classList.remove('muted');
@@ -3350,10 +3584,13 @@ function updateBrunchCardSummary() {
     el.textContent = "You're voting for " + shown + leadTxt;
   } else if (noPrefOn) {
     el.classList.remove('muted');
-    el.textContent = "You're in \u2014 no preference";
+    el.textContent = "You're in \u2014 fine with whatever";
   } else {
+    var rsvp = getRSVP(0, BALLOT_ME);
     el.classList.add('muted');
-    el.textContent = "You haven't voted yet";
+    if (rsvp === 'maybe') el.textContent = "You said maybe";
+    else if (rsvp === 'out') el.textContent = "You're not going to this";
+    else el.textContent = "You haven't voted yet";
   }
 }
 // ═══ end v0.8d ═══
