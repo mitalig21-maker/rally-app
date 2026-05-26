@@ -286,6 +286,23 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .revote-opt-tag{font-size:10px;letter-spacing:0.5px;text-transform:uppercase;color:#92400E;margin-left:auto;flex-shrink:0}
 /* ═══ end v0.8d CSS ═══ */
 
+/* ═══ v0.8e — AI GENERATION LOADING ═══ */
+.ai-loading{position:absolute;inset:0;background:var(--cream);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:210;padding:40px}
+.ai-loading.show{display:flex}
+.ai-loading-badge{display:flex;align-items:center;gap:7px;background:var(--green);color:var(--white);font-family:var(--headline);font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:7px 14px;border-radius:50px;margin-bottom:22px}
+.ai-loading-spark{width:14px;height:14px;animation:aiSpin 1.4s linear infinite}
+@keyframes aiSpin{to{transform:rotate(360deg)}}
+.ai-loading-title{font-family:var(--headline);font-size:21px;font-weight:700;color:var(--green);text-align:center;margin-bottom:8px}
+.ai-loading-sub{font-size:13px;color:var(--text-muted);text-align:center;line-height:1.5;max-width:260px}
+.ai-loading-dots{display:flex;gap:6px;margin-top:24px}
+.ai-loading-dots span{width:8px;height:8px;border-radius:50%;background:var(--green);opacity:.25;animation:aiDot 1.2s ease-in-out infinite}
+.ai-loading-dots span:nth-child(2){animation-delay:.2s}
+.ai-loading-dots span:nth-child(3){animation-delay:.4s}
+@keyframes aiDot{0%,100%{opacity:.25;transform:translateY(0)}50%{opacity:1;transform:translateY(-4px)}}
+.bopt-ai-tag{display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:var(--green);background:var(--green-pale);padding:2px 6px;border-radius:4px;margin-top:3px}
+/* ═══ end v0.8e CSS ═══ */
+
+
 
 
 
@@ -728,7 +745,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         </div>
       </div>
     </div>
-    <div class="version-marker">Rally · v0.8d.3</div>
+    <div class="version-marker">Rally · v0.8e</div>
   </div>
   <button class="fab" onclick="go('screen-start-1')">
     <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
@@ -1299,6 +1316,16 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
       <input class="input-field" id="ballot-suggest-link" type="url" placeholder="Link (optional)" style="margin-bottom:14px">
       <button class="btn-primary" onclick="confirmBallotSuggest()">Add to ballot</button>
     </div>
+  </div>
+  <!-- v0.8e AI generation loading overlay -->
+  <div class="ai-loading" id="ai-loading">
+    <div class="ai-loading-badge">
+      <svg class="ai-loading-spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg>
+      Rally AI
+    </div>
+    <p class="ai-loading-title">Finding spots for the group</p>
+    <p class="ai-loading-sub">Matching everyone's cuisines, neighborhoods, and budget to pick the best places to vote on.</p>
+    <div class="ai-loading-dots"><span></span><span></span><span></span></div>
   </div>
 </div>
 
@@ -2610,6 +2637,111 @@ function resetBallots() {
   rallyBallots = [];
   _ballotOptionSeq = 0;
 }
+
+// ═══ v0.8e — MOCK AI VENUE GENERATION ═══
+// MOCK: a hardcoded NYC venue dataset stands in for the real Yelp Fusion + Claude Haiku
+// recommender. At the backend migration, generateAIPicks() swaps its body for a real
+// async API call; the ballot UI + flow around it stays identical.
+// Each venue: { name, type, cuisines[], neighborhoods[], budget, vibes[] }.
+var AI_VENUE_POOL = [
+  { name: 'Lilia',            type: 'dinner', cuisines: ['Italian'],        neighborhoods: ['Williamsburg'],   budget: '$$$', vibes: ['Trendy','Lively'] },
+  { name: 'Misi',             type: 'dinner', cuisines: ['Italian'],        neighborhoods: ['Williamsburg'],   budget: '$$$', vibes: ['Trendy'] },
+  { name: 'Rezdora',          type: 'dinner', cuisines: ['Italian'],        neighborhoods: ['Flatiron'],       budget: '$$$', vibes: ['Cozy','Date night'] },
+  { name: 'Carbone',          type: 'dinner', cuisines: ['Italian'],        neighborhoods: ['Greenwich Village'], budget: '$$$$', vibes: ['Lively','Special occasion'] },
+  { name: 'Via Carota',       type: 'dinner', cuisines: ['Italian'],        neighborhoods: ['West Village'],   budget: '$$$', vibes: ['Cozy','Date night'] },
+  { name: 'Don Angie',        type: 'dinner', cuisines: ['Italian'],        neighborhoods: ['West Village'],   budget: '$$$', vibes: ['Trendy','Date night'] },
+  { name: 'Cho Dang Gol',     type: 'dinner', cuisines: ['Korean'],         neighborhoods: ['Koreatown'],      budget: '$$',  vibes: ['Casual','Cozy'] },
+  { name: 'Her Name Is Han',  type: 'dinner', cuisines: ['Korean'],         neighborhoods: ['Koreatown'],      budget: '$$',  vibes: ['Cozy','Date night'] },
+  { name: 'Soothr',           type: 'dinner', cuisines: ['Thai'],           neighborhoods: ['East Village'],   budget: '$$',  vibes: ['Trendy','Lively'] },
+  { name: 'Thai Diner',       type: 'dinner', cuisines: ['Thai'],           neighborhoods: ['Nolita'],         budget: '$$',  vibes: ['Casual','Lively'] },
+  { name: 'Kiki\u2019s',      type: 'dinner', cuisines: ['Greek'],          neighborhoods: ['Lower East Side'],budget: '$$',  vibes: ['Lively','Casual'] },
+  { name: 'Cervo\u2019s',     type: 'dinner', cuisines: ['Seafood','Spanish'], neighborhoods: ['Lower East Side'], budget: '$$$', vibes: ['Trendy','Date night'] },
+  { name: 'Cosme',            type: 'dinner', cuisines: ['Mexican'],        neighborhoods: ['Flatiron'],       budget: '$$$$', vibes: ['Special occasion','Trendy'] },
+  { name: 'Casa Enrique',     type: 'dinner', cuisines: ['Mexican'],        neighborhoods: ['Long Island City'], budget: '$$', vibes: ['Casual','Lively'] },
+  { name: 'Tatiana',          type: 'dinner', cuisines: ['American'],       neighborhoods: ['Upper West Side'],budget: '$$$$', vibes: ['Special occasion','Lively'] },
+  { name: 'Buvette',          type: 'brunch', cuisines: ['French'],         neighborhoods: ['West Village'],   budget: '$$',  vibes: ['Cozy','Date night'] },
+  { name: 'Jack\u2019s Wife Freda', type: 'brunch', cuisines: ['American','Mediterranean'], neighborhoods: ['Soho'], budget: '$$', vibes: ['Lively','Casual'] },
+  { name: 'Sadelle\u2019s',   type: 'brunch', cuisines: ['American'],       neighborhoods: ['Soho'],           budget: '$$$', vibes: ['Lively','Special occasion'] },
+  { name: 'Golden Diner',     type: 'brunch', cuisines: ['American','Asian'], neighborhoods: ['Lower East Side'], budget: '$$', vibes: ['Casual','Cozy'] },
+  { name: 'Cafe Mogador',     type: 'brunch', cuisines: ['Mediterranean'],  neighborhoods: ['East Village'],   budget: '$$',  vibes: ['Cozy','Casual'] },
+  { name: 'Clinton St. Baking', type: 'brunch', cuisines: ['American'],     neighborhoods: ['Lower East Side'],budget: '$$',  vibes: ['Casual','Cozy'] },
+  { name: 'The Smith',        type: 'brunch', cuisines: ['American'],       neighborhoods: ['Midtown'],        budget: '$$',  vibes: ['Lively','Boozy'] },
+  { name: 'Sunday in Brooklyn', type: 'brunch', cuisines: ['American'],     neighborhoods: ['Williamsburg'],   budget: '$$$', vibes: ['Trendy','Boozy'] },
+  { name: 'Attaboy',          type: 'bars',   cuisines: [],                 neighborhoods: ['Lower East Side'],budget: '$$$', vibes: ['Cocktail','Intimate'] },
+  { name: 'Employees Only',   type: 'bars',   cuisines: [],                 neighborhoods: ['West Village'],   budget: '$$$', vibes: ['Cocktail','Lively'] },
+  { name: 'The Up & Up',      type: 'bars',   cuisines: [],                 neighborhoods: ['Greenwich Village'], budget: '$$$', vibes: ['Cocktail','Intimate'] },
+  { name: 'Bar Pisellino',    type: 'bars',   cuisines: [],                 neighborhoods: ['West Village'],   budget: '$$',  vibes: ['Wine','Cozy'] },
+  { name: 'Death & Co',       type: 'bars',   cuisines: [],                 neighborhoods: ['East Village'],   budget: '$$$', vibes: ['Cocktail','Intimate'] },
+  { name: 'Mister Paradise',  type: 'bars',   cuisines: [],                 neighborhoods: ['East Village'],   budget: '$$',  vibes: ['Lively','Cocktail'] },
+  { name: 'The Long Island Bar', type: 'bars', cuisines: [],               neighborhoods: ['Brooklyn Heights'], budget: '$$', vibes: ['Cocktail','Cozy'] },
+  { name: 'Westlight',        type: 'bars',   cuisines: [],                 neighborhoods: ['Williamsburg'],   budget: '$$$', vibes: ['Rooftop','Lively'] },
+  { name: 'Dante',            type: 'bars',   cuisines: [],                 neighborhoods: ['Greenwich Village'], budget: '$$$', vibes: ['Lively','Cocktail'] },
+  { name: 'June Wine Bar',    type: 'bars',   cuisines: [],                 neighborhoods: ['Cobble Hill'],    budget: '$$',  vibes: ['Wine','Cozy'] }
+];
+
+// Add an AI-sourced option to a leg's ballot.
+function addAIOption(legIndex, venueName) {
+  var ballot = createBallot(legIndex);
+  var option = {
+    id: _nextOptionId(),
+    source: 'ai',
+    venueName: venueName,
+    link: null,
+    suggestedBy: null,
+    votes: []
+  };
+  ballot.options.push(option);
+  return option;
+}
+
+// MOCK recommender: score venues against a leg's prefs, return up to `count` names.
+// Real build replaces this with Yelp Fusion + Claude Haiku.
+function pickAIVenues(prefs, count) {
+  count = count || 3;
+  var type = (prefs && prefs.type) ? prefs.type : 'dinner';
+  // Custom/activity have no venue dataset — return nothing (real AI handles these later).
+  var pool = AI_VENUE_POOL.filter(function(v) { return v.type === type; });
+  if (pool.length === 0) return [];
+  var cuisines = (prefs && prefs.cuisineDownFor) || [];
+  var hoods = (prefs && prefs.neighborhood) || [];
+  var vibes = (prefs && prefs.vibe) || [];
+  var budget = prefs && prefs.budget;
+  // Score each venue: +3 cuisine match, +2 neighborhood, +1 vibe, +1 budget.
+  var scored = pool.map(function(v) {
+    var score = 0;
+    if (cuisines.length) {
+      cuisines.forEach(function(c) { if (v.cuisines.indexOf(c) !== -1) score += 3; });
+    }
+    if (hoods.length) {
+      hoods.forEach(function(h) { if (v.neighborhoods.indexOf(h) !== -1) score += 2; });
+    }
+    if (vibes.length) {
+      vibes.forEach(function(vb) { if (v.vibes.indexOf(vb) !== -1) score += 1; });
+    }
+    if (budget && budget !== 'Whatever' && v.budget === budget) score += 1;
+    return { v: v, score: score };
+  });
+  // Sort by score desc; stable tiebreak by original order.
+  scored.sort(function(a, b) { return b.score - a.score; });
+  return scored.slice(0, count).map(function(s) { return s.v.name; });
+}
+
+// Generate AI picks for a leg, once. No-op if already generated.
+// Skips venues already on the ballot (a preseed/human pick of the same name).
+function generateAIPicks(legIndex) {
+  var ballot = createBallot(legIndex);
+  if (ballot.aiGenerated) return [];
+  var prefs = (rallyParts[legIndex] && rallyParts[legIndex].prefs) || null;
+  var existingNames = ballot.options.map(function(o) { return o.venueName.toLowerCase(); });
+  var picks = pickAIVenues(prefs, 3).filter(function(name) {
+    return existingNames.indexOf(name.toLowerCase()) === -1;
+  });
+  var added = [];
+  picks.forEach(function(name) { added.push(addAIOption(legIndex, name)); });
+  ballot.aiGenerated = true;
+  return added;
+}
+// ═══ end v0.8e AI generation ═══
 // ═══ end v0.8a ballot data layer ═══
 
 // ═══ v0.8b — BALLOT SCREEN: rendering + approval voting ═══
@@ -2736,7 +2868,7 @@ function renderBallot(legIndex) {
       } else if (opt.source === 'preseed') {
         html += '<p class="bopt-attrib"><strong>Organizer</strong> picked this</p>';
       } else {
-        html += '<p class="bopt-ai">Rally pick</p>';
+        html += '<p><span class="bopt-ai-tag"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg>Rally AI pick</span></p>';
       }
       var tally = opt.votes.length;
       var tallyText = tally === 0 ? 'No votes yet'
@@ -2805,8 +2937,21 @@ function openBallot(legIndex) {
   currentBallotLeg = legIndex || 0;
   var b = getBallot(currentBallotLeg);
   if (b) b.phase = 'voting';
-  renderBallot(currentBallotLeg);
   go('screen-ballot');
+  // v0.8e — first open of a leg: run AI generation behind a branded loading moment.
+  if (b && !b.aiGenerated) {
+    var loader = document.getElementById('ai-loading');
+    if (loader) loader.classList.add('show');
+    // MOCK: instant data, but a deliberate ~1.1s pause so the AI step is felt.
+    // Real build: this delay is replaced by the actual async Yelp+Haiku call.
+    setTimeout(function() {
+      generateAIPicks(currentBallotLeg);
+      if (loader) loader.classList.remove('show');
+      renderBallot(currentBallotLeg);
+    }, 1100);
+  } else {
+    renderBallot(currentBallotLeg);
+  }
 }
 // ═══ end v0.8b ballot screen ═══
 
