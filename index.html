@@ -257,6 +257,33 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .notif-inbox-actions{padding:10px 20px;border-bottom:1px dotted var(--border-dot);text-align:right}
 /* ═══ end v0.8c inbox CSS ═══ */
 
+/* ═══ v0.8d — SUGGESTIONS + Q3 REVOTE ═══ */
+.ballot-banner{margin:8px 20px 4px;background:#FEF3C7;border:1.5px solid #FCD34D;border-radius:var(--radius-sm);padding:11px 13px;font-size:12px;color:#92400E;cursor:pointer;display:flex;align-items:center;gap:8px;line-height:1.4}
+.ballot-banner::before{content:'';width:8px;height:8px;border-radius:50%;background:#DC2626;flex-shrink:0}
+.ballot-banner strong{font-weight:700}
+.ballot-suggest{padding:6px 20px 4px}
+.ballot-dev-btn{display:block;margin:14px 20px 0;width:calc(100% - 40px);background:none;border:1px dashed #C0392B;border-radius:var(--radius-sm);padding:8px;font-family:var(--body);font-size:10px;letter-spacing:0.5px;color:#C0392B;cursor:pointer;opacity:.6}
+.suggest-place-btn.disabled{opacity:.5;cursor:not-allowed;border-style:solid}
+.revote-overlay{position:absolute;inset:0;background:rgba(27,58,45,0.4);display:flex;align-items:flex-end;z-index:200}
+.revote-sheet{background:var(--cream);width:100%;max-height:80%;border-radius:20px 20px 0 0;padding:18px 20px calc(20px + var(--safe-bottom));overflow-y:auto;animation:slideUp .2s ease}
+@keyframes slideUp{from{transform:translateY(40px);opacity:.6}to{transform:translateY(0);opacity:1}}
+.revote-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.revote-title{font-family:var(--headline);font-size:17px;font-weight:700}
+.revote-close{background:none;border:none;font-size:16px;color:var(--text-muted);cursor:pointer;padding:4px}
+.revote-sub{font-size:12px;color:var(--text-muted);margin-bottom:14px;line-height:1.4}
+.revote-opt{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:12px;margin-bottom:8px;cursor:pointer;display:flex;align-items:center;gap:10px}
+.revote-opt.approved{border-color:var(--green);background:var(--green-pale)}
+.revote-opt.isnew{border-color:#FCD34D;background:#FEF9E7}
+.revote-opt.isnew.approved{border-color:var(--green)}
+.revote-opt-check{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border);background:var(--white);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.revote-opt.approved .revote-opt-check{background:var(--green);border-color:var(--green)}
+.revote-opt-check svg{opacity:0}
+.revote-opt.approved .revote-opt-check svg{opacity:1}
+.revote-opt-name{font-size:14px;font-weight:600}
+.revote-opt-tag{font-size:10px;letter-spacing:0.5px;text-transform:uppercase;color:#92400E;margin-left:auto;flex-shrink:0}
+/* ═══ end v0.8d CSS ═══ */
+
+
 
 
 /* LOCKED */
@@ -697,7 +724,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         </div>
       </div>
     </div>
-    <div class="version-marker">Rally · v0.8c</div>
+    <div class="version-marker">Rally · v0.8d</div>
   </div>
   <button class="fab" onclick="go('screen-start-1')">
     <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
@@ -1223,11 +1250,25 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     <p class="ballot-leg-sub" id="ballot-leg-sub"></p>
   </div>
   <div class="scroll-content" style="padding-top:4px">
+    <div id="ballot-banner" class="ballot-banner" style="display:none" onclick="openRevoteFromBanner()"></div>
     <p class="ballot-hint">Tap every place you'd be happy with — pick as many as you like.</p>
     <div id="ballot-options"></div>
     <div class="ballot-nopref" id="ballot-nopref-wrap" style="display:none">
       <button class="ballot-nopref-btn" id="ballot-nopref-btn" onclick="toggleNoPreference()">I'm in — fine with any of these</button>
     </div>
+    <div class="ballot-suggest" id="ballot-suggest-block">
+      <button class="suggest-place-btn" id="ballot-suggest-btn" onclick="toggleBallotSuggest()">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+        <span id="ballot-suggest-btn-label">Suggest a place</span>
+      </button>
+      <div class="suggest-wrap" id="ballot-suggest-wrap">
+        <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px">Add a spot for the group to vote on.</p>
+        <input class="input-field" id="ballot-suggest-name" type="text" placeholder="Place name" style="margin-bottom:8px">
+        <input class="input-field" id="ballot-suggest-link" type="url" placeholder="Link (optional)" style="margin-bottom:10px">
+        <button class="btn-sm" onclick="confirmBallotSuggest()">Add to ballot</button>
+      </div>
+    </div>
+    <button class="ballot-dev-btn" data-dev="1" onclick="devSimulateLateSuggestion()">⚙ DEV: simulate teammate suggestion</button>
     <div class="ballot-status" id="ballot-status"></div>
   </div>
   <nav class="bottom-nav">
@@ -1236,6 +1277,18 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     <button class="nav-item" onclick="go('screen-groups')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Groups</button>
     <button class="nav-item" onclick="go('screen-profile')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</button>
   </nav>
+  <!-- v0.8d revote pop-up overlay -->
+  <div class="revote-overlay" id="revote-overlay" style="display:none">
+    <div class="revote-sheet">
+      <div class="revote-head">
+        <p class="revote-title">A new place was added</p>
+        <button class="revote-close" onclick="closeRevote()">✕</button>
+      </div>
+      <p class="revote-sub" id="revote-sub">Update your picks if you'd like — or leave them as they are.</p>
+      <div id="revote-options"></div>
+      <button class="btn-primary" style="margin-top:6px" onclick="closeRevote()">Done</button>
+    </div>
+  </div>
 </div>
 
 <!-- ══ LOCKED ══ -->
@@ -1599,6 +1652,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     <div style="padding:14px 20px 6px"><p class="section-label">Rally alerts</p></div>
     <div class="toggle-row"><div><p class="toggle-label">New Rally invite</p><p class="toggle-sub">When someone starts a Rally with you</p></div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
     <div class="toggle-row"><div><p class="toggle-label">Voting open</p><p class="toggle-sub">When it's time to vote on venues</p></div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
+    <div class="toggle-row"><div><p class="toggle-label">New suggestion added</p><p class="toggle-sub">When someone adds a place to a ballot you're voting on</p></div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
     <div class="toggle-row"><div><p class="toggle-label">Plan locked</p><p class="toggle-sub">When a venue is decided</p></div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
     <div class="toggle-row"><div><p class="toggle-label">Ticket reminder</p><p class="toggle-sub">When you haven't confirmed a concert ticket</p></div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
     <div style="padding:14px 20px 6px"><p class="section-label">Reminders</p></div>
@@ -2697,6 +2751,9 @@ function renderBallot(legIndex) {
   }
   // Voting status
   renderBallotStatus(legIndex);
+  // v0.8d — suggest button cap state + late-suggestion banner
+  refreshSuggestButton();
+  refreshBallotBanner();
 }
 
 // Render the "X of Y voted" status + per-voter chips.
@@ -2745,8 +2802,8 @@ var NOTIF_TYPES = {
   voting:      { label: 'Voting open',      icon: '\uD83D\uDDF3\uFE0F', destination: 'screen-ballot' },
   locked:      { label: 'Plan locked',      icon: '\uD83D\uDCCD', destination: 'screen-locked' },
   ticket:      { label: 'Ticket reminder',  icon: '\uD83C\uDFAB', destination: 'screen-home' },
-  reminder:    { label: 'Reminder',         icon: '\u23F0', destination: 'screen-home' }
-  // v0.8d adds: suggestion -> { label:'New suggestion added', destination:'screen-ballot' }
+  reminder:    { label: 'Reminder',         icon: '\u23F0', destination: 'screen-home' },
+  suggestion:  { label: 'New suggestion added', icon: '\uD83D\uDCCD', destination: 'screen-ballot' }
 };
 
 var notifications = [];      // each: {id, type, title, text, time, read, legIndex}
@@ -2808,12 +2865,17 @@ function openNotification(notifId) {
   var dest = (t && t.destination) ? t.destination : 'screen-home';
   // Route. For ballot, open the relevant leg if the notification carries one.
   if (dest === 'screen-ballot') {
-    if (typeof ntf.legIndex === 'number' && getBallot(ntf.legIndex)) {
-      openBallot(ntf.legIndex);
-    } else if (getBallot(0)) {
-      openBallot(0);
-    } else {
+    var legToOpen = (typeof ntf.legIndex === 'number' && getBallot(ntf.legIndex)) ? ntf.legIndex
+      : (getBallot(0) ? 0 : null);
+    if (legToOpen === null) {
       go('screen-home');
+    } else {
+      openBallot(legToOpen);
+      // A late-suggestion notification opens straight into the revote pop-up.
+      if (ntf.type === 'suggestion') {
+        var info = ballotPendingBanner[legToOpen];
+        openRevotePopup(legToOpen, info ? info.optionId : null);
+      }
     }
   } else {
     go(dest);
@@ -2870,6 +2932,195 @@ function seedNotifications() {
   updateNotifBadge();
 }
 // ═══ end v0.8c notification inbox ═══
+
+// ═══ v0.8d — SUGGESTIONS ON THE BALLOT + Q3 LATE-SUGGESTION FLOW ═══
+var revoteNewOptionId = null;   // id of the option the revote pop-up highlights
+
+// Toggle the suggest panel open/closed.
+function toggleBallotSuggest() {
+  var btn = document.getElementById('ballot-suggest-btn');
+  if (btn && btn.classList.contains('disabled')) return;
+  var wrap = document.getElementById('ballot-suggest-wrap');
+  if (wrap) wrap.classList.toggle('show');
+}
+
+// Add the current user's suggestion to the current leg's ballot.
+function confirmBallotSuggest() {
+  var nameInp = document.getElementById('ballot-suggest-name');
+  var linkInp = document.getElementById('ballot-suggest-link');
+  var name = nameInp ? nameInp.value.trim() : '';
+  var link = linkInp ? linkInp.value.trim() : '';
+  if (!name) { showToast('Add a place name'); return; }
+  var res = addSuggestion(currentBallotLeg, name, link, BALLOT_ME);
+  if (!res.ok) {
+    if (res.reason === 'per-person-cap') showToast("You've used both your suggestions for this part");
+    else if (res.reason === 'per-leg-cap') showToast('The ballot is full for this part');
+    else showToast('Could not add that');
+    return;
+  }
+  // Adding your own suggestion auto-approves it for you.
+  res.option.votes.push(BALLOT_ME);
+  nameInp.value = '';
+  linkInp.value = '';
+  document.getElementById('ballot-suggest-wrap').classList.remove('show');
+  renderBallot(currentBallotLeg);
+  showToast('Added to the ballot');
+}
+
+// Update the suggest button's enabled/disabled state + label based on caps.
+function refreshSuggestButton() {
+  var btn = document.getElementById('ballot-suggest-btn');
+  var label = document.getElementById('ballot-suggest-btn-label');
+  if (!btn || !label) return;
+  var mine = countHumanSuggestionsBy(currentBallotLeg, BALLOT_ME);
+  var legTotal = countHumanSuggestions(currentBallotLeg);
+  var wrap = document.getElementById('ballot-suggest-wrap');
+  if (mine >= SUGGESTION_CAP_PER_PERSON) {
+    btn.classList.add('disabled');
+    label.textContent = "You've used both your suggestions";
+    if (wrap) wrap.classList.remove('show');
+  } else if (legTotal >= SUGGESTION_CAP_PER_LEG) {
+    btn.classList.add('disabled');
+    label.textContent = 'Ballot is full for this part';
+    if (wrap) wrap.classList.remove('show');
+  } else {
+    btn.classList.remove('disabled');
+    label.textContent = 'Suggest a place';
+  }
+}
+
+// Show / hide the late-suggestion banner for the current leg.
+var ballotPendingBanner = {};   // legIndex -> {venueName, suggestedBy} or undefined
+function refreshBallotBanner() {
+  var banner = document.getElementById('ballot-banner');
+  if (!banner) return;
+  var info = ballotPendingBanner[currentBallotLeg];
+  if (info) {
+    banner.style.display = '';
+    banner.innerHTML = '<span><strong>' + escapeHtml(info.suggestedBy) + '</strong> added ' +
+      escapeHtml(info.venueName) + ' \u2014 tap to review your vote</span>';
+  } else {
+    banner.style.display = 'none';
+    banner.innerHTML = '';
+  }
+}
+
+// Q3: a teammate adds a suggestion during voting.
+// Adds the option, fires a notification, raises the in-ballot banner.
+function lateSuggestion(legIndex, venueName, link, suggestedBy) {
+  var res = addSuggestion(legIndex, venueName, link, suggestedBy);
+  if (!res.ok) return res;
+  ballotPendingBanner[legIndex] = { venueName: venueName, suggestedBy: suggestedBy, optionId: res.option.id };
+  addNotification('suggestion',
+    'New suggestion: ' + venueName,
+    suggestedBy + ' added a place to vote on. Tap to review your pick.',
+    { time: 'Just now', legIndex: legIndex });
+  if (document.getElementById('screen-ballot').style.display !== 'none' && currentBallotLeg === legIndex) {
+    refreshBallotBanner();
+  }
+  return res;
+}
+
+// Dev-only trigger — simulates a teammate's late suggestion (no real multi-user yet).
+var _devSuggestSeq = 0;
+function devSimulateLateSuggestion() {
+  var picks = [
+    { v: 'Dante', by: 'Soumil' },
+    { v: 'Bar Pisellino', by: 'Diana' },
+    { v: 'Employees Only', by: 'Morgan' },
+    { v: 'The Up & Up', by: 'Romit' }
+  ];
+  var pick = picks[_devSuggestSeq % picks.length];
+  _devSuggestSeq += 1;
+  var res = lateSuggestion(currentBallotLeg, pick.v, null, pick.by);
+  if (!res.ok) {
+    showToast(res.reason === 'per-leg-cap' ? 'Ballot full — cannot simulate' : 'Could not simulate');
+    return;
+  }
+  renderBallot(currentBallotLeg);
+  showToast('Simulated: ' + pick.by + ' suggested ' + pick.v);
+}
+
+// Open the revote pop-up from the banner tap.
+function openRevoteFromBanner() {
+  var info = ballotPendingBanner[currentBallotLeg];
+  openRevotePopup(currentBallotLeg, info ? info.optionId : null);
+}
+
+// Open the revote pop-up — new option highlighted at top, full list editable.
+function openRevotePopup(legIndex, newOptionId) {
+  currentBallotLeg = legIndex;
+  revoteNewOptionId = newOptionId || null;
+  var b = getBallot(legIndex);
+  if (!b) return;
+  var sub = document.getElementById('revote-sub');
+  var newOpt = null;
+  if (newOptionId) {
+    for (var i = 0; i < b.options.length; i++) {
+      if (b.options[i].id === newOptionId) { newOpt = b.options[i]; break; }
+    }
+  }
+  sub.textContent = newOpt
+    ? newOpt.venueName + ' was just added. Update your picks if you\u2019d like \u2014 or leave them as they are.'
+    : 'Update your picks if you\u2019d like \u2014 or leave them as they are.';
+  renderRevoteOptions(legIndex);
+  document.getElementById('revote-overlay').style.display = '';
+}
+
+// Render the option list inside the revote pop-up (new option first).
+function renderRevoteOptions(legIndex) {
+  var b = getBallot(legIndex);
+  var wrap = document.getElementById('revote-options');
+  wrap.innerHTML = '';
+  if (!b) return;
+  // New option first, then the rest in existing order.
+  var ordered = [];
+  if (revoteNewOptionId) {
+    b.options.forEach(function(o) { if (o.id === revoteNewOptionId) ordered.push(o); });
+  }
+  b.options.forEach(function(o) { if (o.id !== revoteNewOptionId) ordered.push(o); });
+  ordered.forEach(function(opt) {
+    var approved = opt.votes.indexOf(BALLOT_ME) !== -1;
+    var isNew = opt.id === revoteNewOptionId;
+    var row = document.createElement('div');
+    row.className = 'revote-opt' + (approved ? ' approved' : '') + (isNew ? ' isnew' : '');
+    row.onclick = (function(id) { return function() { revoteToggle(id); }; })(opt.id);
+    var html = '<div class="revote-opt-check"><svg width="11" height="11" fill="none" stroke="white" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>';
+    html += '<span class="revote-opt-name">' + escapeHtml(opt.venueName) + '</span>';
+    if (isNew) html += '<span class="revote-opt-tag">New</span>';
+    row.innerHTML = html;
+    wrap.appendChild(row);
+  });
+}
+
+// Toggle approval from inside the revote pop-up.
+function revoteToggle(optionId) {
+  var b = getBallot(currentBallotLeg);
+  if (!b) return;
+  var opt = null;
+  for (var i = 0; i < b.options.length; i++) {
+    if (b.options[i].id === optionId) { opt = b.options[i]; break; }
+  }
+  if (!opt) return;
+  var idx = opt.votes.indexOf(BALLOT_ME);
+  if (idx === -1) {
+    opt.votes.push(BALLOT_ME);
+    var s = ballotNoPref[currentBallotLeg];
+    if (s) { var si = s.indexOf(BALLOT_ME); if (si !== -1) s.splice(si, 1); }
+  } else {
+    opt.votes.splice(idx, 1);
+  }
+  renderRevoteOptions(currentBallotLeg);
+}
+
+// Close the revote pop-up. Dismisses the banner for this leg (reviewed).
+function closeRevote() {
+  document.getElementById('revote-overlay').style.display = 'none';
+  delete ballotPendingBanner[currentBallotLeg];
+  revoteNewOptionId = null;
+  renderBallot(currentBallotLeg);
+}
+// ═══ end v0.8d ═══
 
 function formatTime(val) {
   if (!val) return '';
@@ -3487,6 +3738,19 @@ function addRallyToFeed() {
   var card = document.createElement('div');
   card.className = 'rally-card';
   card.dataset.cat = 'pending';
+
+  // v0.8d — create a ballot per leg so this Rally is votable.
+  // If a part has a pasted suggested venue, seed it as the creator's pre-seed option.
+  resetBallots();
+  for (var li = 0; li < rallyParts.length; li++) {
+    createBallot(li);
+    var pf = rallyParts[li].prefs;
+    if (pf && pf.suggestedVenue) {
+      addPreseed(li, venueFromUrl(pf.suggestedVenue), pf.suggestedVenue);
+    }
+  }
+  // Route the card to the v0.8 ballot when tapped.
+  card.onclick = function() { openBallot(0); };
 
   // Helper: extract a readable venue name from a pasted URL
   function venueFromUrl(url) {
