@@ -209,6 +209,40 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .venue-link{font-size:11px;color:var(--green);text-decoration:underline;cursor:pointer}
 .vote-check{position:absolute;top:12px;right:12px;width:22px;height:22px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center}
 
+/* ═══ v0.8b — BALLOT SCREEN ═══ */
+.ballot-leghead{padding:12px 20px 12px;border-bottom:1px dotted var(--border-dot);flex-shrink:0}
+.ballot-leg-title{font-family:var(--headline);font-size:20px;font-weight:700}
+.ballot-leg-sub{font-size:12px;color:var(--text-muted);margin-top:3px}
+.ballot-hint{font-size:12px;color:var(--text-muted);padding:12px 20px 4px}
+.bopt{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:14px;margin:0 20px 10px;cursor:pointer;transition:all .15s;position:relative;display:flex;align-items:flex-start;gap:12px}
+.bopt.approved{border-color:var(--green);background:var(--green-pale)}
+.bopt-check{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--border);background:var(--white);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;transition:all .15s}
+.bopt.approved .bopt-check{background:var(--green);border-color:var(--green)}
+.bopt-check svg{opacity:0;transition:opacity .15s}
+.bopt.approved .bopt-check svg{opacity:1}
+.bopt-body{flex:1;min-width:0}
+.bopt-name{font-family:var(--headline);font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px}
+.bopt-attrib{font-size:11px;color:var(--text-muted);margin-top:2px}
+.bopt-attrib strong{color:var(--green);font-weight:600}
+.bopt-ai{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--text-light);margin-top:2px}
+.bopt-foot{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+.bopt-tally{font-size:12px;color:var(--text-muted)}
+.bopt-tally strong{color:var(--green);font-weight:600}
+.bopt-link{font-size:11px;color:var(--green);text-decoration:underline;cursor:pointer}
+.bopt-winning{position:absolute;top:-8px;right:14px;background:var(--green);color:var(--white);font-family:var(--headline);font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:50px}
+.ballot-nopref{margin:6px 20px 4px}
+.ballot-nopref-btn{width:100%;background:none;border:1.5px dashed var(--border);border-radius:var(--radius);padding:13px;font-family:var(--body);font-size:13px;color:var(--text-muted);cursor:pointer}
+.ballot-nopref-btn.on{border-style:solid;border-color:var(--green);background:var(--green-pale);color:var(--green);font-weight:500}
+.ballot-status{margin:14px 20px 0;padding:14px 0 4px;border-top:1px dotted var(--border-dot)}
+.ballot-status-line{font-size:12px;color:var(--text-muted);margin-bottom:8px}
+.ballot-status-line strong{color:var(--green);font-weight:600}
+.ballot-voter-row{display:flex;flex-wrap:wrap;gap:6px}
+.ballot-voter{display:flex;align-items:center;gap:5px;font-size:11px;padding:4px 9px 4px 4px;border-radius:50px;background:var(--cream-dark)}
+.ballot-voter.done{background:var(--green-pale);color:var(--green)}
+.ballot-voter .avatar-sm{width:20px;height:20px;font-size:9px}
+/* ═══ end v0.8b ballot CSS ═══ */
+
+
 /* LOCKED */
 .locked-venue{background:var(--green);margin:14px 20px;border-radius:var(--radius);padding:20px;color:var(--white);position:relative;overflow:hidden}
 .locked-venue::before{content:'';position:absolute;top:-30px;right:-30px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,0.06)}
@@ -647,7 +681,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         </div>
       </div>
     </div>
-    <div class="version-marker">Rally · v0.8a</div>
+    <div class="version-marker">Rally · v0.8b</div>
   </div>
   <button class="fab" onclick="go('screen-start-1')">
     <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
@@ -1156,6 +1190,29 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
       </div>
       <button class="btn-outline" style="font-size:12px;margin-top:14px;padding:12px;width:100%" onclick="go('screen-chat')">&#128172; Group chat</button>
     </div>
+  </div>
+  <nav class="bottom-nav">
+    <button class="nav-item active" onclick="go('screen-home')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Plans</button>
+    <button class="nav-item" onclick="go('screen-memories')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Memories</button>
+    <button class="nav-item" onclick="go('screen-groups')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Groups</button>
+    <button class="nav-item" onclick="go('screen-profile')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</button>
+  </nav>
+</div>
+
+<!-- ══ v0.8b BALLOT ══ -->
+<div class="screen" id="screen-ballot">
+  <div class="topbar"><button class="btn-back" onclick="go('screen-home')">← Back</button><span class="badge badge-voting" id="ballot-badge">Voting</span><div style="width:60px"></div></div>
+  <div class="ballot-leghead">
+    <h2 class="ballot-leg-title" id="ballot-leg-title">Vote</h2>
+    <p class="ballot-leg-sub" id="ballot-leg-sub"></p>
+  </div>
+  <div class="scroll-content" style="padding-top:4px">
+    <p class="ballot-hint">Tap every place you'd be happy with — pick as many as you like.</p>
+    <div id="ballot-options"></div>
+    <div class="ballot-nopref" id="ballot-nopref-wrap" style="display:none">
+      <button class="ballot-nopref-btn" id="ballot-nopref-btn" onclick="toggleNoPreference()">I'm in — fine with any of these</button>
+    </div>
+    <div class="ballot-status" id="ballot-status"></div>
   </div>
   <nav class="bottom-nav">
     <button class="nav-item active" onclick="go('screen-home')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Plans</button>
@@ -2000,6 +2057,7 @@ function go(id) {
   if (id === 'screen-profile') { rotateRecapHeadline(); }
   if (id === 'screen-start-2') { initRallyDateTimeDefaults(); }
   if (id === 'screen-start-3') { initRallyPartsForFinalize(); }
+  if (id === 'screen-ballot') { renderBallot(currentBallotLeg); }
 }
 
 // Default the propose-dates calendar to current month + today, and time to the next 30-min slot from now
@@ -2463,6 +2521,197 @@ function resetBallots() {
   _ballotOptionSeq = 0;
 }
 // ═══ end v0.8a ballot data layer ═══
+
+// ═══ v0.8b — BALLOT SCREEN: rendering + approval voting ═══
+// Roster for the current Rally. 'You' is the current user; rest are dummy friends.
+// Each: { name, initial, bg, fg }. In a real build this comes from the Rally invitees.
+var BALLOT_ROSTER = [
+  { name: 'You',    initial: 'M', bg: '#E8F0EC', fg: '#1B3A2D', isMe: true },
+  { name: 'Soumil', initial: 'S', bg: '#FEF3C7', fg: '#92400E' },
+  { name: 'Romit',  initial: 'R', bg: '#FCE7F3', fg: '#9D174D' },
+  { name: 'Diana',  initial: 'D', bg: '#FEE2E2', fg: '#991B1B' },
+  { name: 'Morgan', initial: 'M', bg: '#EDE9FE', fg: '#5B21B6' }
+];
+var BALLOT_ME = 'You';                 // current user's vote attribution
+var currentBallotLeg = 0;              // which leg the ballot screen is showing
+// Per-leg "in, no preference" attendance signal (Path A+). Keyed by legIndex -> Set of names.
+var ballotNoPref = {};
+
+// Did this person cast any approval on this leg?
+function hasApproved(legIndex, person) {
+  var b = getBallot(legIndex);
+  if (!b) return false;
+  return b.options.some(function(o) { return o.votes.indexOf(person) !== -1; });
+}
+
+// Is this person "in" on this leg? (approved something OR tapped no-preference)
+function isInOnLeg(legIndex, person) {
+  if (hasApproved(legIndex, person)) return true;
+  var s = ballotNoPref[legIndex];
+  return !!(s && s.indexOf(person) !== -1);
+}
+
+// Toggle the current user's approval on an option.
+function toggleApproval(optionId) {
+  var b = getBallot(currentBallotLeg);
+  if (!b) return;
+  var opt = null;
+  for (var i = 0; i < b.options.length; i++) {
+    if (b.options[i].id === optionId) { opt = b.options[i]; break; }
+  }
+  if (!opt) return;
+  var idx = opt.votes.indexOf(BALLOT_ME);
+  if (idx === -1) {
+    opt.votes.push(BALLOT_ME);
+    // Approving a venue means you're in — clear any no-preference flag
+    var s = ballotNoPref[currentBallotLeg];
+    if (s) {
+      var si = s.indexOf(BALLOT_ME);
+      if (si !== -1) s.splice(si, 1);
+    }
+  } else {
+    opt.votes.splice(idx, 1);
+  }
+  renderBallot(currentBallotLeg);
+}
+
+// Toggle the "I'm in, no preference" flag for the current user.
+function toggleNoPreference() {
+  if (!ballotNoPref[currentBallotLeg]) ballotNoPref[currentBallotLeg] = [];
+  var s = ballotNoPref[currentBallotLeg];
+  var i = s.indexOf(BALLOT_ME);
+  if (i === -1) s.push(BALLOT_ME);
+  else s.splice(i, 1);
+  renderBallot(currentBallotLeg);
+}
+
+// Compute the winning option(s) for a leg. Returns array of option ids.
+// Most approvals wins. Tie -> creator's pick breaks it (preseed source). See D-015.
+function computeBallotWinner(legIndex) {
+  var b = getBallot(legIndex);
+  if (!b || b.options.length === 0) return [];
+  var max = -1;
+  b.options.forEach(function(o) { if (o.votes.length > max) max = o.votes.length; });
+  if (max <= 0) return [];
+  var topped = b.options.filter(function(o) { return o.votes.length === max; });
+  if (topped.length === 1) return [topped[0].id];
+  // Tie: creator's pre-seed pick wins if one is tied
+  var preseed = topped.filter(function(o) { return o.source === 'preseed'; });
+  if (preseed.length === 1) return [preseed[0].id];
+  // Still tied with no single preseed -> all tied ids (caller decides; v0.8b just surfaces)
+  return topped.map(function(o) { return o.id; });
+}
+
+// Render the ballot screen for a leg.
+function renderBallot(legIndex) {
+  currentBallotLeg = legIndex;
+  var b = getBallot(legIndex);
+  var part = rallyParts[legIndex];
+  // Header
+  var titleEl = document.getElementById('ballot-leg-title');
+  var subEl = document.getElementById('ballot-leg-sub');
+  if (part) {
+    titleEl.textContent = (part.icon ? part.icon + ' ' : '') + part.typeName;
+    var subBits = [];
+    if (rallyParts.length > 1) subBits.push('Part ' + (legIndex + 1) + ' of ' + rallyParts.length);
+    if (part.time) subBits.push(formatTime(part.time));
+    subEl.textContent = subBits.join(' \u00B7 ');
+  } else {
+    titleEl.textContent = 'Vote';
+    subEl.textContent = '';
+  }
+  // Options
+  var optWrap = document.getElementById('ballot-options');
+  optWrap.innerHTML = '';
+  var winners = computeBallotWinner(legIndex);
+  if (!b || b.options.length === 0) {
+    optWrap.innerHTML = '<p style="font-size:13px;color:var(--text-muted);padding:14px 20px">No places on the ballot yet.</p>';
+  } else {
+    b.options.forEach(function(opt) {
+      var approved = opt.votes.indexOf(BALLOT_ME) !== -1;
+      var card = document.createElement('div');
+      card.className = 'bopt' + (approved ? ' approved' : '');
+      card.setAttribute('data-opt', opt.id);
+      card.onclick = (function(id) { return function() { toggleApproval(id); }; })(opt.id);
+      var html = '';
+      if (winners.length === 1 && winners[0] === opt.id) {
+        html += '<div class="bopt-winning">Leading</div>';
+      }
+      html += '<div class="bopt-check"><svg width="12" height="12" fill="none" stroke="white" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>';
+      html += '<div class="bopt-body">';
+      html += '<p class="bopt-name">' + escapeHtml(opt.venueName) + '</p>';
+      if (opt.source === 'human') {
+        html += '<p class="bopt-attrib"><strong>' + escapeHtml(opt.suggestedBy) + '</strong> suggested \u2192</p>';
+      } else if (opt.source === 'preseed') {
+        html += '<p class="bopt-attrib"><strong>Organizer</strong> picked this</p>';
+      } else {
+        html += '<p class="bopt-ai">Rally pick</p>';
+      }
+      var tally = opt.votes.length;
+      var tallyText = tally === 0 ? 'No approvals yet'
+        : '<strong>' + tally + (tally === 1 ? ' approval' : ' approvals') + '</strong>';
+      html += '<div class="bopt-foot"><p class="bopt-tally">' + tallyText + '</p>';
+      if (opt.link) {
+        html += '<span class="bopt-link" onclick="event.stopPropagation();window.open(' + JSON.stringify(opt.link) + ',\'_blank\')">Open link \u2192</span>';
+      }
+      html += '</div></div>';
+      card.innerHTML = html;
+      optWrap.appendChild(card);
+    });
+  }
+  // "I'm in, no preference" button — only shown if user has approved nothing
+  var noPrefWrap = document.getElementById('ballot-nopref-wrap');
+  var noPrefBtn = document.getElementById('ballot-nopref-btn');
+  var userApprovedSomething = hasApproved(legIndex, BALLOT_ME);
+  if (userApprovedSomething || !b || b.options.length === 0) {
+    noPrefWrap.style.display = 'none';
+  } else {
+    noPrefWrap.style.display = '';
+    var noPrefOn = !!(ballotNoPref[legIndex] && ballotNoPref[legIndex].indexOf(BALLOT_ME) !== -1);
+    noPrefBtn.classList.toggle('on', noPrefOn);
+    noPrefBtn.textContent = noPrefOn ? "You're in \u2014 no preference \u2713" : "I'm in \u2014 fine with any of these";
+  }
+  // Voting status
+  renderBallotStatus(legIndex);
+}
+
+// Render the "X of Y voted" status + per-voter chips.
+function renderBallotStatus(legIndex) {
+  var statusEl = document.getElementById('ballot-status');
+  var voted = [], inNoPref = [], waiting = [];
+  BALLOT_ROSTER.forEach(function(p) {
+    if (hasApproved(legIndex, p.name)) voted.push(p);
+    else if (isInOnLeg(legIndex, p.name)) inNoPref.push(p);
+    else waiting.push(p);
+  });
+  var total = BALLOT_ROSTER.length;
+  var responded = voted.length + inNoPref.length;
+  var html = '<p class="ballot-status-line"><strong>' + responded + ' of ' + total + '</strong> responded';
+  if (waiting.length > 0) {
+    html += ' \u00B7 ' + waiting.map(function(p) { return escapeHtml(p.name); }).join(', ') + ' not yet';
+  }
+  html += '</p><div class="ballot-voter-row">';
+  function chip(p, cls, label) {
+    return '<span class="ballot-voter ' + cls + '">' +
+      '<span class="avatar avatar-sm" style="background:' + p.bg + ';color:' + p.fg + '">' + escapeHtml(p.initial) + '</span>' +
+      escapeHtml(label) + '</span>';
+  }
+  voted.forEach(function(p) { html += chip(p, 'done', (p.isMe ? 'You' : p.name) + ' voted'); });
+  inNoPref.forEach(function(p) { html += chip(p, 'done', (p.isMe ? 'You' : p.name) + ' — in'); });
+  waiting.forEach(function(p) { html += chip(p, '', (p.isMe ? 'You' : p.name)); });
+  html += '</div>';
+  statusEl.innerHTML = html;
+}
+
+// Entry point: open the ballot for a given leg.
+function openBallot(legIndex) {
+  currentBallotLeg = legIndex || 0;
+  var b = getBallot(currentBallotLeg);
+  if (b) b.phase = 'voting';
+  renderBallot(currentBallotLeg);
+  go('screen-ballot');
+}
+// ═══ end v0.8b ballot screen ═══
 
 function formatTime(val) {
   if (!val) return '';
