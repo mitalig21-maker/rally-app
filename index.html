@@ -41,6 +41,8 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;padding:4px 0;font-family:var(--body);font-size:9px;color:var(--text-light)}
 .nav-item.active{color:var(--green);font-weight:500}
 .fab{position:absolute;bottom:calc(70px + var(--safe-bottom));left:50%;transform:translateX(-50%);background:var(--green);color:var(--white);border:none;border-radius:28px;padding:13px 24px;font-family:var(--headline);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;z-index:101;display:flex;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(27,58,45,0.22)}
+/* v0.9 — Quick Rally: a smaller, lighter secondary FAB stacked above the flagship one */
+.fab-quick{position:absolute;bottom:calc(122px + var(--safe-bottom));left:50%;transform:translateX(-50%);background:var(--white);color:var(--green);border:1.5px solid var(--green);border-radius:24px;padding:8px 16px;font-family:var(--body);font-size:12px;font-weight:600;cursor:pointer;z-index:101;display:flex;align-items:center;gap:6px;box-shadow:0 2px 10px rgba(27,58,45,0.12)}
 
 .headline-lg{font-family:var(--headline);font-size:26px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;line-height:1.15}
 .section-label{font-family:var(--headline);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-light)}
@@ -349,6 +351,42 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .ballot-delete{display:block;width:calc(100% - 40px);margin:10px 20px 4px;background:none;border:none;color:#B91C1C;font-family:var(--body);font-size:12px;font-weight:500;text-decoration:underline;cursor:pointer;text-align:center;padding:8px}
 .btn-danger{display:block;width:100%;background:#B91C1C;color:var(--white);border:none;border-radius:50px;padding:14px;font-family:var(--headline);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;text-align:center}
 /* ═══ end v0.8g.2 CSS ═══ */
+
+/* ═══ v0.9 — QUICK RALLY ═══ */
+.qr-label{display:block;font-family:var(--body);font-size:13px;font-weight:600;color:var(--text);margin:14px 0 6px}
+.qr-label:first-child{margin-top:0}
+.qr-input{font-size:15px}
+.qr-hint{font-size:12px;color:var(--text-muted);margin:2px 0 8px}
+.qr-friends{display:flex;flex-wrap:wrap;gap:8px}
+.qr-friend{display:flex;align-items:center;gap:7px;background:var(--white);border:1.5px solid var(--border);border-radius:50px;padding:7px 13px 7px 7px;font-family:var(--body);font-size:13px;color:var(--text);cursor:pointer}
+.qr-friend.sel{border-color:var(--green);background:var(--green-pale);color:var(--green);font-weight:500}
+.qr-friend .avatar{width:24px;height:24px;font-size:11px}
+/* Quick Rally feed card — distinct from voting Rally cards */
+.qr-card-inner{border-left:3px solid var(--green)}
+.qr-badge{background:var(--green);color:var(--white)}
+.qr-tally{display:flex;gap:14px;margin-top:10px}
+.qr-tally-item{font-size:12px;color:var(--text-muted)}
+.qr-tally-item strong{font-size:15px;color:var(--green);font-weight:700;display:block}
+.qr-tally-item.is-out strong{color:#B91C1C}
+.qr-tally-item.is-maybe strong{color:#92400E}
+.qr-expand{font-size:11px;color:var(--green);text-decoration:underline;cursor:pointer;margin-top:8px;display:inline-block}
+.qr-roster{margin-top:10px;padding-top:10px;border-top:1px dotted var(--border-dot);display:none}
+.qr-roster.open{display:block}
+.qr-roster-row{display:flex;align-items:center;justify-content:space-between;padding:4px 0;font-size:12px}
+.qr-roster-name{color:var(--text)}
+.qr-roster-status{font-size:11px;font-weight:600}
+.qr-rs-in{color:var(--green)}
+.qr-rs-maybe{color:#92400E}
+.qr-rs-out{color:#B91C1C}
+.qr-rs-none{color:var(--text-muted)}
+/* Quick Rally response control (recipient view) */
+.qr-respond{display:flex;gap:8px;margin-top:12px}
+.qr-respond button{flex:1;background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:10px;font-family:var(--body);font-size:13px;font-weight:600;color:var(--text-muted);cursor:pointer}
+.qr-respond button.sel-in{border-color:var(--green);background:var(--green-pale);color:var(--green)}
+.qr-respond button.sel-maybe{border-color:#92400E;background:#FEF3C7;color:#92400E}
+.qr-respond button.sel-out{border-color:#B91C1C;background:#FEE2E2;color:#B91C1C}
+/* ═══ end v0.9 CSS ═══ */
+
 
 
 
@@ -796,8 +834,11 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         </div>
       </div>
     </div>
-    <div class="version-marker">Rally · v0.8g.2</div>
+    <div class="version-marker">Rally · v0.9</div>
   </div>
+  <button class="fab-quick" onclick="openQuickRally()">
+    ⚡ Quick Rally
+  </button>
   <button class="fab" onclick="go('screen-start-1')">
     <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
     Start a Rally
@@ -808,6 +849,32 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     <button class="nav-item" onclick="go('screen-groups')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Groups</button>
     <button class="nav-item" onclick="go('screen-profile')"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</button>
   </nav>
+</div>
+
+<!-- ══ v0.9 QUICK RALLY — COMPOSE ══ -->
+<div class="screen" id="screen-quick-rally">
+  <div class="topbar">
+    <button class="btn-back" onclick="go('screen-home')">← Back</button>
+    <span class="topbar-logo" style="font-size:15px">⚡ Quick Rally</span>
+    <div style="width:60px"></div>
+  </div>
+  <div class="sheet-header">
+    <p class="sheet-title">Quick Rally</p>
+    <p class="sheet-sub">Got a plan? Round up the crew — fast.</p>
+  </div>
+  <div class="scroll-content" style="padding:16px 20px">
+    <label class="qr-label">What's the plan?</label>
+    <input class="input-field qr-input" id="qr-what" type="text" placeholder="Dinner, drinks, movie night...">
+    <label class="qr-label">Where?</label>
+    <input class="input-field qr-input" id="qr-where" type="text" placeholder="Carbone, my place, TBD...">
+    <label class="qr-label">When?</label>
+    <input class="input-field qr-input" id="qr-when" type="text" placeholder="Tonight 8pm, Sat afternoon...">
+    <label class="qr-label">Who's invited?</label>
+    <p class="qr-hint">Tap the friends you want to round up.</p>
+    <div id="qr-friends" class="qr-friends"></div>
+    <div style="height:16px"></div>
+    <button class="btn-primary" onclick="sendQuickRally()">Send Quick Rally ⚡</button>
+  </div>
 </div>
 
 <!-- ══ START RALLY 1 ══ -->
@@ -4396,6 +4463,189 @@ function selectRespTime(btn, val) {
   btn.classList.add('selected');
   const input = document.getElementById('resp-custom-time');
   if (input) input.style.display = val === 'diff' ? 'block' : 'none';
+}
+
+// ═══ v0.9 — QUICK RALLY ═══
+// A Quick Rally is a fast in-the-moment plan: the sender names what/where/when and
+// picks specific invitees. No voting, no AI — the plan is set. Invitees respond
+// In / Maybe / Can't, and the sender watches a live tally inline on the home card.
+// Distinct from Rally (voting) and from Status/Feed (broadcast, no specific invitees).
+
+var QR_FRIENDS = [
+  { name: 'Soumil', initial: 'S', bg: '#FEF3C7', fg: '#92400E' },
+  { name: 'Romit',  initial: 'R', bg: '#FCE7F3', fg: '#9D174D' },
+  { name: 'Morgan', initial: 'M', bg: '#EDE9FE', fg: '#5B21B6' },
+  { name: 'Diana',  initial: 'D', bg: '#FEE2E2', fg: '#991B1B' },
+  { name: 'Dimple', initial: 'D', bg: '#E8F0EC', fg: '#1B3A2D' },
+  { name: 'Jenali', initial: 'J', bg: '#DBEAFE', fg: '#1E40AF' }
+];
+// In-flight selection while composing.
+var qrSelectedFriends = [];
+// The active Quick Rally (one at a time in this prototype). Null until one is sent.
+//   { what, where, when, invited:[names], responses:{name:'in'|'maybe'|'out'} }
+var quickRally = null;
+
+// Open the compose screen — reset fields + selection.
+function openQuickRally() {
+  qrSelectedFriends = [];
+  var w = document.getElementById('qr-what');
+  var wh = document.getElementById('qr-where');
+  var wn = document.getElementById('qr-when');
+  if (w) w.value = '';
+  if (wh) wh.value = '';
+  if (wn) wn.value = '';
+  renderQRFriends();
+  go('screen-quick-rally');
+}
+
+// Render the friend toggle chips on the compose screen.
+function renderQRFriends() {
+  var wrap = document.getElementById('qr-friends');
+  if (!wrap) return;
+  var html = '';
+  QR_FRIENDS.forEach(function(f) {
+    var sel = qrSelectedFriends.indexOf(f.name) !== -1;
+    html += '<button type="button" class="qr-friend' + (sel ? ' sel' : '') +
+      '" onclick="toggleQRFriend(\'' + f.name + '\')">' +
+      '<span class="avatar" style="background:' + f.bg + ';color:' + f.fg + '">' +
+      escapeHtml(f.initial) + '</span>' + escapeHtml(f.name) + '</button>';
+  });
+  wrap.innerHTML = html;
+}
+
+function toggleQRFriend(name) {
+  var i = qrSelectedFriends.indexOf(name);
+  if (i === -1) qrSelectedFriends.push(name);
+  else qrSelectedFriends.splice(i, 1);
+  renderQRFriends();
+}
+
+// Send the Quick Rally — validate, build the object, render the feed card, go home.
+function sendQuickRally() {
+  var what = document.getElementById('qr-what').value.trim();
+  var where = document.getElementById('qr-where').value.trim();
+  var when = document.getElementById('qr-when').value.trim();
+  if (!what) { showToast('What\u2019s the plan?'); return; }
+  if (!when) { showToast('Add a time so people know when'); return; }
+  if (qrSelectedFriends.length === 0) { showToast('Pick at least one friend to invite'); return; }
+  quickRally = {
+    what: what,
+    where: where,
+    when: when,
+    invited: qrSelectedFriends.slice(),
+    responses: {}                  // name -> 'in' | 'maybe' | 'out'
+  };
+  renderQuickRallyCard();
+  go('screen-home');
+  showToast('Quick Rally sent \u26a1');
+}
+
+// Render (or re-render) the Quick Rally feed card at the top of the feed.
+function renderQuickRallyCard() {
+  var feed = document.getElementById('rally-feed');
+  if (!feed || !quickRally) return;
+  var existing = document.getElementById('quick-rally-card');
+  if (existing && existing.parentNode) existing.parentNode.removeChild(existing);
+  var card = document.createElement('div');
+  card.className = 'rally-card';
+  card.id = 'quick-rally-card';
+  card.dataset.cat = 'tonight';
+  card.innerHTML = quickRallyCardMarkup();
+  // Insert just under the home header (top of the feed).
+  var header = feed.querySelector('.home-header');
+  if (header && header.nextSibling) feed.insertBefore(card, header.nextSibling);
+  else feed.insertBefore(card, feed.firstChild);
+}
+
+// Build the inner markup for the Quick Rally card — meta, tally, expandable roster,
+// and (for the demo) an In/Maybe/Can't response control standing in for an invitee.
+function quickRallyCardMarkup() {
+  var q = quickRally;
+  var counts = qrCounts();
+  var whereLine = q.where ? (' \u00B7 ' + escapeHtml(q.where)) : '';
+  var html = '<div class="card card-pad qr-card-inner">';
+  html += '<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">';
+  html += '<div><p class="rally-title-text">\u26a1 ' + escapeHtml(q.what) + '</p>';
+  html += '<p class="rally-meta">' + escapeHtml(q.when) + whereLine + ' \u00B7 You started</p></div>';
+  html += '<span class="badge qr-badge">Quick</span></div>';
+  html += '<hr class="dot-divider">';
+  // Live tally
+  html += '<div class="qr-tally">';
+  html += '<div class="qr-tally-item"><strong>' + counts.in + '</strong>in</div>';
+  html += '<div class="qr-tally-item is-maybe"><strong>' + counts.maybe + '</strong>maybe</div>';
+  html += '<div class="qr-tally-item is-out"><strong>' + counts.out + '</strong>can\u2019t</div>';
+  html += '<div class="qr-tally-item"><strong>' + counts.pending + '</strong>no reply</div>';
+  html += '</div>';
+  html += '<span class="qr-expand" onclick="toggleQRRoster(event)">See who\u2019s in \u2193</span>';
+  // Expandable roster
+  html += '<div class="qr-roster" id="qr-roster">';
+  q.invited.forEach(function(name) {
+    var r = q.responses[name];
+    var label, cls;
+    if (r === 'in') { label = 'In'; cls = 'qr-rs-in'; }
+    else if (r === 'maybe') { label = 'Maybe'; cls = 'qr-rs-maybe'; }
+    else if (r === 'out') { label = 'Can\u2019t'; cls = 'qr-rs-out'; }
+    else { label = 'No reply'; cls = 'qr-rs-none'; }
+    html += '<div class="qr-roster-row"><span class="qr-roster-name">' + escapeHtml(name) +
+      '</span><span class="qr-roster-status ' + cls + '">' + label + '</span></div>';
+  });
+  html += '</div>';
+  // Demo response control — stands in for an invitee responding, so the tally is live.
+  html += '<div class="qr-respond" data-dev="1">';
+  var firstInvitee = q.invited[0];
+  var fr = q.responses[firstInvitee];
+  html += '<button class="' + (fr === 'in' ? 'sel-in' : '') + '" onclick="qrRespond(\'in\')">In</button>';
+  html += '<button class="' + (fr === 'maybe' ? 'sel-maybe' : '') + '" onclick="qrRespond(\'maybe\')">Maybe</button>';
+  html += '<button class="' + (fr === 'out' ? 'sel-out' : '') + '" onclick="qrRespond(\'out\')">Can\u2019t</button>';
+  html += '</div>';
+  html += '</div>';
+  return html;
+}
+
+// Tally counts across the invited list.
+function qrCounts() {
+  var c = { in: 0, maybe: 0, out: 0, pending: 0 };
+  if (!quickRally) return c;
+  quickRally.invited.forEach(function(name) {
+    var r = quickRally.responses[name];
+    if (r === 'in') c.in++;
+    else if (r === 'maybe') c.maybe++;
+    else if (r === 'out') c.out++;
+    else c.pending++;
+  });
+  return c;
+}
+
+// Expand / collapse the roster on the card.
+function toggleQRRoster(e) {
+  if (e) e.stopPropagation();
+  var roster = document.getElementById('qr-roster');
+  var link = e && e.currentTarget;
+  if (!roster) return;
+  var open = roster.classList.toggle('open');
+  if (link) link.textContent = open ? 'Hide responses \u2191' : 'See who\u2019s in \u2193';
+}
+
+// Demo: an invitee responds. Updates the first invitee's response so the tally moves.
+function qrRespond(state) {
+  if (!quickRally) return;
+  var firstInvitee = quickRally.invited[0];
+  if (!firstInvitee) return;
+  if (quickRally.responses[firstInvitee] === state) {
+    delete quickRally.responses[firstInvitee];   // tap again to clear
+  } else {
+    quickRally.responses[firstInvitee] = state;
+  }
+  // Re-render the card, preserving whether the roster was expanded.
+  var wasOpen = document.getElementById('qr-roster') &&
+    document.getElementById('qr-roster').classList.contains('open');
+  renderQuickRallyCard();
+  if (wasOpen) {
+    var roster = document.getElementById('qr-roster');
+    if (roster) roster.classList.add('open');
+    var link = document.querySelector('#quick-rally-card .qr-expand');
+    if (link) link.textContent = 'Hide responses \u2191';
+  }
 }
 
 // ADD RALLY TO FEED
