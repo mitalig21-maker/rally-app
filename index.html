@@ -451,26 +451,29 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .status-card.is-future{border-left:3px solid var(--green)}
 /* ═══ end v1.0c CSS ═══ */
 
-/* ═══ v1.0d — STATUS DETAIL + COMMENTS ═══ */
-.detail-comments-section{margin:18px 20px 0;padding-top:18px;border-top:1px dotted var(--border-dot)}
-.detail-comments-header{font-family:var(--body);font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:14px}
-.detail-comments-list{display:flex;flex-direction:column;gap:14px;margin-bottom:16px}
-.detail-comments-empty{font-size:13px;color:var(--text-muted);text-align:center;padding:8px 0 4px;line-height:1.5}
-.detail-comment{display:flex;gap:10px}
-.detail-comment-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;background:var(--green-pale);color:var(--green);flex-shrink:0}
-.detail-comment-body{flex:1;min-width:0}
-.detail-comment-meta{display:flex;align-items:baseline;gap:6px;margin-bottom:2px}
-.detail-comment-name{font-family:var(--body);font-size:13px;font-weight:600;color:var(--text)}
-.detail-comment-time{font-size:11px;color:var(--text-muted)}
-.detail-comment-text{font-size:13px;color:var(--text);line-height:1.45;word-wrap:break-word}
-.detail-comment-composer{display:flex;gap:8px;padding-top:10px;border-top:1px dotted var(--border-dot)}
-.detail-comment-composer .input-field{flex:1;font-size:14px;margin-bottom:0}
-.detail-comment-send{background:var(--green);color:var(--white);border:none;border-radius:var(--radius-sm);padding:0 18px;font-family:var(--body);font-size:13px;font-weight:600;cursor:pointer}
-.detail-comment-send:disabled{opacity:0.4;cursor:not-allowed}
-/* When a status card lives inside the detail screen, it shouldn't have an outer margin
-   (the detail screen has its own padding) and the footer's tap interactions stay the same. */
-#detail-card-host .status-card{margin:0 20px}
-/* ═══ end v1.0d CSS ═══ */
+/* ═══ v1.0f — INLINE COMMENTS (replaces v1.0d detail screen) ═══ */
+/* The comments section lives inside each Status card on the Feed. IG-style:
+   1-2 latest visible, expander to see all, composer appears when expanded. */
+.status-comments{margin-top:10px;padding-top:10px;border-top:1px dotted var(--border-dot)}
+.status-comments-preview{display:flex;flex-direction:column;gap:8px}
+.status-comments-empty{font-size:12px;color:var(--text-muted);font-style:italic;padding:2px 0}
+.status-comment-row{display:flex;gap:8px;align-items:flex-start}
+.status-comment-avatar{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;background:var(--green-pale);color:var(--green);flex-shrink:0;margin-top:1px}
+.status-comment-body{flex:1;min-width:0}
+.status-comment-meta{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+.status-comment-name{font-family:var(--body);font-size:12px;font-weight:600;color:var(--text)}
+.status-comment-time{font-size:10px;color:var(--text-muted)}
+.status-comment-text{font-size:13px;color:var(--text);line-height:1.45;word-wrap:break-word;margin-top:1px}
+.status-comment-actions{display:flex;align-items:center;gap:10px;margin-top:3px}
+.status-comment-heart{background:none;border:none;padding:2px 0;cursor:pointer;font-family:var(--body);font-size:11px;color:var(--text-muted);display:inline-flex;align-items:center;gap:4px}
+.status-comment-heart.hearted{color:#DC2626;font-weight:600}
+.status-comment-delete{background:none;border:none;padding:2px 0;cursor:pointer;font-family:var(--body);font-size:11px;color:var(--text-muted);text-decoration:underline}
+.status-comments-expand{margin-top:6px;background:none;border:none;padding:2px 0;cursor:pointer;font-family:var(--body);font-size:12px;color:var(--green);font-weight:500}
+.status-comment-composer{display:flex;gap:6px;margin-top:8px}
+.status-comment-composer input{flex:1;font-size:13px;padding:7px 10px;border:1px solid var(--border);border-radius:var(--radius-sm);font-family:var(--body);background:var(--white);color:var(--text);min-width:0}
+.status-comment-composer input:focus{outline:none;border-color:var(--green)}
+.status-comment-composer button{background:var(--green);color:var(--white);border:none;border-radius:var(--radius-sm);padding:0 12px;font-family:var(--body);font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap}
+/* ═══ end v1.0f CSS ═══ */
 
 /* ═══ v1.0e — LIVE/FUTURE POLISH ═══ */
 /* Top-right chip on every status card: Live = pulsing dot + countdown; Future = date + time */
@@ -947,7 +950,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         </div>
       </div>
     </div>
-    <div class="version-marker">Rally · v1.0e</div>
+    <div class="version-marker">Rally · v1.0f</div>
   </div>
   <button class="fab-quick" onclick="openQuickRally()">
     ⚡ Quick Rally
@@ -1832,28 +1835,6 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
       </div>
     </button>
     <p class="qr-hint" style="margin-top:14px;text-align:center">A status broadcasts to your friends — no specific invitees, no commitment expected.</p>
-  </div>
-</div>
-
-<!-- ══ v1.0d — STATUS DETAIL + COMMENTS ══ -->
-<div class="screen" id="screen-status-detail">
-  <div class="topbar">
-    <button class="btn-back" onclick="go('screen-feed')">← Back</button>
-    <span class="topbar-logo" style="font-size:15px">Status</span>
-    <div style="width:60px"></div>
-  </div>
-  <div class="scroll-content" style="padding:14px 0 16px">
-    <!-- The full status card lives at the top, re-using the regular renderer for consistency. -->
-    <div id="detail-card-host"></div>
-    <!-- Comments section -->
-    <div class="detail-comments-section">
-      <p class="detail-comments-header" id="detail-comments-header">Comments</p>
-      <div id="detail-comments-list" class="detail-comments-list"></div>
-      <div class="detail-comment-composer">
-        <input class="input-field" id="detail-comment-input" type="text" placeholder="Add a comment..." onkeydown="if(event.key==='Enter')addStatusComment()">
-        <button class="detail-comment-send" onclick="addStatusComment()">Post</button>
-      </div>
-    </div>
   </div>
 </div>
 
@@ -5049,7 +5030,8 @@ function confirmDeleteStatus(statusId) {
   var i = feedStatuses.findIndex(function(x) { return x.id === statusId; });
   if (i !== -1) feedStatuses.splice(i, 1);
   editingStatusId = null;
-  if (activeStatusId === statusId) activeStatusId = null;
+  // Drop expanded-state for the deleted card so the Set doesn't leak.
+  expandedStatusIds.delete(statusId);
   renderFeed();
   go('screen-feed');
   showToast('Status deleted');
@@ -5096,6 +5078,26 @@ function renderFeed() {
     var dB = (b.date || '') + ' ' + (b.timeStart || '');
     return dA < dB ? -1 : dA > dB ? 1 : 0;
   });
+  // v1.0f — preserve any in-progress comment text + focus across re-renders. The Live
+  // ticker re-renders every 30s, which would otherwise wipe whatever you're typing.
+  var savedInputs = {};
+  var focusedId = null;
+  var focusedSelStart = null;
+  var focusedSelEnd = null;
+  var liveZone = document.getElementById('feed-live-list');
+  var futureZone = document.getElementById('feed-future-list');
+  [liveZone, futureZone].forEach(function(zone) {
+    if (!zone) return;
+    zone.querySelectorAll('.status-comment-composer input').forEach(function(inp) {
+      if (inp.value) savedInputs[inp.id] = inp.value;
+      if (inp === document.activeElement) {
+        focusedId = inp.id;
+        try { focusedSelStart = inp.selectionStart; focusedSelEnd = inp.selectionEnd; } catch (e) {}
+        if (!savedInputs[inp.id]) savedInputs[inp.id] = inp.value;
+      }
+    });
+  });
+
   if (live.length === 0) {
     liveList.innerHTML = '<p class="feed-empty">No one\u2019s out right now. Tap <strong>+ Post a status</strong> to be the first.</p>';
   } else {
@@ -5105,6 +5107,21 @@ function renderFeed() {
     futureList.innerHTML = '<p class="feed-empty">Nothing on the books yet. Post what you\u2019re up to later this week.</p>';
   } else {
     futureList.innerHTML = future.map(function(s) { return renderStatusCard(s, now); }).join('');
+  }
+
+  // Restore saved inputs.
+  Object.keys(savedInputs).forEach(function(id) {
+    var inp = document.getElementById(id);
+    if (inp) inp.value = savedInputs[id];
+  });
+  if (focusedId) {
+    var inp = document.getElementById(focusedId);
+    if (inp) {
+      inp.focus();
+      if (focusedSelStart !== null) {
+        try { inp.setSelectionRange(focusedSelStart, focusedSelEnd); } catch (e) {}
+      }
+    }
   }
 }
 
@@ -5181,11 +5198,12 @@ function renderStatusCard(s, now) {
         '<span class="star-icon">\ud83c\udfc1</span>' +
         '<span>' + starCount + '</span>' +
       '</button>' +
-      '<button class="status-comment-link" onclick="openStatusDetail(\'' + s.id + '\')">' +
+      '<button class="status-comment-link" onclick="toggleStatusCommentsExpanded(\'' + s.id + '\')">' +
         '<span>\ud83d\udcac</span><span>' + commentCount + '</span>' +
       '</button>' +
       editBtn +
     '</div>' +
+    renderInlineComments(s) +
   '</div>';
 }
 
@@ -5198,85 +5216,30 @@ function toggleStar(statusId) {
   if (i === -1) s.stars.push(STATUS_VIEWER);
   else s.stars.splice(i, 1);
   renderFeed();
-  // If the detail screen is showing this status, refresh it so the star count stays in sync.
-  if (activeStatusId === statusId) renderStatusDetail();
 }
 
-// Delete a status the viewer authored. Confirmed via toast — Status is lighter weight
-// than Rally, so a hard delete-confirm dialog would feel out of scale.
+// Delete a status the viewer authored. Lighter than Rally delete — Status is lower-stakes.
+// As of v1.0e the user path is Edit screen → red "Delete this status" → confirmDeleteStatus;
+// this raw deleteStatus is preserved as the underlying remover (and for legacy/test paths).
 function deleteStatus(statusId) {
   var i = feedStatuses.findIndex(function(s) { return s.id === statusId; });
   if (i === -1) return;
   var s = feedStatuses[i];
   if (s.author.name !== STATUS_ME.name) return;   // safety: only mine
   feedStatuses.splice(i, 1);
+  // Also drop expanded-state for the deleted card so the Set doesn't leak.
+  expandedStatusIds.delete(statusId);
   renderFeed();
-  // If the detail screen was viewing the just-deleted status, return to the Feed so
-  // the user isn't stuck looking at a stale card.
-  if (activeStatusId === statusId) {
-    activeStatusId = null;
-    go('screen-feed');
-  }
   showToast('Status deleted');
 }
 
-// v1.0d — track which status the detail screen is currently showing.
-var activeStatusId = null;
+// v1.0f — inline comments. Tracks which status cards have their comments expanded
+// (showing all comments + composer). When collapsed: latest 1-2 comments preview + expander.
+// Reactions are heart-only (D-022 ethos: lightweight signal, no commitment expected).
+// Comments are append-only — you can delete one you authored or one on a post you own.
+var expandedStatusIds = new Set();
 
-// Open the status detail screen — full card at top, comments list + composer below.
-// Re-renders on each open so the data is fresh (stars/comments may have changed elsewhere).
-function openStatusDetail(statusId) {
-  var s = feedStatuses.find(function(x) { return x.id === statusId; });
-  if (!s) return;
-  activeStatusId = statusId;
-  renderStatusDetail();
-  var input = document.getElementById('detail-comment-input');
-  if (input) input.value = '';
-  go('screen-status-detail');
-}
-
-// Render the active status's card + comments thread into the detail screen.
-function renderStatusDetail() {
-  var s = feedStatuses.find(function(x) { return x.id === activeStatusId; });
-  if (!s) return;
-  var host = document.getElementById('detail-card-host');
-  if (host) {
-    host.innerHTML = renderStatusCard(s);
-    // Avoid duplicate DOM IDs between the feed card and the detail card by suffixing
-    // the inner card's id here. The feed list keeps the canonical s.id.
-    var inner = host.querySelector('.status-card');
-    if (inner) inner.id = s.id + '-detail';
-  }
-  var list = document.getElementById('detail-comments-list');
-  var header = document.getElementById('detail-comments-header');
-  if (header) header.textContent = 'Comments \u00b7 ' + s.comments.length;
-  if (!list) return;
-  if (s.comments.length === 0) {
-    list.innerHTML = '<p class="detail-comments-empty">No comments yet. Be the first to chime in.</p>';
-  } else {
-    list.innerHTML = s.comments.map(renderCommentRow).join('');
-  }
-}
-
-// Build one comment row.
-function renderCommentRow(c) {
-  // The viewer's own comments use the viewer's identity; friend comments would carry their own.
-  // For v1.0d everything is "You" by default — author shape stays open for richer attribution later.
-  var initial = (c.by && c.by.length) ? c.by.charAt(0).toUpperCase() : 'Y';
-  return '<div class="detail-comment">' +
-    '<div class="detail-comment-avatar">' + escapeHtml(initial) + '</div>' +
-    '<div class="detail-comment-body">' +
-      '<div class="detail-comment-meta">' +
-        '<span class="detail-comment-name">' + escapeHtml(c.by || 'You') + '</span>' +
-        '<span class="detail-comment-time">' + formatCommentTime(c.at) + '</span>' +
-      '</div>' +
-      '<p class="detail-comment-text">' + escapeHtml(c.text) + '</p>' +
-    '</div>' +
-  '</div>';
-}
-
-// Friendly relative time for comments. Anything < 60s = "just now",
-// < 60m = "Nm ago", < 24h = "Nh ago", else a short date string.
+// Friendly relative time for a comment. <60s "just now", <60m "Nm", <24h "Nh", else "MMM D".
 function formatCommentTime(ts) {
   if (!ts) return '';
   var now = Date.now();
@@ -5290,23 +5253,139 @@ function formatCommentTime(ts) {
   return monNames[d.getMonth()] + ' ' + d.getDate();
 }
 
-// Append a comment to the active status. Empty/whitespace input is silently ignored.
-// Refreshes the detail view (and the Feed list, so the card's comment count updates).
-function addStatusComment() {
-  var s = feedStatuses.find(function(x) { return x.id === activeStatusId; });
+// Build the inline-comments block for a status card. Two modes:
+//   - collapsed: latest 2 comments + "View all N comments" if there are more + 0-comments hint
+//   - expanded: all comments + composer
+// In both modes a 1-tap composer is shown when expanded; on collapsed cards the comment-link
+// in the card footer is the way to expand (tap to expand, tap again to collapse).
+function renderInlineComments(s) {
+  var expanded = expandedStatusIds.has(s.id);
+  var comments = s.comments || [];
+  var total = comments.length;
+  var html = '<div class="status-comments">';
+  if (total === 0) {
+    if (expanded) {
+      html += '<p class="status-comments-empty">No comments yet. Be the first to chime in.</p>';
+    }
+    // collapsed + zero comments: no preview at all (avoid empty visual noise)
+  } else if (expanded) {
+    // Show every comment, oldest-first (chronological — feels like a conversation).
+    html += '<div class="status-comments-preview">';
+    comments.forEach(function(c, i) { html += renderCommentRow(s, c, i); });
+    html += '</div>';
+  } else {
+    // Show the latest up-to-2 comments, with "View all N" expander when there are more.
+    var latest = comments.slice(Math.max(0, total - 2));
+    html += '<div class="status-comments-preview">';
+    latest.forEach(function(c) {
+      var i = comments.indexOf(c);
+      html += renderCommentRow(s, c, i);
+    });
+    html += '</div>';
+    if (total > 2) {
+      html += '<button class="status-comments-expand" onclick="toggleStatusCommentsExpanded(\'' + s.id + '\')">' +
+        'View all ' + total + ' comments</button>';
+    }
+  }
+  // Composer: shown when expanded (regardless of count) OR when collapsed and zero comments
+  // (so you can post the first comment without an extra tap to expand).
+  if (expanded || total === 0) {
+    html += '<div class="status-comment-composer">' +
+      '<input type="text" id="comment-input-' + s.id + '" placeholder="Add a comment..." ' +
+        'onkeydown="if(event.key===\'Enter\')postStatusComment(\'' + s.id + '\')">' +
+      '<button onclick="postStatusComment(\'' + s.id + '\')">Post</button>' +
+    '</div>';
+  }
+  html += '</div>';
+  return html;
+}
+
+// Build a single comment row. Includes heart reaction + delete (when allowed).
+function renderCommentRow(status, c, idx) {
+  var initial = (c.by && c.by.length) ? c.by.charAt(0).toUpperCase() : 'Y';
+  var hearts = c.hearts || [];
+  var hearted = hearts.indexOf(STATUS_VIEWER) !== -1;
+  var heartCount = hearts.length;
+  // Delete eligibility: comment author OR status owner. STATUS_VIEWER stands in for the
+  // current user identity in this prototype (always 'You' or matches STATUS_ME.name).
+  var iAmCommentAuthor = (c.by === STATUS_VIEWER) || (c.by === STATUS_ME.name);
+  var iAmStatusOwner = (status.author && status.author.name === STATUS_ME.name);
+  var canDelete = iAmCommentAuthor || iAmStatusOwner;
+  var heartLabel = heartCount > 0 ? (' ' + heartCount) : '';
+  var actionsHtml = '<div class="status-comment-actions">' +
+    '<button class="status-comment-heart' + (hearted ? ' hearted' : '') + '" ' +
+      'onclick="toggleCommentHeart(\'' + status.id + '\', ' + idx + ')">' +
+      '<span>\u2764\ufe0f</span><span>' + heartLabel + '</span>' +
+    '</button>' +
+    (canDelete
+      ? '<button class="status-comment-delete" onclick="deleteComment(\'' + status.id + '\', ' + idx + ')">Delete</button>'
+      : '') +
+    '</div>';
+  return '<div class="status-comment-row">' +
+    '<div class="status-comment-avatar">' + escapeHtml(initial) + '</div>' +
+    '<div class="status-comment-body">' +
+      '<div class="status-comment-meta">' +
+        '<span class="status-comment-name">' + escapeHtml(c.by || 'You') + '</span>' +
+        '<span class="status-comment-time">' + formatCommentTime(c.at) + '</span>' +
+      '</div>' +
+      '<p class="status-comment-text">' + escapeHtml(c.text) + '</p>' +
+      actionsHtml +
+    '</div>' +
+  '</div>';
+}
+
+// Toggle a status card's comments expanded state. Re-renders the feed.
+function toggleStatusCommentsExpanded(statusId) {
+  if (expandedStatusIds.has(statusId)) expandedStatusIds.delete(statusId);
+  else expandedStatusIds.add(statusId);
+  renderFeed();
+}
+
+// Post a comment to a status from the inline composer on the card. Empty/whitespace ignored.
+// Posting from a collapsed card with 0 comments auto-expands so the user can see what they posted.
+function postStatusComment(statusId) {
+  var s = feedStatuses.find(function(x) { return x.id === statusId; });
   if (!s) return;
-  var input = document.getElementById('detail-comment-input');
+  var input = document.getElementById('comment-input-' + statusId);
   if (!input) return;
   var text = input.value.trim();
   if (!text) return;
-  s.comments.push({ by: STATUS_VIEWER, text: text, at: Date.now() });
+  s.comments.push({ by: STATUS_VIEWER, text: text, at: Date.now(), hearts: [] });
+  // Auto-expand so the user sees their comment land somewhere visible (in case it lands
+  // past the 2-comment preview window or this card was at 0 comments).
+  expandedStatusIds.add(statusId);
   input.value = '';
-  renderStatusDetail();
-  // Note: the Feed list will re-render on next entry via the screen-feed hook, so the
-  // card's comment count picks up the new total without us touching it from here.
+  renderFeed();
+  // Restore focus to the input so a series of comments doesn't require re-tapping.
+  var newInput = document.getElementById('comment-input-' + statusId);
+  if (newInput) newInput.focus();
 }
 
-// ═══ end v1.0a / v1.0b — FEED / STATUS ═══
+// Toggle the viewer's heart on a specific comment.
+function toggleCommentHeart(statusId, commentIdx) {
+  var s = feedStatuses.find(function(x) { return x.id === statusId; });
+  if (!s || !s.comments[commentIdx]) return;
+  var c = s.comments[commentIdx];
+  if (!c.hearts) c.hearts = [];
+  var i = c.hearts.indexOf(STATUS_VIEWER);
+  if (i === -1) c.hearts.push(STATUS_VIEWER);
+  else c.hearts.splice(i, 1);
+  renderFeed();
+}
+
+// Delete a comment. Allowed if: viewer authored the comment, OR viewer owns the post.
+function deleteComment(statusId, commentIdx) {
+  var s = feedStatuses.find(function(x) { return x.id === statusId; });
+  if (!s || !s.comments[commentIdx]) return;
+  var c = s.comments[commentIdx];
+  var iAmCommentAuthor = (c.by === STATUS_VIEWER) || (c.by === STATUS_ME.name);
+  var iAmStatusOwner = (s.author && s.author.name === STATUS_ME.name);
+  if (!iAmCommentAuthor && !iAmStatusOwner) return;   // safety
+  s.comments.splice(commentIdx, 1);
+  renderFeed();
+}
+
+// ═══ end v1.0a / v1.0b / v1.0f — FEED / STATUS ═══
 
 // ═══ v0.9 — QUICK RALLY (v0.9.1 update) ═══
 // A Quick Rally is a fast in-the-moment plan: the sender names what/where/when and
