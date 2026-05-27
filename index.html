@@ -472,6 +472,30 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 #detail-card-host .status-card{margin:0 20px}
 /* ═══ end v1.0d CSS ═══ */
 
+/* ═══ v1.0e — LIVE/FUTURE POLISH ═══ */
+/* Top-right chip on every status card: Live = pulsing dot + countdown; Future = date + time */
+.status-card{position:relative}
+.status-card-chip{position:absolute;top:12px;right:14px;display:inline-flex;align-items:center;gap:6px;font-family:var(--body);font-size:11px;font-weight:600;padding:5px 10px;border-radius:20px}
+.status-card-chip.is-live{background:#FEE2E2;color:#B91C1C}
+.status-card-chip.is-live .feed-live-dot{width:7px;height:7px}
+.status-card-chip.is-future{background:var(--green-pale);color:var(--green)}
+/* Chip eats space on the right edge of the header so author meta doesn't overlap */
+.status-card-header{padding-right:90px}
+/* Location tag (Partiful-style) — prominent, tappable, opens maps */
+.status-card-location{display:inline-flex;align-items:center;gap:6px;background:var(--cream);border:1px solid var(--border);border-radius:8px;padding:8px 12px;margin-top:4px;margin-bottom:8px;text-decoration:none;color:var(--text);font-family:var(--body);font-size:14px;font-weight:600;max-width:100%;cursor:pointer}
+.status-card-location:hover{border-color:var(--green)}
+.status-card-location-pin{flex-shrink:0;font-size:14px;line-height:1}
+.status-card-location-text{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* The old uppercase venue headline is retired — location tag takes its place. */
+/* Edit affordance (gear icon) on the card footer, replaces inline Delete */
+.status-edit-btn{display:flex;align-items:center;gap:5px;background:none;border:none;padding:4px 0;cursor:pointer;font-family:var(--body);font-size:13px;color:var(--text-muted);margin-left:auto}
+/* ═══ end v1.0e CSS ═══ */
+
+/* Inline danger button used inside Edit screens to scope deletes */
+.btn-text-danger{width:100%;background:none;border:none;font-family:var(--body);font-size:13px;color:#B91C1C;text-decoration:underline;cursor:pointer;padding:6px}
+
+
+
 
 
 
@@ -923,7 +947,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         </div>
       </div>
     </div>
-    <div class="version-marker">Rally · v1.0d</div>
+    <div class="version-marker">Rally · v1.0e</div>
   </div>
   <button class="fab-quick" onclick="openQuickRally()">
     ⚡ Quick Rally
@@ -1849,9 +1873,19 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     <input class="input-field qr-input" id="live-venue" type="text" placeholder="Spring Lounge, Joe's apartment, the park...">
     <label class="qr-label">Vibe <span class="qr-opt">(optional)</span></label>
     <input class="input-field qr-input" id="live-vibe" type="text" placeholder="Cocktails, low-key, sunset, etc.">
-    <p class="qr-hint" style="margin-top:18px;text-align:center">Live statuses show on the Feed with a pulsing red dot. They fade off the Feed at the end of the night.</p>
+    <label class="qr-label">How long will you be there? <span class="qr-opt">(optional)</span></label>
+    <select class="select-field qr-input" id="live-duration">
+      <option value="">No fixed time — until I leave</option>
+      <option value="30">For the next 30 min</option>
+      <option value="60">For the next 1 hour</option>
+      <option value="120">For the next 2 hours</option>
+      <option value="180">For the next 3 hours</option>
+      <option value="240">For the next 4 hours</option>
+    </select>
+    <p class="qr-hint" style="margin-top:18px;text-align:center">Live statuses show on the Feed with a pulsing red dot. If you set a duration, it counts down for everyone.</p>
     <div style="height:12px"></div>
-    <button class="btn-primary" onclick="sendLiveStatus()">Post Live status</button>
+    <button class="btn-primary" id="live-submit-btn" onclick="sendLiveStatus()">Post Live status</button>
+    <button class="btn-text-danger" id="live-delete-btn" onclick="deleteLiveFromEdit()" style="display:none;margin-top:10px">Delete this status</button>
   </div>
 </div>
 
@@ -1880,7 +1914,8 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     <input class="input-field qr-input" id="future-vibe" type="text" placeholder="Picnic, live music, casual...">
     <p class="qr-hint" style="margin-top:18px;text-align:center">Friends see it on the Feed in the Coming up section. Anyone can star it or stop by.</p>
     <div style="height:12px"></div>
-    <button class="btn-primary" onclick="sendFutureStatus()">Post status</button>
+    <button class="btn-primary" id="future-submit-btn" onclick="sendFutureStatus()">Post status</button>
+    <button class="btn-text-danger" id="future-delete-btn" onclick="deleteFutureFromEdit()" style="display:none;margin-top:10px">Delete this status</button>
   </div>
 </div>
 
@@ -2539,7 +2574,8 @@ function go(id) {
   if (id === 'screen-ballot') { renderBallot(currentBallotLeg); }
   if (id === 'screen-notif-inbox') { renderNotifInbox(); }
   if (id === 'screen-home') { updateBrunchCardSummary(); refreshActiveRallyCard(); }
-  if (id === 'screen-feed') { renderFeed(); }
+  if (id === 'screen-feed') { renderFeed(); startFeedTicker(); }
+  else { stopFeedTicker(); }
 }
 
 // Default the propose-dates calendar to current month + today, and time to the next 30-min slot from now
@@ -4722,22 +4758,135 @@ var STATUS_ME = { kind: 'friend', name: 'Mita', initial: 'M', bg: '#E8F0EC', fg:
 var STATUS_VIEWER = 'You';
 var statusIdSeq = 1;
 
+// v1.0e — when the Live or Future compose screen is open in EDIT mode, this points to
+// the status being edited. Null when composing a new one. Cleared on every fresh open.
+var editingStatusId = null;
+
+// ── effective-kind: is this status currently Live, currently Future, or past its end? ──
+// v1.0e introduces real-time reclassification: a Future status whose start time has passed
+// (but end hasn't) is treated as Live for rendering + sorting. Past-end statuses are dropped
+// from the feed entirely. The stored s.kind never changes — re-classification is render-time.
+// Returns 'live' | 'future' | 'expired'.
+function effectiveKind(s, now) {
+  now = now || Date.now();
+  if (s.kind === 'live') {
+    // Live with a duration: expires postedAt + durationMinutes*60000.
+    if (s.durationMinutes && s.postedAt) {
+      var endAt = s.postedAt + s.durationMinutes * 60 * 1000;
+      if (now >= endAt) return 'expired';
+    }
+    return 'live';
+  }
+  if (s.kind === 'future') {
+    if (!s.date || !s.timeStart) return 'future';   // missing time data — keep as future
+    var startMs = parseStatusDateTime(s.date, s.timeStart);
+    var endMs = s.timeEnd ? parseStatusDateTime(s.date, s.timeEnd) : null;
+    if (endMs && now >= endMs) return 'expired';
+    if (now >= startMs) return 'live';
+    return 'future';
+  }
+  return s.kind;
+}
+
+// Parse an ISO date + HH:MM into a local-time epoch ms.
+function parseStatusDateTime(isoDate, hhmm) {
+  if (!isoDate || !hhmm) return 0;
+  var dp = isoDate.split('-');
+  var tp = hhmm.split(':');
+  if (dp.length !== 3 || tp.length !== 2) return 0;
+  return new Date(
+    parseInt(dp[0], 10), parseInt(dp[1], 10) - 1, parseInt(dp[2], 10),
+    parseInt(tp[0], 10), parseInt(tp[1], 10), 0, 0
+  ).getTime();
+}
+
+// Live remaining-time formatter — used for the top-right chip on Live cards with a duration.
+// Returns "Live now" if no duration, "Live • 47m" if <1h left, "Live • 1h 30m" if more.
+function liveChipText(s, now) {
+  now = now || Date.now();
+  // Currently-live Future status: countdown is based on its timeEnd, not duration.
+  if (s.kind === 'future') {
+    if (!s.timeEnd) return 'Live now';
+    var endMs = parseStatusDateTime(s.date, s.timeEnd);
+    return 'Live \u2022 ' + formatRemaining(endMs - now);
+  }
+  // Native Live with duration:
+  if (!s.durationMinutes) return 'Live now';
+  var endAt = s.postedAt + s.durationMinutes * 60 * 1000;
+  return 'Live \u2022 ' + formatRemaining(endAt - now);
+}
+
+// Pretty-print remaining ms — "47m" / "1h 30m" / "less than a min" (and "0m" clamp).
+function formatRemaining(ms) {
+  if (ms <= 0) return '0m';
+  var totalMin = Math.floor(ms / (60 * 1000));
+  if (totalMin < 1) return 'less than a min';
+  if (totalMin < 60) return totalMin + 'm';
+  var h = Math.floor(totalMin / 60);
+  var m = totalMin % 60;
+  return m === 0 ? (h + 'h') : (h + 'h ' + m + 'm');
+}
+
+// Build a Google Maps query URL for a venue. Returns null for non-venue-looking strings
+// (generic placeholders like "my place", "tbd", etc.) so we don't open a useless query.
+function mapsHrefFor(venue) {
+  if (!venue) return null;
+  var trimmed = venue.trim();
+  if (!looksLikeVenue(trimmed)) return null;
+  return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(trimmed);
+}
+function looksLikeVenue(s) {
+  if (!s) return false;
+  var lower = s.toLowerCase().trim();
+  // Generic non-venue placeholders — surface as a tag but not a map link.
+  var nonVenue = [
+    'my place', 'home', "my home", 'tbd', 'tba',
+    'somewhere', 'still figuring it out', 'idk', 'wherever', 'wherever you want'
+  ];
+  return nonVenue.indexOf(lower) === -1;
+}
+
 // Open the status type-picker screen (Live vs Future).
 function openStatusCompose() {
   go('screen-status-type');
 }
-// Open the Live compose form — reset fields.
+
+// Open the Live compose form for a NEW status — reset fields, clear editing state.
 function openStatusLive() {
+  editingStatusId = null;
   var v = document.getElementById('live-venue');
   var b = document.getElementById('live-vibe');
+  var d = document.getElementById('live-duration');
   if (v) v.value = '';
   if (b) b.value = '';
+  if (d) d.value = '';
+  // Reset edit-mode UI affordances.
+  var btn = document.getElementById('live-submit-btn');
+  var del = document.getElementById('live-delete-btn');
+  if (btn) btn.textContent = 'Post Live status';
+  if (del) del.style.display = 'none';
   go('screen-status-live');
 }
-// Open the Future compose form — populate dropdowns + reset fields. Date defaults to
-// tomorrow (Future is, by definition, not now); start defaults to next half-hour;
-// end defaults to start + 2h, clamped to the picker range.
+
+// Open the Live compose form pre-filled for EDIT — used from the gear button on a Live card.
+function openStatusLiveEdit(statusId) {
+  var s = feedStatuses.find(function(x) { return x.id === statusId; });
+  if (!s) return;
+  editingStatusId = statusId;
+  document.getElementById('live-venue').value = s.venue || '';
+  document.getElementById('live-vibe').value = s.vibe || '';
+  var d = document.getElementById('live-duration');
+  if (d) d.value = s.durationMinutes ? String(s.durationMinutes) : '';
+  var btn = document.getElementById('live-submit-btn');
+  var del = document.getElementById('live-delete-btn');
+  if (btn) btn.textContent = 'Save changes';
+  if (del) del.style.display = 'block';
+  go('screen-status-live');
+}
+
+// Open the Future compose form for a NEW status — populate dropdowns + reset.
 function openStatusFuture() {
+  editingStatusId = null;
   var v = document.getElementById('future-venue');
   var b = document.getElementById('future-vibe');
   if (v) v.value = '';
@@ -4763,11 +4912,38 @@ function openStatusFuture() {
     var endVal = (h < 10 ? '0' : '') + h + ':' + m;
     endSel.value = endVal;
   }
+  // Reset edit-mode UI affordances.
+  var btn = document.getElementById('future-submit-btn');
+  var del = document.getElementById('future-delete-btn');
+  if (btn) btn.textContent = 'Post status';
+  if (del) del.style.display = 'none';
   go('screen-status-future');
 }
 
-// Post a Future status. Required: venue, date, start time. Optional: end time, vibe.
-// End time is validated against start (must be after) when provided.
+// Open the Future compose form pre-filled for EDIT.
+function openStatusFutureEdit(statusId) {
+  var s = feedStatuses.find(function(x) { return x.id === statusId; });
+  if (!s) return;
+  editingStatusId = statusId;
+  var dateSel = document.getElementById('future-date');
+  var startSel = document.getElementById('future-time-start');
+  var endSel = document.getElementById('future-time-end');
+  buildQRDateOptions(dateSel);
+  buildQRTimeOptions(startSel);
+  buildQRTimeOptions(endSel);
+  document.getElementById('future-venue').value = s.venue || '';
+  document.getElementById('future-vibe').value = s.vibe || '';
+  if (dateSel) dateSel.value = s.date || qrTodayISO();
+  if (startSel) startSel.value = s.timeStart || qrNextHalfHour();
+  if (endSel) endSel.value = s.timeEnd || '';
+  var btn = document.getElementById('future-submit-btn');
+  var del = document.getElementById('future-delete-btn');
+  if (btn) btn.textContent = 'Save changes';
+  if (del) del.style.display = 'block';
+  go('screen-status-future');
+}
+
+// Post a Future status — or save an edit if editingStatusId is set.
 function sendFutureStatus() {
   var venue = document.getElementById('future-venue').value.trim();
   var vibe = document.getElementById('future-vibe').value.trim();
@@ -4775,9 +4951,23 @@ function sendFutureStatus() {
   var timeStart = document.getElementById('future-time-start').value;
   var timeEnd = document.getElementById('future-time-end').value;
   if (!venue) { showToast('Where will you be?'); return; }
-  // End must be after start if both are set.
   if (timeStart && timeEnd && timeEnd <= timeStart) {
     showToast('End time must be after start');
+    return;
+  }
+  if (editingStatusId) {
+    var s = feedStatuses.find(function(x) { return x.id === editingStatusId; });
+    if (s) {
+      s.venue = venue;
+      s.vibe = vibe;
+      s.date = date;
+      s.timeStart = timeStart;
+      s.timeEnd = timeEnd;
+    }
+    editingStatusId = null;
+    renderFeed();
+    go('screen-feed');
+    showToast('Status updated');
     return;
   }
   var status = {
@@ -4799,18 +4989,33 @@ function sendFutureStatus() {
   showToast('Posted to Coming up \ud83d\udcc5');
 }
 
-// Post a Live status. Required: venue. Optional: vibe. Adds to feedStatuses, re-renders
-// the Feed, returns the user to the Feed tab with a confirmation toast.
+// Post a Live status — or save an edit if editingStatusId is set.
 function sendLiveStatus() {
   var venue = document.getElementById('live-venue').value.trim();
   var vibe = document.getElementById('live-vibe').value.trim();
+  var durRaw = document.getElementById('live-duration').value;
+  var durationMinutes = durRaw ? parseInt(durRaw, 10) : null;
   if (!venue) { showToast('Where are you?'); return; }
+  if (editingStatusId) {
+    var s = feedStatuses.find(function(x) { return x.id === editingStatusId; });
+    if (s) {
+      s.venue = venue;
+      s.vibe = vibe;
+      s.durationMinutes = durationMinutes;
+    }
+    editingStatusId = null;
+    renderFeed();
+    go('screen-feed');
+    showToast('Status updated');
+    return;
+  }
   var status = {
     id: 'st-' + (statusIdSeq++),
     kind: 'live',
     author: STATUS_ME,
     venue: venue,
     vibe: vibe,
+    durationMinutes: durationMinutes,
     postedAt: Date.now(),
     stars: [],
     comments: []
@@ -4821,16 +5026,71 @@ function sendLiveStatus() {
   showToast('You\u2019re live \ud83d\udfe2');
 }
 
-// Render the full Feed: split feedStatuses into live and future, render each into its
-// zone's list element, fall back to the empty state when a zone has none.
+// Delete handlers wired from inside the Edit screens — both go through confirmDeleteStatus
+// which surfaces the confirm dialog and refuses on non-self authors.
+function deleteLiveFromEdit() {
+  if (!editingStatusId) return;
+  confirmDeleteStatus(editingStatusId);
+}
+function deleteFutureFromEdit() {
+  if (!editingStatusId) return;
+  confirmDeleteStatus(editingStatusId);
+}
+
+// v1.0e — delete-with-confirm. Used by Edit screens. Safety: only the author can delete.
+function confirmDeleteStatus(statusId) {
+  var s = feedStatuses.find(function(x) { return x.id === statusId; });
+  if (!s) return;
+  if (s.author.name !== STATUS_ME.name) return;   // safety: only mine
+  var ok = (typeof window !== 'undefined' && typeof window.confirm === 'function')
+    ? window.confirm('Delete this status? This can\u2019t be undone.')
+    : true;
+  if (!ok) return;
+  var i = feedStatuses.findIndex(function(x) { return x.id === statusId; });
+  if (i !== -1) feedStatuses.splice(i, 1);
+  editingStatusId = null;
+  if (activeStatusId === statusId) activeStatusId = null;
+  renderFeed();
+  go('screen-feed');
+  showToast('Status deleted');
+}
+
+// v1.0e — countdown ticker. While the Feed screen is visible, re-render every 30s so live
+// countdowns tick down and Future→Live transitions happen automatically. Started on
+// screen-feed entry, stopped on leave.
+var feedTickerId = null;
+function startFeedTicker() {
+  if (feedTickerId !== null) return;
+  feedTickerId = setInterval(function() {
+    // Cheap guard: if user navigated away from the Feed, stop ticking.
+    var active = document.querySelector('.screen.active');
+    if (!active || active.id !== 'screen-feed') { stopFeedTicker(); return; }
+    renderFeed();
+  }, 30000);
+}
+function stopFeedTicker() {
+  if (feedTickerId !== null) {
+    clearInterval(feedTickerId);
+    feedTickerId = null;
+  }
+}
+
+// Render the full Feed. v1.0e: zone assignment is now based on effectiveKind (Future statuses
+// past start time render in the Happening-now zone). Expired statuses are dropped silently.
 function renderFeed() {
   var liveList = document.getElementById('feed-live-list');
   var futureList = document.getElementById('feed-future-list');
   if (!liveList || !futureList) return;
-  var live = feedStatuses.filter(function(s) { return s.kind === 'live'; });
-  var future = feedStatuses.filter(function(s) { return s.kind === 'future'; });
-  // v1.0c — Future zone is sorted by date ascending, then start time ascending.
-  // Soonest at the top so a glance shows what's nearest.
+  var now = Date.now();
+  var live = [];
+  var future = [];
+  feedStatuses.forEach(function(s) {
+    var ek = effectiveKind(s, now);
+    if (ek === 'live') live.push(s);
+    else if (ek === 'future') future.push(s);
+    // 'expired' falls through — neither zone
+  });
+  // Future zone sorted by date then start time ascending.
   future.sort(function(a, b) {
     var dA = (a.date || '') + ' ' + (a.timeStart || '');
     var dB = (b.date || '') + ' ' + (b.timeStart || '');
@@ -4839,43 +5099,56 @@ function renderFeed() {
   if (live.length === 0) {
     liveList.innerHTML = '<p class="feed-empty">No one\u2019s out right now. Tap <strong>+ Post a status</strong> to be the first.</p>';
   } else {
-    liveList.innerHTML = live.map(renderStatusCard).join('');
+    liveList.innerHTML = live.map(function(s) { return renderStatusCard(s, now); }).join('');
   }
   if (future.length === 0) {
     futureList.innerHTML = '<p class="feed-empty">Nothing on the books yet. Post what you\u2019re up to later this week.</p>';
   } else {
-    futureList.innerHTML = future.map(renderStatusCard).join('');
+    futureList.innerHTML = future.map(function(s) { return renderStatusCard(s, now); }).join('');
   }
 }
 
-// Build the markup for a single Status card. Reads author.kind to apply promoted styling.
-// Star button is interactive; comment count is shown but full thread view ships in v1.0d.
-function renderStatusCard(s) {
-  var isLive = s.kind === 'live';
-  var isFuture = s.kind === 'future';
+// Build the markup for a single Status card. v1.0e changes:
+//  - Top-right chip slot (.status-card-chip) replaces the sub-meta line.
+//  - Venue rendered as a prominent .status-card-location tag, tappable → Google Maps query.
+//  - Reaction icon is 🏁 (race flag), replacing ⭐.
+//  - Footer drops the inline Delete link; Edit gear (creator-only) opens the edit screen.
+//  - 'Live now' classification is dynamic (a Future past start renders with the live chip).
+function renderStatusCard(s, now) {
+  now = now || Date.now();
+  var ek = effectiveKind(s, now);
+  var renderingAsLive = (ek === 'live');
+  var renderingAsFuture = (ek === 'future');
   var isPromoted = s.author && s.author.kind === 'promoter';
   var cls = 'status-card' +
-    (isLive ? ' is-live' : '') +
-    (isFuture ? ' is-future' : '') +
+    (renderingAsLive ? ' is-live' : '') +
+    (renderingAsFuture ? ' is-future' : '') +
     (isPromoted ? ' is-promoted' : '');
   var avatarStyle = 'background:' + s.author.bg + ';color:' + s.author.fg;
-  // Sub-meta line. Live = pulsing dot + "Live now". Future = friendly date + time range.
-  var sub = '';
-  if (isLive) {
-    sub = '<span class="feed-live-dot"></span>Live now';
-  } else if (isFuture) {
+  // Top-right chip: Live (pulsing dot + countdown) OR Future (date + time).
+  var chip;
+  if (renderingAsLive) {
+    chip = '<span class="status-card-chip is-live"><span class="feed-live-dot"></span>' +
+      escapeHtml(liveChipText(s, now)) + '</span>';
+  } else {
     var bits = [];
-    if (s.date) bits.push(escapeHtml(qrFormatDate(s.date)));
+    if (s.date) bits.push(qrFormatDate(s.date));
     if (s.timeStart) {
       var t = qrFormatTime(s.timeStart);
       if (s.timeEnd) t += ' \u2013 ' + qrFormatTime(s.timeEnd);
       bits.push(t);
     }
-    sub = bits.join(' \u00b7 ');
+    chip = '<span class="status-card-chip is-future">' + escapeHtml(bits.join(' \u00b7 ')) + '</span>';
   }
   var promotedBadge = isPromoted ? '<span class="status-card-promoted-badge">Promoted</span>' : '';
   var isMine = s.author.name === STATUS_ME.name;
-  var deleteLink = isMine ? '<button class="status-delete-link" onclick="deleteStatus(\'' + s.id + '\')">Delete</button>' : '';
+  // Edit affordance: creator-only. Picks the right edit opener based on the STORED kind
+  // (not the effective one) — editing a Future-now-Live still uses the future form.
+  var editBtn = isMine
+    ? '<button class="status-edit-btn" onclick="' +
+        (s.kind === 'live' ? "openStatusLiveEdit('" + s.id + "')" : "openStatusFutureEdit('" + s.id + "')") +
+      '"><span>\u2699\ufe0f</span><span>Edit</span></button>'
+    : '';
   var starred = s.stars.indexOf(STATUS_VIEWER) !== -1;
   var starCount = s.stars.length;
   var commentCount = s.comments.length;
@@ -4883,26 +5156,35 @@ function renderStatusCard(s) {
     ? '<a class="status-card-tickets" href="' + s.ticketLink.replace(/"/g, '%22') + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">Buy tickets \u2197</a>'
     : '';
   var vibeLine = s.vibe ? '<p class="status-card-vibe">' + escapeHtml(s.vibe) + '</p>' : '';
+  // Location tag — Partiful-style. Anchor when looksLikeVenue, otherwise a non-clickable span.
+  var mapsHref = mapsHrefFor(s.venue);
+  var locationTag = mapsHref
+    ? '<a class="status-card-location" href="' + mapsHref + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">' +
+        '<span class="status-card-location-pin">\ud83d\udccd</span>' +
+        '<span class="status-card-location-text">' + escapeHtml(s.venue) + '</span></a>'
+    : '<span class="status-card-location">' +
+        '<span class="status-card-location-pin">\ud83d\udccd</span>' +
+        '<span class="status-card-location-text">' + escapeHtml(s.venue) + '</span></span>';
   return '<div class="' + cls + '" id="' + s.id + '">' +
+    chip +
     '<div class="status-card-header">' +
       '<div class="status-card-author" style="' + avatarStyle + '">' + escapeHtml(s.author.initial) + '</div>' +
       '<div class="status-card-author-meta">' +
         '<p class="status-card-author-name">' + escapeHtml(s.author.name) + promotedBadge + '</p>' +
-        '<p class="status-card-author-sub">' + sub + '</p>' +
       '</div>' +
     '</div>' +
-    '<p class="status-card-venue">' + escapeHtml(s.venue) + '</p>' +
+    locationTag +
     vibeLine +
     ticketsLine +
     '<div class="status-card-footer">' +
       '<button class="status-star-btn' + (starred ? ' starred' : '') + '" onclick="toggleStar(\'' + s.id + '\')">' +
-        '<span class="star-icon">\u2b50</span>' +
+        '<span class="star-icon">\ud83c\udfc1</span>' +
         '<span>' + starCount + '</span>' +
       '</button>' +
       '<button class="status-comment-link" onclick="openStatusDetail(\'' + s.id + '\')">' +
         '<span>\ud83d\udcac</span><span>' + commentCount + '</span>' +
       '</button>' +
-      deleteLink +
+      editBtn +
     '</div>' +
   '</div>';
 }
