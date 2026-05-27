@@ -451,6 +451,28 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .status-card.is-future{border-left:3px solid var(--green)}
 /* ═══ end v1.0c CSS ═══ */
 
+/* ═══ v1.0d — STATUS DETAIL + COMMENTS ═══ */
+.detail-comments-section{margin:18px 20px 0;padding-top:18px;border-top:1px dotted var(--border-dot)}
+.detail-comments-header{font-family:var(--body);font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:14px}
+.detail-comments-list{display:flex;flex-direction:column;gap:14px;margin-bottom:16px}
+.detail-comments-empty{font-size:13px;color:var(--text-muted);text-align:center;padding:8px 0 4px;line-height:1.5}
+.detail-comment{display:flex;gap:10px}
+.detail-comment-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;background:var(--green-pale);color:var(--green);flex-shrink:0}
+.detail-comment-body{flex:1;min-width:0}
+.detail-comment-meta{display:flex;align-items:baseline;gap:6px;margin-bottom:2px}
+.detail-comment-name{font-family:var(--body);font-size:13px;font-weight:600;color:var(--text)}
+.detail-comment-time{font-size:11px;color:var(--text-muted)}
+.detail-comment-text{font-size:13px;color:var(--text);line-height:1.45;word-wrap:break-word}
+.detail-comment-composer{display:flex;gap:8px;padding-top:10px;border-top:1px dotted var(--border-dot)}
+.detail-comment-composer .input-field{flex:1;font-size:14px;margin-bottom:0}
+.detail-comment-send{background:var(--green);color:var(--white);border:none;border-radius:var(--radius-sm);padding:0 18px;font-family:var(--body);font-size:13px;font-weight:600;cursor:pointer}
+.detail-comment-send:disabled{opacity:0.4;cursor:not-allowed}
+/* When a status card lives inside the detail screen, it shouldn't have an outer margin
+   (the detail screen has its own padding) and the footer's tap interactions stay the same. */
+#detail-card-host .status-card{margin:0 20px}
+/* ═══ end v1.0d CSS ═══ */
+
+
 
 
 
@@ -901,7 +923,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         </div>
       </div>
     </div>
-    <div class="version-marker">Rally · v1.0c</div>
+    <div class="version-marker">Rally · v1.0d</div>
   </div>
   <button class="fab-quick" onclick="openQuickRally()">
     ⚡ Quick Rally
@@ -1786,6 +1808,28 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
       </div>
     </button>
     <p class="qr-hint" style="margin-top:14px;text-align:center">A status broadcasts to your friends — no specific invitees, no commitment expected.</p>
+  </div>
+</div>
+
+<!-- ══ v1.0d — STATUS DETAIL + COMMENTS ══ -->
+<div class="screen" id="screen-status-detail">
+  <div class="topbar">
+    <button class="btn-back" onclick="go('screen-feed')">← Back</button>
+    <span class="topbar-logo" style="font-size:15px">Status</span>
+    <div style="width:60px"></div>
+  </div>
+  <div class="scroll-content" style="padding:14px 0 16px">
+    <!-- The full status card lives at the top, re-using the regular renderer for consistency. -->
+    <div id="detail-card-host"></div>
+    <!-- Comments section -->
+    <div class="detail-comments-section">
+      <p class="detail-comments-header" id="detail-comments-header">Comments</p>
+      <div id="detail-comments-list" class="detail-comments-list"></div>
+      <div class="detail-comment-composer">
+        <input class="input-field" id="detail-comment-input" type="text" placeholder="Add a comment..." onkeydown="if(event.key==='Enter')addStatusComment()">
+        <button class="detail-comment-send" onclick="addStatusComment()">Post</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -4872,6 +4916,8 @@ function toggleStar(statusId) {
   if (i === -1) s.stars.push(STATUS_VIEWER);
   else s.stars.splice(i, 1);
   renderFeed();
+  // If the detail screen is showing this status, refresh it so the star count stays in sync.
+  if (activeStatusId === statusId) renderStatusDetail();
 }
 
 // Delete a status the viewer authored. Confirmed via toast — Status is lighter weight
@@ -4883,13 +4929,99 @@ function deleteStatus(statusId) {
   if (s.author.name !== STATUS_ME.name) return;   // safety: only mine
   feedStatuses.splice(i, 1);
   renderFeed();
+  // If the detail screen was viewing the just-deleted status, return to the Feed so
+  // the user isn't stuck looking at a stale card.
+  if (activeStatusId === statusId) {
+    activeStatusId = null;
+    go('screen-feed');
+  }
   showToast('Status deleted');
 }
 
-// Stub for v1.0d — opens the detail / comments view. For now, surfaces a toast so taps
-// don't dead-end without feedback.
+// v1.0d — track which status the detail screen is currently showing.
+var activeStatusId = null;
+
+// Open the status detail screen — full card at top, comments list + composer below.
+// Re-renders on each open so the data is fresh (stars/comments may have changed elsewhere).
 function openStatusDetail(statusId) {
-  showToast('Comments coming in v1.0d');
+  var s = feedStatuses.find(function(x) { return x.id === statusId; });
+  if (!s) return;
+  activeStatusId = statusId;
+  renderStatusDetail();
+  var input = document.getElementById('detail-comment-input');
+  if (input) input.value = '';
+  go('screen-status-detail');
+}
+
+// Render the active status's card + comments thread into the detail screen.
+function renderStatusDetail() {
+  var s = feedStatuses.find(function(x) { return x.id === activeStatusId; });
+  if (!s) return;
+  var host = document.getElementById('detail-card-host');
+  if (host) {
+    host.innerHTML = renderStatusCard(s);
+    // Avoid duplicate DOM IDs between the feed card and the detail card by suffixing
+    // the inner card's id here. The feed list keeps the canonical s.id.
+    var inner = host.querySelector('.status-card');
+    if (inner) inner.id = s.id + '-detail';
+  }
+  var list = document.getElementById('detail-comments-list');
+  var header = document.getElementById('detail-comments-header');
+  if (header) header.textContent = 'Comments \u00b7 ' + s.comments.length;
+  if (!list) return;
+  if (s.comments.length === 0) {
+    list.innerHTML = '<p class="detail-comments-empty">No comments yet. Be the first to chime in.</p>';
+  } else {
+    list.innerHTML = s.comments.map(renderCommentRow).join('');
+  }
+}
+
+// Build one comment row.
+function renderCommentRow(c) {
+  // The viewer's own comments use the viewer's identity; friend comments would carry their own.
+  // For v1.0d everything is "You" by default — author shape stays open for richer attribution later.
+  var initial = (c.by && c.by.length) ? c.by.charAt(0).toUpperCase() : 'Y';
+  return '<div class="detail-comment">' +
+    '<div class="detail-comment-avatar">' + escapeHtml(initial) + '</div>' +
+    '<div class="detail-comment-body">' +
+      '<div class="detail-comment-meta">' +
+        '<span class="detail-comment-name">' + escapeHtml(c.by || 'You') + '</span>' +
+        '<span class="detail-comment-time">' + formatCommentTime(c.at) + '</span>' +
+      '</div>' +
+      '<p class="detail-comment-text">' + escapeHtml(c.text) + '</p>' +
+    '</div>' +
+  '</div>';
+}
+
+// Friendly relative time for comments. Anything < 60s = "just now",
+// < 60m = "Nm ago", < 24h = "Nh ago", else a short date string.
+function formatCommentTime(ts) {
+  if (!ts) return '';
+  var now = Date.now();
+  var diffMs = now - ts;
+  if (diffMs < 60 * 1000) return 'just now';
+  if (diffMs < 60 * 60 * 1000) return Math.floor(diffMs / (60 * 1000)) + 'm ago';
+  if (diffMs < 24 * 60 * 60 * 1000) return Math.floor(diffMs / (60 * 60 * 1000)) + 'h ago';
+  var d = new Date(ts);
+  var monNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  return monNames[d.getMonth()] + ' ' + d.getDate();
+}
+
+// Append a comment to the active status. Empty/whitespace input is silently ignored.
+// Refreshes the detail view (and the Feed list, so the card's comment count updates).
+function addStatusComment() {
+  var s = feedStatuses.find(function(x) { return x.id === activeStatusId; });
+  if (!s) return;
+  var input = document.getElementById('detail-comment-input');
+  if (!input) return;
+  var text = input.value.trim();
+  if (!text) return;
+  s.comments.push({ by: STATUS_VIEWER, text: text, at: Date.now() });
+  input.value = '';
+  renderStatusDetail();
+  // Note: the Feed list will re-render on next entry via the screen-feed hook, so the
+  // card's comment count picks up the new total without us touching it from here.
 }
 
 // ═══ end v1.0a / v1.0b — FEED / STATUS ═══
