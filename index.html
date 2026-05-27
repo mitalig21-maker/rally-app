@@ -422,6 +422,31 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .status-type-card-sub{font-size:12px;color:var(--text-muted);line-height:1.45}
 /* ═══ end v1.0a CSS ═══ */
 
+/* ═══ v1.0b — STATUS CARDS ═══ */
+.status-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin:0 20px}
+.status-card.is-live{border-left:3px solid #DC2626}
+.status-card-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.status-card-author{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;flex-shrink:0}
+.status-card-author-meta{flex:1;min-width:0}
+.status-card-author-name{font-family:var(--body);font-size:13px;font-weight:600;color:var(--text);line-height:1.2}
+.status-card-author-sub{font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:5px;margin-top:2px}
+.status-card-author-sub .feed-live-dot{width:6px;height:6px}
+.status-card-venue{font-family:var(--headline);font-size:17px;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:0.3px;margin-bottom:3px;line-height:1.25}
+.status-card-vibe{font-size:12px;color:var(--text-muted);font-style:italic;margin-bottom:10px}
+.status-card-footer{display:flex;align-items:center;gap:14px;padding-top:8px;border-top:1px dotted var(--border-dot)}
+.status-star-btn{display:flex;align-items:center;gap:6px;background:none;border:none;padding:4px 0;cursor:pointer;font-family:var(--body);font-size:13px;color:var(--text-muted)}
+.status-star-btn.starred{color:#D97706;font-weight:600}
+.status-star-btn .star-icon{font-size:16px;line-height:1}
+.status-comment-link{display:flex;align-items:center;gap:6px;background:none;border:none;padding:4px 0;cursor:pointer;font-family:var(--body);font-size:13px;color:var(--text-muted)}
+.status-delete-link{margin-left:auto;background:none;border:none;font-size:11px;color:#B91C1C;text-decoration:underline;cursor:pointer;padding:4px 0}
+/* "Promoted" badge + tickets link — declared now per Future-directions architecture seam,
+   even though no promoter posts can be created in v1.0b. */
+.status-card.is-promoted{border-left-color:#5B21B6}
+.status-card-promoted-badge{display:inline-block;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:#EDE9FE;color:#5B21B6;padding:2px 6px;border-radius:3px;margin-left:6px}
+.status-card-tickets{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--green);text-decoration:underline;margin-top:4px}
+/* ═══ end v1.0b CSS ═══ */
+
+
 
 
 
@@ -870,7 +895,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         </div>
       </div>
     </div>
-    <div class="version-marker">Rally · v1.0a</div>
+    <div class="version-marker">Rally · v1.0b</div>
   </div>
   <button class="fab-quick" onclick="openQuickRally()">
     ⚡ Quick Rally
@@ -1767,11 +1792,16 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
   </div>
   <div class="sheet-header">
     <p class="sheet-title">Where you at?</p>
-    <p class="sheet-sub">Tell your friends where you are right now.</p>
+    <p class="sheet-sub">Tell your friends what's going on right now. No pressure — they can star it or stop by.</p>
   </div>
-  <div class="scroll-content" style="padding:16px 20px;text-align:center;color:var(--text-muted);font-size:13px">
-    <p style="margin-top:40px">Live status form ships in v1.0b — venue, vibe, post.</p>
-    <p style="margin-top:8px;font-size:12px">For now, this is the navigation shell.</p>
+  <div class="scroll-content" style="padding:16px 20px">
+    <label class="qr-label">Where?</label>
+    <input class="input-field qr-input" id="live-venue" type="text" placeholder="Spring Lounge, Joe's apartment, the park...">
+    <label class="qr-label">Vibe <span class="qr-opt">(optional)</span></label>
+    <input class="input-field qr-input" id="live-vibe" type="text" placeholder="Cocktails, low-key, sunset, etc.">
+    <p class="qr-hint" style="margin-top:18px;text-align:center">Live statuses show on the Feed with a pulsing red dot. They fade off the Feed at the end of the night.</p>
+    <div style="height:12px"></div>
+    <button class="btn-primary" onclick="sendLiveStatus()">Post Live status</button>
   </div>
 </div>
 
@@ -2447,6 +2477,7 @@ function go(id) {
   if (id === 'screen-ballot') { renderBallot(currentBallotLeg); }
   if (id === 'screen-notif-inbox') { renderNotifInbox(); }
   if (id === 'screen-home') { updateBrunchCardSummary(); refreshActiveRallyCard(); }
+  if (id === 'screen-feed') { renderFeed(); }
 }
 
 // Default the propose-dates calendar to current month + today, and time to the next 30-min slot from now
@@ -4601,7 +4632,7 @@ function selectRespTime(btn, val) {
   if (input) input.style.display = val === 'diff' ? 'block' : 'none';
 }
 
-// ═══ v1.0a — FEED / STATUS ═══
+// ═══ v1.0a / v1.0b — FEED / STATUS ═══
 // Status is the third coordination product (D-014): broadcast, no specific invitees,
 // no engagement expected ("I'll be here, your call"). Engagement model is star reaction
 // (D-022) + comments — no RSVP, no attendee count. Two types: Live (now, typed venue,
@@ -4611,30 +4642,158 @@ function selectRespTime(btn, val) {
 //   The status data model carries an `author` field that does not assume "friend." A
 //   future promoter author type is an additive change (set author.kind = 'promoter',
 //   author.name = company, plus optional ticketLink), not a model refactor. The card
-//   renderer in v1.0b/c will render a "Promoted" badge + "Buy tickets ↗" link slot when
-//   those fields are present; in v1.0a none of that is exercised, but the shape is set.
+//   renderer reads author.kind to apply .is-promoted styling + Promoted badge + tickets
+//   link slot; in v1.0b nothing creates a promoter post, but the renderer path is live.
 //
 // In-memory data model (single-source-of-truth prototype, same shortcut Quick Rally uses;
 // real per-record Supabase rows come in Phase 2):
 //   { id, kind:'live'|'future', author:{kind:'friend'|'promoter', name, initial, bg, fg},
 //     venue, vibe,                              // live + future
 //     date, timeStart, timeEnd,                 // future only
-//     ticketLink,                               // promoter only (unused in v1.0a)
+//     ticketLink,                               // promoter only (unused in v1.0b)
 //     postedAt, stars:[names], comments:[{by, text, at}] }
 var feedStatuses = [];
+
+// "Me" as a status author — the prototype's stand-in until real auth. Mita per design system.
+var STATUS_ME = { kind: 'friend', name: 'Mita', initial: 'M', bg: '#E8F0EC', fg: '#1B3A2D' };
+// Star reactions are attributed to a viewer identity; in the prototype there's only one user.
+var STATUS_VIEWER = 'You';
+var statusIdSeq = 1;
 
 // Open the status type-picker screen (Live vs Future).
 function openStatusCompose() {
   go('screen-status-type');
 }
+// Open the Live compose form — reset fields.
 function openStatusLive() {
+  var v = document.getElementById('live-venue');
+  var b = document.getElementById('live-vibe');
+  if (v) v.value = '';
+  if (b) b.value = '';
   go('screen-status-live');
 }
 function openStatusFuture() {
   go('screen-status-future');
 }
 
-// ═══ end v1.0a — FEED / STATUS ═══
+// Post a Live status. Required: venue. Optional: vibe. Adds to feedStatuses, re-renders
+// the Feed, returns the user to the Feed tab with a confirmation toast.
+function sendLiveStatus() {
+  var venue = document.getElementById('live-venue').value.trim();
+  var vibe = document.getElementById('live-vibe').value.trim();
+  if (!venue) { showToast('Where are you?'); return; }
+  var status = {
+    id: 'st-' + (statusIdSeq++),
+    kind: 'live',
+    author: STATUS_ME,
+    venue: venue,
+    vibe: vibe,
+    postedAt: Date.now(),
+    stars: [],
+    comments: []
+  };
+  feedStatuses.unshift(status);
+  renderFeed();
+  go('screen-feed');
+  showToast('You\u2019re live \ud83d\udfe2');
+}
+
+// Render the full Feed: split feedStatuses into live and future, render each into its
+// zone's list element, fall back to the empty state when a zone has none.
+function renderFeed() {
+  var liveList = document.getElementById('feed-live-list');
+  var futureList = document.getElementById('feed-future-list');
+  if (!liveList || !futureList) return;
+  var live = feedStatuses.filter(function(s) { return s.kind === 'live'; });
+  var future = feedStatuses.filter(function(s) { return s.kind === 'future'; });
+  // Future statuses sort by date (when v1.0c ships their date field); for now newest-first.
+  if (live.length === 0) {
+    liveList.innerHTML = '<p class="feed-empty">No one\u2019s out right now. Tap <strong>+ Post a status</strong> to be the first.</p>';
+  } else {
+    liveList.innerHTML = live.map(renderStatusCard).join('');
+  }
+  if (future.length === 0) {
+    futureList.innerHTML = '<p class="feed-empty">Nothing on the books yet. Post what you\u2019re up to later this week.</p>';
+  } else {
+    futureList.innerHTML = future.map(renderStatusCard).join('');
+  }
+}
+
+// Build the markup for a single Status card. Reads author.kind to apply promoted styling.
+// Star button is interactive; comment count is shown but full thread view ships in v1.0d.
+function renderStatusCard(s) {
+  var isLive = s.kind === 'live';
+  var isPromoted = s.author && s.author.kind === 'promoter';
+  var cls = 'status-card' + (isLive ? ' is-live' : '') + (isPromoted ? ' is-promoted' : '');
+  var avatarStyle = 'background:' + s.author.bg + ';color:' + s.author.fg;
+  var subBits = [];
+  if (isLive) subBits.push('<span class="feed-live-dot"></span>Live now');
+  else if (s.date) subBits.push(escapeHtml(s.date));   // future v1.0c sets this
+  var sub = subBits.join(' \u00b7 ');
+  var promotedBadge = isPromoted ? '<span class="status-card-promoted-badge">Promoted</span>' : '';
+  var isMine = s.author.name === STATUS_ME.name;
+  var deleteLink = isMine ? '<button class="status-delete-link" onclick="deleteStatus(\'' + s.id + '\')">Delete</button>' : '';
+  var starred = s.stars.indexOf(STATUS_VIEWER) !== -1;
+  var starCount = s.stars.length;
+  var commentCount = s.comments.length;
+  var ticketsLine = (isPromoted && s.ticketLink)
+    ? '<a class="status-card-tickets" href="' + s.ticketLink.replace(/"/g, '%22') + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">Buy tickets \u2197</a>'
+    : '';
+  var vibeLine = s.vibe ? '<p class="status-card-vibe">' + escapeHtml(s.vibe) + '</p>' : '';
+  return '<div class="' + cls + '" id="' + s.id + '">' +
+    '<div class="status-card-header">' +
+      '<div class="status-card-author" style="' + avatarStyle + '">' + escapeHtml(s.author.initial) + '</div>' +
+      '<div class="status-card-author-meta">' +
+        '<p class="status-card-author-name">' + escapeHtml(s.author.name) + promotedBadge + '</p>' +
+        '<p class="status-card-author-sub">' + sub + '</p>' +
+      '</div>' +
+    '</div>' +
+    '<p class="status-card-venue">' + escapeHtml(s.venue) + '</p>' +
+    vibeLine +
+    ticketsLine +
+    '<div class="status-card-footer">' +
+      '<button class="status-star-btn' + (starred ? ' starred' : '') + '" onclick="toggleStar(\'' + s.id + '\')">' +
+        '<span class="star-icon">\u2b50</span>' +
+        '<span>' + starCount + '</span>' +
+      '</button>' +
+      '<button class="status-comment-link" onclick="openStatusDetail(\'' + s.id + '\')">' +
+        '<span>\ud83d\udcac</span><span>' + commentCount + '</span>' +
+      '</button>' +
+      deleteLink +
+    '</div>' +
+  '</div>';
+}
+
+// Toggle the viewer's star on a status — one boolean per viewer (D-022 says the icon is
+// the cosmetic, the model is one reaction per user per post).
+function toggleStar(statusId) {
+  var s = feedStatuses.find(function(x) { return x.id === statusId; });
+  if (!s) return;
+  var i = s.stars.indexOf(STATUS_VIEWER);
+  if (i === -1) s.stars.push(STATUS_VIEWER);
+  else s.stars.splice(i, 1);
+  renderFeed();
+}
+
+// Delete a status the viewer authored. Confirmed via toast — Status is lighter weight
+// than Rally, so a hard delete-confirm dialog would feel out of scale.
+function deleteStatus(statusId) {
+  var i = feedStatuses.findIndex(function(s) { return s.id === statusId; });
+  if (i === -1) return;
+  var s = feedStatuses[i];
+  if (s.author.name !== STATUS_ME.name) return;   // safety: only mine
+  feedStatuses.splice(i, 1);
+  renderFeed();
+  showToast('Status deleted');
+}
+
+// Stub for v1.0d — opens the detail / comments view. For now, surfaces a toast so taps
+// don't dead-end without feedback.
+function openStatusDetail(statusId) {
+  showToast('Comments coming in v1.0d');
+}
+
+// ═══ end v1.0a / v1.0b — FEED / STATUS ═══
 
 // ═══ v0.9 — QUICK RALLY (v0.9.1 update) ═══
 // A Quick Rally is a fast in-the-moment plan: the sender names what/where/when and
