@@ -422,77 +422,82 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .status-type-card-sub{font-size:12px;color:var(--text-muted);line-height:1.45}
 /* ═══ end v1.0a CSS ═══ */
 
-/* ═══ v1.0b — STATUS CARDS ═══ */
-.status-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin:0 20px}
+/* ═══ v1.0g — STATUS CARDS (compact, swipeable, right-aligned actions) ═══ */
+/* The swipe wrapper holds the card + the revealed actions behind it. Swipe-left on the
+   card translates it horizontally to expose actions on the right side of the wrapper. */
+.status-card-wrap{position:relative;margin:0 20px;overflow:hidden;border-radius:var(--radius)}
+.status-card-actions{position:absolute;top:0;right:0;bottom:0;display:flex;align-items:stretch}
+.status-card-actions button{background:var(--text);color:var(--white);border:none;font-family:var(--body);font-size:13px;font-weight:600;padding:0 22px;cursor:pointer}
+.status-card-actions .action-edit{background:#1B3A2D}
+.status-card-actions .action-delete{background:#B91C1C}
+.status-card{position:relative;background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;transition:transform 0.18s ease;touch-action:pan-y;user-select:none}
 .status-card.is-live{border-left:3px solid #DC2626}
-.status-card-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.status-card-author{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;flex-shrink:0}
-.status-card-author-meta{flex:1;min-width:0}
-.status-card-author-name{font-family:var(--body);font-size:13px;font-weight:600;color:var(--text);line-height:1.2}
-.status-card-author-sub{font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:5px;margin-top:2px}
-.status-card-author-sub .feed-live-dot{width:6px;height:6px}
-.status-card-venue{font-family:var(--headline);font-size:17px;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:0.3px;margin-bottom:3px;line-height:1.25}
-.status-card-vibe{font-size:12px;color:var(--text-muted);font-style:italic;margin-bottom:10px}
-.status-card-footer{display:flex;align-items:center;gap:14px;padding-top:8px;border-top:1px dotted var(--border-dot)}
-.status-star-btn{display:flex;align-items:center;gap:6px;background:none;border:none;padding:4px 0;cursor:pointer;font-family:var(--body);font-size:13px;color:var(--text-muted)}
-.status-star-btn.starred{color:#D97706;font-weight:600}
-.status-star-btn .star-icon{font-size:16px;line-height:1}
-.status-comment-link{display:flex;align-items:center;gap:6px;background:none;border:none;padding:4px 0;cursor:pointer;font-family:var(--body);font-size:13px;color:var(--text-muted)}
-.status-delete-link{margin-left:auto;background:none;border:none;font-size:11px;color:#B91C1C;text-decoration:underline;cursor:pointer;padding:4px 0}
-/* "Promoted" badge + tickets link — declared now per Future-directions architecture seam,
-   even though no promoter posts can be created in v1.0b. */
-.status-card.is-promoted{border-left-color:#5B21B6}
-.status-card-promoted-badge{display:inline-block;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:#EDE9FE;color:#5B21B6;padding:2px 6px;border-radius:3px;margin-left:6px}
-.status-card-tickets{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--green);text-decoration:underline;margin-top:4px}
-/* ═══ end v1.0b CSS ═══ */
-
-/* ═══ v1.0c — FUTURE STATUS ═══ */
-.future-time-sep{display:flex;align-items:center;padding:0 2px;font-size:12px;color:var(--text-muted)}
 .status-card.is-future{border-left:3px solid var(--green)}
-/* ═══ end v1.0c CSS ═══ */
-
-/* ═══ v1.0f — INLINE COMMENTS (replaces v1.0d detail screen) ═══ */
-/* The comments section lives inside each Status card on the Feed. IG-style:
-   1-2 latest visible, expander to see all, composer appears when expanded. */
-.status-comments{margin-top:10px;padding-top:10px;border-top:1px dotted var(--border-dot)}
-.status-comments-preview{display:flex;flex-direction:column;gap:8px}
-.status-comments-empty{font-size:12px;color:var(--text-muted);font-style:italic;padding:2px 0}
-.status-comment-row{display:flex;gap:8px;align-items:flex-start}
-.status-comment-avatar{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;background:var(--green-pale);color:var(--green);flex-shrink:0;margin-top:1px}
-.status-comment-body{flex:1;min-width:0}
-.status-comment-meta{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
-.status-comment-name{font-family:var(--body);font-size:12px;font-weight:600;color:var(--text)}
-.status-comment-time{font-size:10px;color:var(--text-muted)}
-.status-comment-text{font-size:13px;color:var(--text);line-height:1.45;word-wrap:break-word;margin-top:1px}
-.status-comment-actions{display:flex;align-items:center;gap:10px;margin-top:3px}
-.status-comment-heart{background:none;border:none;padding:2px 0;cursor:pointer;font-family:var(--body);font-size:11px;color:var(--text-muted);display:inline-flex;align-items:center;gap:4px}
-.status-comment-heart.hearted{color:#DC2626;font-weight:600}
-.status-comment-delete{background:none;border:none;padding:2px 0;cursor:pointer;font-family:var(--body);font-size:11px;color:var(--text-muted);text-decoration:underline}
-.status-comments-expand{margin-top:6px;background:none;border:none;padding:2px 0;cursor:pointer;font-family:var(--body);font-size:12px;color:var(--green);font-weight:500}
-.status-comment-composer{display:flex;gap:6px;margin-top:8px}
-.status-comment-composer input{flex:1;font-size:13px;padding:7px 10px;border:1px solid var(--border);border-radius:var(--radius-sm);font-family:var(--body);background:var(--white);color:var(--text);min-width:0}
-.status-comment-composer input:focus{outline:none;border-color:var(--green)}
-.status-comment-composer button{background:var(--green);color:var(--white);border:none;border-radius:var(--radius-sm);padding:0 12px;font-family:var(--body);font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap}
-/* ═══ end v1.0f CSS ═══ */
-
-/* ═══ v1.0e — LIVE/FUTURE POLISH ═══ */
-/* Top-right chip on every status card: Live = pulsing dot + countdown; Future = date + time */
-.status-card{position:relative}
-.status-card-chip{position:absolute;top:12px;right:14px;display:inline-flex;align-items:center;gap:6px;font-family:var(--body);font-size:11px;font-weight:600;padding:5px 10px;border-radius:20px}
+.status-card.is-promoted{border-left-color:#5B21B6}
+.status-card.swiping{transition:none}
+/* Top row: avatar + name on left, chip on right */
+.status-card-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.status-card-author{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0}
+.status-card-author-meta{flex:1;min-width:0}
+.status-card-author-name{font-family:var(--body);font-size:13px;font-weight:600;color:var(--text);line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.status-card-chip{display:inline-flex;align-items:center;gap:6px;font-family:var(--body);font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;flex-shrink:0}
 .status-card-chip.is-live{background:#FEE2E2;color:#B91C1C}
-.status-card-chip.is-live .feed-live-dot{width:7px;height:7px}
+.status-card-chip.is-live .feed-live-dot{width:6px;height:6px}
 .status-card-chip.is-future{background:var(--green-pale);color:var(--green)}
-/* Chip eats space on the right edge of the header so author meta doesn't overlap */
-.status-card-header{padding-right:90px}
-/* Location tag (Partiful-style) — prominent, tappable, opens maps */
-.status-card-location{display:inline-flex;align-items:center;gap:6px;background:var(--cream);border:1px solid var(--border);border-radius:8px;padding:8px 12px;margin-top:4px;margin-bottom:8px;text-decoration:none;color:var(--text);font-family:var(--body);font-size:14px;font-weight:600;max-width:100%;cursor:pointer}
-.status-card-location:hover{border-color:var(--green)}
-.status-card-location-pin{flex-shrink:0;font-size:14px;line-height:1}
-.status-card-location-text{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-/* The old uppercase venue headline is retired — location tag takes its place. */
-/* Edit affordance (gear icon) on the card footer, replaces inline Delete */
-.status-edit-btn{display:flex;align-items:center;gap:5px;background:none;border:none;padding:4px 0;cursor:pointer;font-family:var(--body);font-size:13px;color:var(--text-muted);margin-left:auto}
-/* ═══ end v1.0e CSS ═══ */
+/* Middle row: location underlined on left, actions on right */
+.status-card-mid{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.status-card-location{display:inline-flex;align-items:center;gap:4px;text-decoration:underline;text-underline-offset:3px;color:var(--text);font-family:var(--body);font-size:14px;font-weight:500;min-width:0;flex:1}
+.status-card-location.no-link{text-decoration:none;color:var(--text-muted)}
+.status-card-location-pin{flex-shrink:0;font-size:13px;line-height:1}
+.status-card-location-text{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.status-card-actions-inline{display:flex;align-items:center;gap:14px;flex-shrink:0}
+.status-star-btn{display:inline-flex;align-items:center;gap:4px;background:none;border:none;padding:2px 0;cursor:pointer;font-family:var(--body);font-size:13px;color:var(--text-muted)}
+.status-star-btn.starred{color:#D97706;font-weight:600}
+.status-star-btn .star-icon{font-size:15px;line-height:1}
+.status-comment-link{display:inline-flex;align-items:center;gap:4px;background:none;border:none;padding:2px 0;cursor:pointer;font-family:var(--body);font-size:13px;color:var(--text-muted)}
+.status-card-vibe{font-size:12px;color:var(--text-muted);font-style:italic;margin-top:5px}
+/* Latest-comment preview row on the card */
+.status-card-comment-preview{margin-top:8px;padding-top:8px;border-top:1px dotted var(--border-dot);display:flex;align-items:baseline;gap:5px;font-size:12px;line-height:1.35;color:var(--text)}
+.status-card-comment-preview-name{font-weight:600;color:var(--text);flex-shrink:0}
+.status-card-comment-preview-text{color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
+.status-card-comment-preview-more{color:var(--green);cursor:pointer;font-weight:500;flex-shrink:0;text-decoration:underline}
+/* Promoted badge + tickets link — preserved for monetization architecture seam */
+.status-card-promoted-badge{display:inline-block;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:#EDE9FE;color:#5B21B6;padding:2px 6px;border-radius:3px;margin-left:6px}
+.status-card-tickets{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--green);text-decoration:underline;margin-top:6px}
+
+/* ═══ v1.0g — COMMENTS BOTTOM SHEET ═══ */
+.comments-sheet-backdrop{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.45);z-index:200;opacity:0;transition:opacity 0.2s ease;pointer-events:none}
+.comments-sheet-backdrop.open{opacity:1;pointer-events:auto}
+.comments-sheet{position:fixed;left:0;right:0;bottom:0;background:var(--cream);border-radius:18px 18px 0 0;z-index:201;max-height:85vh;display:flex;flex-direction:column;transform:translateY(100%);transition:transform 0.25s ease;box-shadow:0 -4px 24px rgba(0,0,0,0.18);touch-action:pan-y;will-change:transform}
+.comments-sheet.open{transform:translateY(0)}
+.comments-sheet.dragging{transition:none}
+.comments-sheet-handle{display:flex;justify-content:center;padding:9px 0 4px}
+.comments-sheet-handle::before{content:"";display:block;width:36px;height:4px;background:var(--border);border-radius:2px}
+.comments-sheet-header{padding:6px 20px 12px;border-bottom:1px dotted var(--border-dot);font-family:var(--body);font-size:12px;color:var(--text-muted);text-align:center}
+.comments-sheet-header strong{color:var(--text);font-weight:600}
+.comments-sheet-list{flex:1;overflow-y:auto;padding:14px 20px 8px;-webkit-overflow-scrolling:touch}
+.comments-sheet-empty{font-size:13px;color:var(--text-muted);font-style:italic;text-align:center;padding:20px 0 12px}
+.comments-sheet-composer{display:flex;gap:8px;padding:12px 16px calc(12px + var(--safe-bottom));background:var(--white);border-top:1px solid var(--border)}
+.comments-sheet-composer input{flex:1;font-size:14px;padding:10px 14px;border:1px solid var(--border);border-radius:22px;font-family:var(--body);background:var(--cream);color:var(--text);min-width:0}
+.comments-sheet-composer input:focus{outline:none;border-color:var(--green);background:var(--white)}
+.comments-sheet-composer button{background:var(--green);color:var(--white);border:none;border-radius:22px;padding:0 18px;font-family:var(--body);font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+
+/* Comment row inside the sheet — swipeable for delete */
+.sheet-comment-wrap{position:relative;overflow:hidden;border-radius:8px;margin-bottom:6px}
+.sheet-comment-actions{position:absolute;top:0;right:0;bottom:0;display:flex;align-items:stretch}
+.sheet-comment-actions button{background:#B91C1C;color:var(--white);border:none;font-family:var(--body);font-size:12px;font-weight:600;padding:0 16px;cursor:pointer}
+.sheet-comment{position:relative;display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:var(--cream);transition:transform 0.18s ease;touch-action:pan-y}
+.sheet-comment.swiping{transition:none}
+.sheet-comment-avatar{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;background:var(--green-pale);color:var(--green);flex-shrink:0;margin-top:1px}
+.sheet-comment-body{flex:1;min-width:0;padding-right:36px}
+.sheet-comment-meta{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;line-height:1.2}
+.sheet-comment-name{font-family:var(--body);font-size:12px;font-weight:600;color:var(--text)}
+.sheet-comment-time{font-size:10px;color:var(--text-muted)}
+.sheet-comment-text{font-size:13px;color:var(--text);line-height:1.45;word-wrap:break-word;margin-top:2px}
+/* Heart pinned to the right edge of the comment row, inline (not below the text) */
+.sheet-comment-heart{position:absolute;top:8px;right:10px;background:none;border:none;padding:2px 0;cursor:pointer;font-family:var(--body);font-size:11px;color:var(--text-muted);display:inline-flex;align-items:center;gap:3px}
+.sheet-comment-heart.hearted{color:#DC2626;font-weight:600}
+/* ═══ end v1.0g CSS ═══ */
 
 /* Inline danger button used inside Edit screens to scope deletes */
 .btn-text-danger{width:100%;background:none;border:none;font-family:var(--body);font-size:13px;color:#B91C1C;text-decoration:underline;cursor:pointer;padding:6px}
@@ -950,7 +955,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         </div>
       </div>
     </div>
-    <div class="version-marker">Rally · v1.0f</div>
+    <div class="version-marker">Rally · v1.0g</div>
   </div>
   <button class="fab-quick" onclick="openQuickRally()">
     ⚡ Quick Rally
@@ -2435,6 +2440,18 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
   </div>
 </div>
 
+
+<!-- ══ v1.0g — COMMENTS BOTTOM SHEET ══ -->
+<div class="comments-sheet-backdrop" id="comments-sheet-backdrop" onclick="closeCommentsSheet()"></div>
+<div class="comments-sheet" id="comments-sheet" role="dialog" aria-label="Comments">
+  <div class="comments-sheet-handle"></div>
+  <div class="comments-sheet-header" id="comments-sheet-header"></div>
+  <div class="comments-sheet-list" id="comments-sheet-list"></div>
+  <div class="comments-sheet-composer">
+    <input type="text" id="sheet-comment-input" placeholder="Leave a comment..." onkeydown="if(event.key==='Enter')postSheetComment()">
+    <button onclick="postSheetComment()">Post</button>
+  </div>
+</div>
 
 <script>
 // -- DATA --
@@ -5030,8 +5047,8 @@ function confirmDeleteStatus(statusId) {
   var i = feedStatuses.findIndex(function(x) { return x.id === statusId; });
   if (i !== -1) feedStatuses.splice(i, 1);
   editingStatusId = null;
-  // Drop expanded-state for the deleted card so the Set doesn't leak.
-  expandedStatusIds.delete(statusId);
+  // v1.0g: if the sheet was open for the deleted status, close it.
+  if (sheetStatusId === statusId) closeCommentsSheet();
   renderFeed();
   go('screen-feed');
   showToast('Status deleted');
@@ -5078,25 +5095,8 @@ function renderFeed() {
     var dB = (b.date || '') + ' ' + (b.timeStart || '');
     return dA < dB ? -1 : dA > dB ? 1 : 0;
   });
-  // v1.0f — preserve any in-progress comment text + focus across re-renders. The Live
-  // ticker re-renders every 30s, which would otherwise wipe whatever you're typing.
-  var savedInputs = {};
-  var focusedId = null;
-  var focusedSelStart = null;
-  var focusedSelEnd = null;
-  var liveZone = document.getElementById('feed-live-list');
-  var futureZone = document.getElementById('feed-future-list');
-  [liveZone, futureZone].forEach(function(zone) {
-    if (!zone) return;
-    zone.querySelectorAll('.status-comment-composer input').forEach(function(inp) {
-      if (inp.value) savedInputs[inp.id] = inp.value;
-      if (inp === document.activeElement) {
-        focusedId = inp.id;
-        try { focusedSelStart = inp.selectionStart; focusedSelEnd = inp.selectionEnd; } catch (e) {}
-        if (!savedInputs[inp.id]) savedInputs[inp.id] = inp.value;
-      }
-    });
-  });
+  // v1.0g — the inline composer is gone (comments live in the bottom sheet now), so no
+  // composer-input preservation is needed across re-renders. The ticker can re-paint freely.
 
   if (live.length === 0) {
     liveList.innerHTML = '<p class="feed-empty">No one\u2019s out right now. Tap <strong>+ Post a status</strong> to be the first.</p>';
@@ -5108,21 +5108,8 @@ function renderFeed() {
   } else {
     futureList.innerHTML = future.map(function(s) { return renderStatusCard(s, now); }).join('');
   }
-
-  // Restore saved inputs.
-  Object.keys(savedInputs).forEach(function(id) {
-    var inp = document.getElementById(id);
-    if (inp) inp.value = savedInputs[id];
-  });
-  if (focusedId) {
-    var inp = document.getElementById(focusedId);
-    if (inp) {
-      inp.focus();
-      if (focusedSelStart !== null) {
-        try { inp.setSelectionRange(focusedSelStart, focusedSelEnd); } catch (e) {}
-      }
-    }
-  }
+  // Wire up swipe gestures on the new cards (idempotent — only binds listeners once).
+  setupSwipeOnce();
 }
 
 // Build the markup for a single Status card. v1.0e changes:
@@ -5131,18 +5118,20 @@ function renderFeed() {
 //  - Reaction icon is 🏁 (race flag), replacing ⭐.
 //  - Footer drops the inline Delete link; Edit gear (creator-only) opens the edit screen.
 //  - 'Live now' classification is dynamic (a Future past start renders with the live chip).
+// v1.0g — compact card with: top row (avatar + name + chip), mid row (underlined location
+// + actions on right), optional vibe line, latest-comment preview at bottom (1 comment max
+// with "… see more" when there are more). Edit is hidden — swipe the card left to reveal it.
 function renderStatusCard(s, now) {
   now = now || Date.now();
   var ek = effectiveKind(s, now);
   var renderingAsLive = (ek === 'live');
-  var renderingAsFuture = (ek === 'future');
   var isPromoted = s.author && s.author.kind === 'promoter';
   var cls = 'status-card' +
     (renderingAsLive ? ' is-live' : '') +
-    (renderingAsFuture ? ' is-future' : '') +
+    (!renderingAsLive ? ' is-future' : '') +
     (isPromoted ? ' is-promoted' : '');
   var avatarStyle = 'background:' + s.author.bg + ';color:' + s.author.fg;
-  // Top-right chip: Live (pulsing dot + countdown) OR Future (date + time).
+  // Chip (top-right of top row).
   var chip;
   if (renderingAsLive) {
     chip = '<span class="status-card-chip is-live"><span class="feed-live-dot"></span>' +
@@ -5159,56 +5148,77 @@ function renderStatusCard(s, now) {
   }
   var promotedBadge = isPromoted ? '<span class="status-card-promoted-badge">Promoted</span>' : '';
   var isMine = s.author.name === STATUS_ME.name;
-  // Edit affordance: creator-only. Picks the right edit opener based on the STORED kind
-  // (not the effective one) — editing a Future-now-Live still uses the future form.
-  var editBtn = isMine
-    ? '<button class="status-edit-btn" onclick="' +
-        (s.kind === 'live' ? "openStatusLiveEdit('" + s.id + "')" : "openStatusFutureEdit('" + s.id + "')") +
-      '"><span>\u2699\ufe0f</span><span>Edit</span></button>'
-    : '';
+  // Location: clean underlined inline link, no box. Generic placeholders get a non-link span.
+  var mapsHref = mapsHrefFor(s.venue);
+  var locationHtml = mapsHref
+    ? '<a class="status-card-location" href="' + mapsHref + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">' +
+        '<span class="status-card-location-pin">\ud83d\udccd</span>' +
+        '<span class="status-card-location-text">' + escapeHtml(s.venue) + '</span></a>'
+    : '<span class="status-card-location no-link">' +
+        '<span class="status-card-location-pin">\ud83d\udccd</span>' +
+        '<span class="status-card-location-text">' + escapeHtml(s.venue) + '</span></span>';
   var starred = s.stars.indexOf(STATUS_VIEWER) !== -1;
   var starCount = s.stars.length;
   var commentCount = s.comments.length;
+  // Inline actions on the right of the mid row: reaction + comments. Edit is hidden;
+  // swipe-left on the card reveals it.
+  var actionsHtml = '<div class="status-card-actions-inline">' +
+    '<button class="status-star-btn' + (starred ? ' starred' : '') + '" onclick="toggleStar(\'' + s.id + '\')">' +
+      '<span class="star-icon">\ud83c\udfc1</span><span>' + starCount + '</span>' +
+    '</button>' +
+    '<button class="status-comment-link" onclick="openCommentsSheet(\'' + s.id + '\')">' +
+      '<span>\ud83d\udcac</span><span>' + commentCount + '</span>' +
+    '</button>' +
+  '</div>';
   var ticketsLine = (isPromoted && s.ticketLink)
     ? '<a class="status-card-tickets" href="' + s.ticketLink.replace(/"/g, '%22') + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">Buy tickets \u2197</a>'
     : '';
   var vibeLine = s.vibe ? '<p class="status-card-vibe">' + escapeHtml(s.vibe) + '</p>' : '';
-  // Location tag — Partiful-style. Anchor when looksLikeVenue, otherwise a non-clickable span.
-  var mapsHref = mapsHrefFor(s.venue);
-  var locationTag = mapsHref
-    ? '<a class="status-card-location" href="' + mapsHref + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">' +
-        '<span class="status-card-location-pin">\ud83d\udccd</span>' +
-        '<span class="status-card-location-text">' + escapeHtml(s.venue) + '</span></a>'
-    : '<span class="status-card-location">' +
-        '<span class="status-card-location-pin">\ud83d\udccd</span>' +
-        '<span class="status-card-location-text">' + escapeHtml(s.venue) + '</span></span>';
-  return '<div class="' + cls + '" id="' + s.id + '">' +
-    chip +
-    '<div class="status-card-header">' +
-      '<div class="status-card-author" style="' + avatarStyle + '">' + escapeHtml(s.author.initial) + '</div>' +
-      '<div class="status-card-author-meta">' +
-        '<p class="status-card-author-name">' + escapeHtml(s.author.name) + promotedBadge + '</p>' +
+  // Latest-comment preview row at bottom of card. Shows ONLY the most recent 1 comment
+  // (or none if there are none). "… see more" appears when there are more than 1.
+  var commentPreview = '';
+  if (commentCount > 0) {
+    var lastComment = s.comments[commentCount - 1];
+    var seeMore = commentCount > 1
+      ? '<span class="status-card-comment-preview-more" onclick="openCommentsSheet(\'' + s.id + '\')">\u2026 see more</span>'
+      : '';
+    commentPreview =
+      '<div class="status-card-comment-preview" onclick="openCommentsSheet(\'' + s.id + '\')">' +
+        '<span class="status-card-comment-preview-name">' + escapeHtml(lastComment.by || 'You') + '</span>' +
+        '<span class="status-card-comment-preview-text">' + escapeHtml(lastComment.text) + '</span>' +
+        seeMore +
+      '</div>';
+  }
+  // Hidden edit action — revealed by swipe-left on the card. Only on my own posts.
+  var swipeAction = isMine
+    ? '<div class="status-card-actions">' +
+        '<button class="action-edit" onclick="' +
+          (s.kind === 'live' ? "openStatusLiveEdit('" + s.id + "')" : "openStatusFutureEdit('" + s.id + "')") +
+        '">Edit</button>' +
+      '</div>'
+    : '';
+  return '<div class="status-card-wrap" data-status-id="' + s.id + '">' +
+    swipeAction +
+    '<div class="' + cls + '" id="' + s.id + '">' +
+      '<div class="status-card-top">' +
+        '<div class="status-card-author" style="' + avatarStyle + '">' + escapeHtml(s.author.initial) + '</div>' +
+        '<div class="status-card-author-meta">' +
+          '<p class="status-card-author-name">' + escapeHtml(s.author.name) + promotedBadge + '</p>' +
+        '</div>' +
+        chip +
       '</div>' +
+      '<div class="status-card-mid">' +
+        locationHtml +
+        actionsHtml +
+      '</div>' +
+      vibeLine +
+      ticketsLine +
+      commentPreview +
     '</div>' +
-    locationTag +
-    vibeLine +
-    ticketsLine +
-    '<div class="status-card-footer">' +
-      '<button class="status-star-btn' + (starred ? ' starred' : '') + '" onclick="toggleStar(\'' + s.id + '\')">' +
-        '<span class="star-icon">\ud83c\udfc1</span>' +
-        '<span>' + starCount + '</span>' +
-      '</button>' +
-      '<button class="status-comment-link" onclick="toggleStatusCommentsExpanded(\'' + s.id + '\')">' +
-        '<span>\ud83d\udcac</span><span>' + commentCount + '</span>' +
-      '</button>' +
-      editBtn +
-    '</div>' +
-    renderInlineComments(s) +
   '</div>';
 }
 
-// Toggle the viewer's star on a status — one boolean per viewer (D-022 says the icon is
-// the cosmetic, the model is one reaction per user per post).
+// Toggle the viewer's star on a status — one boolean per viewer (D-022).
 function toggleStar(statusId) {
   var s = feedStatuses.find(function(x) { return x.id === statusId; });
   if (!s) return;
@@ -5227,17 +5237,18 @@ function deleteStatus(statusId) {
   var s = feedStatuses[i];
   if (s.author.name !== STATUS_ME.name) return;   // safety: only mine
   feedStatuses.splice(i, 1);
-  // Also drop expanded-state for the deleted card so the Set doesn't leak.
-  expandedStatusIds.delete(statusId);
   renderFeed();
   showToast('Status deleted');
 }
 
-// v1.0f — inline comments. Tracks which status cards have their comments expanded
-// (showing all comments + composer). When collapsed: latest 1-2 comments preview + expander.
-// Reactions are heart-only (D-022 ethos: lightweight signal, no commitment expected).
-// Comments are append-only — you can delete one you authored or one on a post you own.
-var expandedStatusIds = new Set();
+// v1.0g — comments live in a bottom sheet, not inline on the card. Cards show only the
+// latest 1 comment as a teaser; tapping 💬 (or "see more") opens the sheet with the full
+// thread + composer. Sheet is dismissible via backdrop tap or swipe-down. Comments inside
+// the sheet swipe-left to reveal Delete. Cards on the Feed swipe-left to reveal Edit
+// (status author only).
+
+// Which status the comments sheet is currently showing (null when closed).
+var sheetStatusId = null;
 
 // Friendly relative time for a comment. <60s "just now", <60m "Nm", <24h "Nh", else "MMM D".
 function formatCommentTime(ts) {
@@ -5253,115 +5264,122 @@ function formatCommentTime(ts) {
   return monNames[d.getMonth()] + ' ' + d.getDate();
 }
 
-// Build the inline-comments block for a status card. Two modes:
-//   - collapsed: latest 2 comments + "View all N comments" if there are more + 0-comments hint
-//   - expanded: all comments + composer
-// In both modes a 1-tap composer is shown when expanded; on collapsed cards the comment-link
-// in the card footer is the way to expand (tap to expand, tap again to collapse).
-function renderInlineComments(s) {
-  var expanded = expandedStatusIds.has(s.id);
-  var comments = s.comments || [];
-  var total = comments.length;
-  var html = '<div class="status-comments">';
-  if (total === 0) {
-    if (expanded) {
-      html += '<p class="status-comments-empty">No comments yet. Be the first to chime in.</p>';
-    }
-    // collapsed + zero comments: no preview at all (avoid empty visual noise)
-  } else if (expanded) {
-    // Show every comment, oldest-first (chronological — feels like a conversation).
-    html += '<div class="status-comments-preview">';
-    comments.forEach(function(c, i) { html += renderCommentRow(s, c, i); });
-    html += '</div>';
-  } else {
-    // Show the latest up-to-2 comments, with "View all N" expander when there are more.
-    var latest = comments.slice(Math.max(0, total - 2));
-    html += '<div class="status-comments-preview">';
-    latest.forEach(function(c) {
-      var i = comments.indexOf(c);
-      html += renderCommentRow(s, c, i);
-    });
-    html += '</div>';
-    if (total > 2) {
-      html += '<button class="status-comments-expand" onclick="toggleStatusCommentsExpanded(\'' + s.id + '\')">' +
-        'View all ' + total + ' comments</button>';
-    }
+// Open the comments sheet for a status. Stores active id, renders content, slides up.
+function openCommentsSheet(statusId) {
+  var s = feedStatuses.find(function(x) { return x.id === statusId; });
+  if (!s) return;
+  sheetStatusId = statusId;
+  renderCommentsSheet();
+  var bd = document.getElementById('comments-sheet-backdrop');
+  var sheet = document.getElementById('comments-sheet');
+  if (bd) bd.classList.add('open');
+  if (sheet) sheet.classList.add('open');
+  // Reset composer
+  var input = document.getElementById('sheet-comment-input');
+  if (input) {
+    input.value = '';
+    // Focus delayed so the slide-up animation doesn't get interrupted on iOS.
+    setTimeout(function() { try { input.focus(); } catch (e) {} }, 280);
   }
-  // Composer: shown when expanded (regardless of count) OR when collapsed and zero comments
-  // (so you can post the first comment without an extra tap to expand).
-  if (expanded || total === 0) {
-    html += '<div class="status-comment-composer">' +
-      '<input type="text" id="comment-input-' + s.id + '" placeholder="Add a comment..." ' +
-        'onkeydown="if(event.key===\'Enter\')postStatusComment(\'' + s.id + '\')">' +
-      '<button onclick="postStatusComment(\'' + s.id + '\')">Post</button>' +
-    '</div>';
-  }
-  html += '</div>';
-  return html;
 }
 
-// Build a single comment row. Includes heart reaction + delete (when allowed).
-function renderCommentRow(status, c, idx) {
+// Close the sheet — clear active id, slide down, dim backdrop.
+function closeCommentsSheet() {
+  sheetStatusId = null;
+  var bd = document.getElementById('comments-sheet-backdrop');
+  var sheet = document.getElementById('comments-sheet');
+  if (bd) bd.classList.remove('open');
+  if (sheet) sheet.classList.remove('open');
+}
+
+// Render the contents of the open sheet — header summary + comment thread.
+function renderCommentsSheet() {
+  if (!sheetStatusId) return;
+  var s = feedStatuses.find(function(x) { return x.id === sheetStatusId; });
+  if (!s) return;
+  var header = document.getElementById('comments-sheet-header');
+  var list = document.getElementById('comments-sheet-list');
+  if (header) {
+    header.innerHTML = 'Comments on <strong>' + escapeHtml(s.venue || 'this status') + '</strong> \u00b7 ' +
+      s.comments.length;
+  }
+  if (!list) return;
+  if (s.comments.length === 0) {
+    list.innerHTML = '<p class="comments-sheet-empty">No comments yet. Be the first to chime in.</p>';
+  } else {
+    list.innerHTML = s.comments.map(function(c, i) {
+      return renderSheetCommentRow(s, c, i);
+    }).join('');
+  }
+}
+
+// Build a sheet comment row — includes the swipe wrapper so swipe-left reveals Delete.
+function renderSheetCommentRow(status, c, idx) {
   var initial = (c.by && c.by.length) ? c.by.charAt(0).toUpperCase() : 'Y';
   var hearts = c.hearts || [];
   var hearted = hearts.indexOf(STATUS_VIEWER) !== -1;
   var heartCount = hearts.length;
-  // Delete eligibility: comment author OR status owner. STATUS_VIEWER stands in for the
-  // current user identity in this prototype (always 'You' or matches STATUS_ME.name).
+  // Delete: comment author OR post owner. The action only renders if the viewer is allowed.
   var iAmCommentAuthor = (c.by === STATUS_VIEWER) || (c.by === STATUS_ME.name);
   var iAmStatusOwner = (status.author && status.author.name === STATUS_ME.name);
   var canDelete = iAmCommentAuthor || iAmStatusOwner;
-  var heartLabel = heartCount > 0 ? (' ' + heartCount) : '';
-  var actionsHtml = '<div class="status-comment-actions">' +
-    '<button class="status-comment-heart' + (hearted ? ' hearted' : '') + '" ' +
-      'onclick="toggleCommentHeart(\'' + status.id + '\', ' + idx + ')">' +
-      '<span>\u2764\ufe0f</span><span>' + heartLabel + '</span>' +
-    '</button>' +
-    (canDelete
-      ? '<button class="status-comment-delete" onclick="deleteComment(\'' + status.id + '\', ' + idx + ')">Delete</button>'
-      : '') +
-    '</div>';
-  return '<div class="status-comment-row">' +
-    '<div class="status-comment-avatar">' + escapeHtml(initial) + '</div>' +
-    '<div class="status-comment-body">' +
-      '<div class="status-comment-meta">' +
-        '<span class="status-comment-name">' + escapeHtml(c.by || 'You') + '</span>' +
-        '<span class="status-comment-time">' + formatCommentTime(c.at) + '</span>' +
+  var heartCountLabel = heartCount > 0 ? heartCount : '';
+  var actionsHtml = canDelete
+    ? '<div class="sheet-comment-actions"><button onclick="deleteSheetComment(' + idx + ')">Delete</button></div>'
+    : '';
+  return '<div class="sheet-comment-wrap" data-comment-idx="' + idx + '"' +
+      (canDelete ? ' data-swipeable="1"' : '') + '>' +
+    actionsHtml +
+    '<div class="sheet-comment">' +
+      '<div class="sheet-comment-avatar">' + escapeHtml(initial) + '</div>' +
+      '<div class="sheet-comment-body">' +
+        '<div class="sheet-comment-meta">' +
+          '<span class="sheet-comment-name">' + escapeHtml(c.by || 'You') + '</span>' +
+          '<span class="sheet-comment-time">' + formatCommentTime(c.at) + '</span>' +
+        '</div>' +
+        '<p class="sheet-comment-text">' + escapeHtml(c.text) + '</p>' +
       '</div>' +
-      '<p class="status-comment-text">' + escapeHtml(c.text) + '</p>' +
-      actionsHtml +
+      '<button class="sheet-comment-heart' + (hearted ? ' hearted' : '') +
+        '" onclick="toggleCommentHeart(\'' + status.id + '\', ' + idx + ')">' +
+        '<span>\u2764\ufe0f</span>' +
+        (heartCount > 0 ? '<span>' + heartCount + '</span>' : '') +
+      '</button>' +
     '</div>' +
   '</div>';
 }
 
-// Toggle a status card's comments expanded state. Re-renders the feed.
-function toggleStatusCommentsExpanded(statusId) {
-  if (expandedStatusIds.has(statusId)) expandedStatusIds.delete(statusId);
-  else expandedStatusIds.add(statusId);
-  renderFeed();
-}
-
-// Post a comment to a status from the inline composer on the card. Empty/whitespace ignored.
-// Posting from a collapsed card with 0 comments auto-expands so the user can see what they posted.
-function postStatusComment(statusId) {
-  var s = feedStatuses.find(function(x) { return x.id === statusId; });
+// Post a comment from the sheet's composer. Empty/whitespace silently ignored.
+function postSheetComment() {
+  if (!sheetStatusId) return;
+  var s = feedStatuses.find(function(x) { return x.id === sheetStatusId; });
   if (!s) return;
-  var input = document.getElementById('comment-input-' + statusId);
+  var input = document.getElementById('sheet-comment-input');
   if (!input) return;
   var text = input.value.trim();
   if (!text) return;
   s.comments.push({ by: STATUS_VIEWER, text: text, at: Date.now(), hearts: [] });
-  // Auto-expand so the user sees their comment land somewhere visible (in case it lands
-  // past the 2-comment preview window or this card was at 0 comments).
-  expandedStatusIds.add(statusId);
   input.value = '';
+  renderCommentsSheet();
+  // Refresh feed so the latest-comment preview on the card stays in sync underneath.
   renderFeed();
-  // Restore focus to the input so a series of comments doesn't require re-tapping.
-  var newInput = document.getElementById('comment-input-' + statusId);
-  if (newInput) newInput.focus();
+  try { input.focus(); } catch (e) {}
 }
 
-// Toggle the viewer's heart on a specific comment.
+// Delete a comment from the sheet (swipe-left → Delete tap). Refreshes both surfaces.
+function deleteSheetComment(commentIdx) {
+  if (!sheetStatusId) return;
+  var s = feedStatuses.find(function(x) { return x.id === sheetStatusId; });
+  if (!s || !s.comments[commentIdx]) return;
+  var c = s.comments[commentIdx];
+  var iAmCommentAuthor = (c.by === STATUS_VIEWER) || (c.by === STATUS_ME.name);
+  var iAmStatusOwner = (s.author && s.author.name === STATUS_ME.name);
+  if (!iAmCommentAuthor && !iAmStatusOwner) return;   // safety
+  s.comments.splice(commentIdx, 1);
+  renderCommentsSheet();
+  renderFeed();
+}
+
+// Toggle the viewer's heart on a specific comment (works from sheet).
 function toggleCommentHeart(statusId, commentIdx) {
   var s = feedStatuses.find(function(x) { return x.id === statusId; });
   if (!s || !s.comments[commentIdx]) return;
@@ -5370,22 +5388,131 @@ function toggleCommentHeart(statusId, commentIdx) {
   var i = c.hearts.indexOf(STATUS_VIEWER);
   if (i === -1) c.hearts.push(STATUS_VIEWER);
   else c.hearts.splice(i, 1);
+  renderCommentsSheet();
   renderFeed();
 }
 
-// Delete a comment. Allowed if: viewer authored the comment, OR viewer owns the post.
+// Legacy v1.0f functions that other code might still reference — kept as no-ops
+// or routed to the sheet equivalents so we don't break anything in tests.
+function postStatusComment(statusId) {
+  // Old path posted from an inline composer on the card. The card no longer has one;
+  // tapping 💬 should open the sheet instead. Preserved as a no-op for safety.
+  openCommentsSheet(statusId);
+}
 function deleteComment(statusId, commentIdx) {
+  // Legacy path — route to the sheet's delete flow when the sheet is showing this status.
+  if (sheetStatusId === statusId) { deleteSheetComment(commentIdx); return; }
   var s = feedStatuses.find(function(x) { return x.id === statusId; });
   if (!s || !s.comments[commentIdx]) return;
   var c = s.comments[commentIdx];
   var iAmCommentAuthor = (c.by === STATUS_VIEWER) || (c.by === STATUS_ME.name);
   var iAmStatusOwner = (s.author && s.author.name === STATUS_ME.name);
-  if (!iAmCommentAuthor && !iAmStatusOwner) return;   // safety
+  if (!iAmCommentAuthor && !iAmStatusOwner) return;
   s.comments.splice(commentIdx, 1);
   renderFeed();
 }
 
-// ═══ end v1.0a / v1.0b / v1.0f — FEED / STATUS ═══
+// v1.0g — pointer-driven swipe-to-reveal. Used by status cards (reveals Edit) and by
+// comment rows in the sheet (reveals Delete). Returns a snap state at end of drag.
+//
+// Mechanism: pointerdown captures startX, pointermove translates the foreground element
+// to translateX(-delta) clamped to 0..maxReveal, pointerup snaps to 0 or -maxReveal based
+// on threshold. The function operates on any element pair of (wrapper, foreground, actions).
+//
+// We use a delegated approach attached to the Feed list + sheet list, registered once.
+var SWIPE_THRESHOLD = 60;       // px to commit to revealed state
+var SWIPE_MAX_REVEAL = 110;     // px max translate while dragging
+var swipeState = null;          // { foregroundEl, startX, currentX, isOpen, maxReveal }
+
+function setupSwipeOnce() {
+  if (window._swipeBound) return;
+  window._swipeBound = true;
+  document.addEventListener('pointerdown', onSwipeStart, true);
+  document.addEventListener('pointermove', onSwipeMove, true);
+  document.addEventListener('pointerup', onSwipeEnd, true);
+  document.addEventListener('pointercancel', onSwipeEnd, true);
+}
+
+function onSwipeStart(e) {
+  // Find the swipeable foreground for this pointer target.
+  var card = e.target.closest && e.target.closest('.status-card');
+  var sheetComment = e.target.closest && e.target.closest('.sheet-comment');
+  var foreground = null;
+  var maxReveal = SWIPE_MAX_REVEAL;
+  if (card && card.closest('.status-card-wrap')) {
+    // Only swipe the card if the post is mine (only mine has an Edit action behind it).
+    var wrap = card.closest('.status-card-wrap');
+    if (!wrap.querySelector('.action-edit')) return;
+    foreground = card;
+  } else if (sheetComment) {
+    var commentWrap = sheetComment.closest('.sheet-comment-wrap');
+    if (!commentWrap || commentWrap.getAttribute('data-swipeable') !== '1') return;
+    foreground = sheetComment;
+    maxReveal = 80;
+  } else {
+    return;
+  }
+  // Ignore swipes that start on buttons/links inside the foreground — those want tap behavior.
+  if (e.target.closest('button, a')) return;
+  // Read current openness from the existing transform
+  var currentTx = readTranslateX(foreground);
+  swipeState = {
+    foregroundEl: foreground,
+    startX: e.clientX,
+    currentX: e.clientX,
+    startOffset: currentTx,
+    isOpen: currentTx <= -10,
+    maxReveal: maxReveal,
+    moved: false
+  };
+}
+
+function onSwipeMove(e) {
+  if (!swipeState) return;
+  var dx = e.clientX - swipeState.startX;
+  if (Math.abs(dx) < 4 && !swipeState.moved) return;   // ignore micro-jitters
+  swipeState.moved = true;
+  swipeState.currentX = e.clientX;
+  // Combine starting offset with drag delta
+  var targetTx = swipeState.startOffset + dx;
+  // Clamp: can go from 0 (closed) to -maxReveal (open)
+  if (targetTx > 0) targetTx = 0;
+  if (targetTx < -swipeState.maxReveal) targetTx = -swipeState.maxReveal;
+  swipeState.foregroundEl.classList.add('swiping');
+  swipeState.foregroundEl.style.transform = 'translateX(' + targetTx + 'px)';
+}
+
+function onSwipeEnd() {
+  if (!swipeState) return;
+  var el = swipeState.foregroundEl;
+  el.classList.remove('swiping');
+  var currentTx = readTranslateX(el);
+  // Snap: if past threshold or already mostly open, snap to maxReveal; else snap closed.
+  if (currentTx < -SWIPE_THRESHOLD) {
+    el.style.transform = 'translateX(-' + swipeState.maxReveal + 'px)';
+  } else {
+    el.style.transform = 'translateX(0)';
+  }
+  swipeState = null;
+}
+
+function readTranslateX(el) {
+  var t = el.style.transform || '';
+  var m = t.match(/translateX\((-?\d+(?:\.\d+)?)px\)/);
+  return m ? parseFloat(m[1]) : 0;
+}
+
+// Close any open swipe states on the Feed — used after a status edit/delete fires.
+function resetAllSwipes() {
+  document.querySelectorAll('.status-card[style*="translateX"]').forEach(function(el) {
+    el.style.transform = 'translateX(0)';
+  });
+  document.querySelectorAll('.sheet-comment[style*="translateX"]').forEach(function(el) {
+    el.style.transform = 'translateX(0)';
+  });
+}
+
+// ═══ end v1.0a / v1.0b / v1.0f / v1.0g — FEED / STATUS ═══
 
 // ═══ v0.9 — QUICK RALLY (v0.9.1 update) ═══
 // A Quick Rally is a fast in-the-moment plan: the sender names what/where/when and
