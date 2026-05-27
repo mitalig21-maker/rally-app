@@ -355,8 +355,11 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 /* ═══ v0.9 — QUICK RALLY ═══ */
 .qr-label{display:block;font-family:var(--body);font-size:13px;font-weight:600;color:var(--text);margin:14px 0 6px}
 .qr-label:first-child{margin-top:0}
+.qr-opt{font-weight:400;color:var(--text-muted);font-size:11px}
 .qr-input{font-size:15px}
 .qr-hint{font-size:12px;color:var(--text-muted);margin:2px 0 8px}
+.qr-when-row{display:flex;gap:8px}
+.qr-when-select{flex:1;min-width:0;font-size:15px}
 .qr-friends{display:flex;flex-wrap:wrap;gap:8px}
 .qr-friend{display:flex;align-items:center;gap:7px;background:var(--white);border:1.5px solid var(--border);border-radius:50px;padding:7px 13px 7px 7px;font-family:var(--body);font-size:13px;color:var(--text);cursor:pointer}
 .qr-friend.sel{border-color:var(--green);background:var(--green-pale);color:var(--green);font-weight:500}
@@ -364,12 +367,17 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 /* Quick Rally feed card — distinct from voting Rally cards */
 .qr-card-inner{border-left:3px solid var(--green)}
 .qr-badge{background:var(--green);color:var(--white)}
-.qr-tally{display:flex;gap:14px;margin-top:10px}
-.qr-tally-item{font-size:12px;color:var(--text-muted)}
-.qr-tally-item strong{font-size:15px;color:var(--green);font-weight:700;display:block}
-.qr-tally-item.is-out strong{color:#B91C1C}
-.qr-tally-item.is-maybe strong{color:#92400E}
-.qr-expand{font-size:11px;color:var(--green);text-decoration:underline;cursor:pointer;margin-top:8px;display:inline-block}
+/* v0.9.1 — Option B tally: one sentence + thin progress bar */
+.qr-tally-line{font-size:14px;color:var(--text);font-weight:500;margin-top:10px;margin-bottom:6px}
+.qr-tally-line strong{color:var(--green);font-weight:700}
+.qr-tally-line .qr-tally-secondary{color:var(--text-muted);font-size:12px;font-weight:400;margin-left:6px}
+.qr-tally-bar{display:flex;width:100%;height:6px;border-radius:3px;overflow:hidden;background:var(--border)}
+.qr-tally-bar-seg{height:100%}
+.qr-tally-bar-in{background:var(--green)}
+.qr-tally-bar-maybe{background:#D97706}
+.qr-tally-bar-out{background:#B91C1C}
+.qr-expand{font-size:11px;color:var(--green);text-decoration:underline;cursor:pointer;margin-top:10px;display:inline-block}
+.qr-edit-link{font-size:11px;color:var(--green);text-decoration:underline;cursor:pointer;float:right}
 .qr-roster{margin-top:10px;padding-top:10px;border-top:1px dotted var(--border-dot);display:none}
 .qr-roster.open{display:block}
 .qr-roster-row{display:flex;align-items:center;justify-content:space-between;padding:4px 0;font-size:12px}
@@ -379,6 +387,8 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .qr-rs-maybe{color:#92400E}
 .qr-rs-out{color:#B91C1C}
 .qr-rs-none{color:var(--text-muted)}
+/* Card meta link (e.g. menu link on a Quick Rally card) */
+.qr-meta-link{color:var(--green);text-decoration:underline;cursor:pointer}
 /* Quick Rally response control (recipient view) */
 .qr-respond{display:flex;gap:8px;margin-top:12px}
 .qr-respond button{flex:1;background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:10px;font-family:var(--body);font-size:13px;font-weight:600;color:var(--text-muted);cursor:pointer}
@@ -834,7 +844,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         </div>
       </div>
     </div>
-    <div class="version-marker">Rally · v0.9</div>
+    <div class="version-marker">Rally · v0.9.1</div>
   </div>
   <button class="fab-quick" onclick="openQuickRally()">
     ⚡ Quick Rally
@@ -865,15 +875,20 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
   <div class="scroll-content" style="padding:16px 20px">
     <label class="qr-label">What's the plan?</label>
     <input class="input-field qr-input" id="qr-what" type="text" placeholder="Dinner, drinks, movie night...">
-    <label class="qr-label">Where?</label>
+    <label class="qr-label">Where? <span class="qr-opt">(optional)</span></label>
     <input class="input-field qr-input" id="qr-where" type="text" placeholder="Carbone, my place, TBD...">
+    <label class="qr-label">Link <span class="qr-opt">(optional)</span></label>
+    <input class="input-field qr-input" id="qr-link" type="url" placeholder="Menu, event page, group chat...">
     <label class="qr-label">When?</label>
-    <input class="input-field qr-input" id="qr-when" type="text" placeholder="Tonight 8pm, Sat afternoon...">
+    <div class="qr-when-row">
+      <select class="select-field qr-when-select" id="qr-date"></select>
+      <select class="select-field qr-when-select" id="qr-time"></select>
+    </div>
     <label class="qr-label">Who's invited?</label>
     <p class="qr-hint">Tap the friends you want to round up.</p>
     <div id="qr-friends" class="qr-friends"></div>
     <div style="height:16px"></div>
-    <button class="btn-primary" onclick="sendQuickRally()">Send Quick Rally ⚡</button>
+    <button class="btn-primary" id="qr-submit-btn" onclick="sendQuickRally()">Send Quick Rally ⚡</button>
   </div>
 </div>
 
@@ -4465,7 +4480,7 @@ function selectRespTime(btn, val) {
   if (input) input.style.display = val === 'diff' ? 'block' : 'none';
 }
 
-// ═══ v0.9 — QUICK RALLY ═══
+// ═══ v0.9 — QUICK RALLY (v0.9.1 update) ═══
 // A Quick Rally is a fast in-the-moment plan: the sender names what/where/when and
 // picks specific invitees. No voting, no AI — the plan is set. Invitees respond
 // In / Maybe / Can't, and the sender watches a live tally inline on the home card.
@@ -4482,18 +4497,143 @@ var QR_FRIENDS = [
 // In-flight selection while composing.
 var qrSelectedFriends = [];
 // The active Quick Rally (one at a time in this prototype). Null until one is sent.
-//   { what, where, when, invited:[names], responses:{name:'in'|'maybe'|'out'} }
+//   { what, where, link, date, time, invited:[names], responses:{name:'in'|'maybe'|'out'} }
 var quickRally = null;
+// True when the compose screen is editing an existing Quick Rally (vs. composing a new one).
+var qrEditing = false;
 
-// Open the compose screen — reset fields + selection.
+// ── Date / time helpers ─────────────────────────────────────
+// Build the date dropdown options: Today, Tomorrow, then the next 7 specific dates.
+// Each option's value is an ISO date (YYYY-MM-DD); label is human-friendly.
+function buildQRDateOptions(selectEl) {
+  if (!selectEl) return;
+  var now = new Date();
+  var html = '';
+  for (var i = 0; i < 9; i++) {
+    var d = new Date(now.getFullYear(), now.getMonth(), now.getDate() + i);
+    var iso = d.getFullYear() + '-' +
+      ('0' + (d.getMonth() + 1)).slice(-2) + '-' +
+      ('0' + d.getDate()).slice(-2);
+    var label;
+    if (i === 0) label = 'Today';
+    else if (i === 1) label = 'Tomorrow';
+    else {
+      var dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      var monNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      label = dayNames[d.getDay()] + ' ' + monNames[d.getMonth()] + ' ' + d.getDate();
+    }
+    html += '<option value="' + iso + '">' + label + '</option>';
+  }
+  selectEl.innerHTML = html;
+}
+// Build the time dropdown: half-hour increments 07:00–23:30.
+function buildQRTimeOptions(selectEl) {
+  if (!selectEl) return;
+  var html = '';
+  for (var h = 7; h < 24; h++) {
+    for (var m = 0; m < 60; m += 30) {
+      var val = (h < 10 ? '0' : '') + h + ':' + (m === 0 ? '00' : '30');
+      var hh = (h === 0 ? 12 : (h > 12 ? h - 12 : h));
+      var ampm = h < 12 ? 'AM' : 'PM';
+      var label = hh + ':' + (m === 0 ? '00' : '30') + ' ' + ampm;
+      html += '<option value="' + val + '">' + label + '</option>';
+    }
+  }
+  selectEl.innerHTML = html;
+}
+// Round the current time up to the next 30-min slot, clamped to 07:00–23:30.
+// Same logic as initRallyDateTimeDefaults so Quick Rally matches regular Rally behavior.
+function qrNextHalfHour() {
+  var now = new Date();
+  var h = now.getHours();
+  var m = now.getMinutes();
+  if (m === 0) m = 30;
+  else if (m <= 30) m = 30;
+  else { m = 0; h += 1; }
+  if (h >= 24) { h = 23; m = 30; }
+  if (h < 7) { h = 7; m = 0; }
+  return (h < 10 ? '0' : '') + h + ':' + (m === 0 ? '00' : '30');
+}
+function qrTodayISO() {
+  var now = new Date();
+  return now.getFullYear() + '-' +
+    ('0' + (now.getMonth() + 1)).slice(-2) + '-' +
+    ('0' + now.getDate()).slice(-2);
+}
+// Format an ISO date ('2026-05-27') for the card meta. Today/Tomorrow get friendly labels.
+function qrFormatDate(iso) {
+  if (!iso) return '';
+  var parts = iso.split('-');
+  if (parts.length !== 3) return iso;
+  var d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+  var today = new Date();
+  today = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  var diff = Math.round((d - today) / (1000 * 60 * 60 * 24));
+  if (diff === 0) return 'Today';
+  if (diff === 1) return 'Tomorrow';
+  var dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  var monNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  return dayNames[d.getDay()] + ' ' + monNames[d.getMonth()] + ' ' + d.getDate();
+}
+// Format a 24h time ('19:30') as '7:30 PM' for display.
+function qrFormatTime(val) {
+  if (!val) return '';
+  var tp = val.split(':');
+  if (tp.length !== 2) return val;
+  var h = parseInt(tp[0], 10);
+  var ampm = h < 12 ? 'AM' : 'PM';
+  var hh = (h === 0 ? 12 : (h > 12 ? h - 12 : h));
+  return hh + ':' + tp[1] + ' ' + ampm;
+}
+
+// ── Compose screen ──────────────────────────────────────────
+// Open the compose screen for a NEW Quick Rally — reset all fields + selection,
+// populate dropdowns, default date to Today and time to the next 30-min slot.
 function openQuickRally() {
+  qrEditing = false;
   qrSelectedFriends = [];
   var w = document.getElementById('qr-what');
   var wh = document.getElementById('qr-where');
-  var wn = document.getElementById('qr-when');
+  var lk = document.getElementById('qr-link');
   if (w) w.value = '';
   if (wh) wh.value = '';
-  if (wn) wn.value = '';
+  if (lk) lk.value = '';
+  var dateSel = document.getElementById('qr-date');
+  var timeSel = document.getElementById('qr-time');
+  buildQRDateOptions(dateSel);
+  buildQRTimeOptions(timeSel);
+  if (dateSel) dateSel.value = qrTodayISO();
+  if (timeSel) timeSel.value = qrNextHalfHour();
+  var btn = document.getElementById('qr-submit-btn');
+  if (btn) btn.textContent = 'Send Quick Rally \u26a1';
+  renderQRFriends();
+  go('screen-quick-rally');
+}
+
+// Open the compose screen pre-filled with the active Quick Rally (edit mode).
+// Responses are preserved on save.
+function openQuickRallyEdit() {
+  if (!quickRally) return;
+  qrEditing = true;
+  qrSelectedFriends = quickRally.invited.slice();
+  var dateSel = document.getElementById('qr-date');
+  var timeSel = document.getElementById('qr-time');
+  buildQRDateOptions(dateSel);
+  buildQRTimeOptions(timeSel);
+  document.getElementById('qr-what').value = quickRally.what || '';
+  document.getElementById('qr-where').value = quickRally.where || '';
+  document.getElementById('qr-link').value = quickRally.link || '';
+  // If the saved date is now in the past (e.g. yesterday), the option may not be in the
+  // dropdown — set value anyway; the browser will just show blank. Re-default to Today.
+  if (dateSel) {
+    dateSel.value = quickRally.date || qrTodayISO();
+    if (!dateSel.value) dateSel.value = qrTodayISO();
+  }
+  if (timeSel) timeSel.value = quickRally.time || qrNextHalfHour();
+  var btn = document.getElementById('qr-submit-btn');
+  if (btn) btn.textContent = 'Save changes';
   renderQRFriends();
   go('screen-quick-rally');
 }
@@ -4520,26 +4660,52 @@ function toggleQRFriend(name) {
   renderQRFriends();
 }
 
-// Send the Quick Rally — validate, build the object, render the feed card, go home.
+// Send or save — validate, build/update the object, render the feed card, go home.
+// v0.9.1: only 'what' and at-least-one-invitee are mandatory. Where, link, date, and
+// time are all optional (date defaults to today, time defaults to the next 30-min slot).
 function sendQuickRally() {
   var what = document.getElementById('qr-what').value.trim();
   var where = document.getElementById('qr-where').value.trim();
-  var when = document.getElementById('qr-when').value.trim();
+  var link = document.getElementById('qr-link').value.trim();
+  var dateSel = document.getElementById('qr-date');
+  var timeSel = document.getElementById('qr-time');
+  var date = dateSel ? dateSel.value : '';
+  var time = timeSel ? timeSel.value : '';
   if (!what) { showToast('What\u2019s the plan?'); return; }
-  if (!when) { showToast('Add a time so people know when'); return; }
   if (qrSelectedFriends.length === 0) { showToast('Pick at least one friend to invite'); return; }
-  quickRally = {
-    what: what,
-    where: where,
-    when: when,
-    invited: qrSelectedFriends.slice(),
-    responses: {}                  // name -> 'in' | 'maybe' | 'out'
-  };
+  if (qrEditing && quickRally) {
+    // Edit mode: update in place, preserving responses (but trim them to the new invitee
+    // list — anyone who was un-invited no longer has a slot).
+    quickRally.what = what;
+    quickRally.where = where;
+    quickRally.link = link;
+    quickRally.date = date;
+    quickRally.time = time;
+    quickRally.invited = qrSelectedFriends.slice();
+    var preserved = {};
+    quickRally.invited.forEach(function(n) {
+      if (quickRally.responses[n]) preserved[n] = quickRally.responses[n];
+    });
+    quickRally.responses = preserved;
+  } else {
+    quickRally = {
+      what: what,
+      where: where,
+      link: link,
+      date: date,
+      time: time,
+      invited: qrSelectedFriends.slice(),
+      responses: {}
+    };
+  }
+  var wasEditing = qrEditing;
+  qrEditing = false;
   renderQuickRallyCard();
   go('screen-home');
-  showToast('Quick Rally sent \u26a1');
+  showToast(wasEditing ? 'Quick Rally updated' : 'Quick Rally sent \u26a1');
 }
 
+// ── Feed card ───────────────────────────────────────────────
 // Render (or re-render) the Quick Rally feed card at the top of the feed.
 function renderQuickRallyCard() {
   var feed = document.getElementById('rally-feed');
@@ -4557,26 +4723,58 @@ function renderQuickRallyCard() {
   else feed.insertBefore(card, feed.firstChild);
 }
 
-// Build the inner markup for the Quick Rally card — meta, tally, expandable roster,
-// and (for the demo) an In/Maybe/Can't response control standing in for an invitee.
+// Build the inner markup for the Quick Rally card.
+// v0.9.1 changes: Option-B tally (sentence + bar), Edit link, optional link rendered
+// in the meta line, friendly date/time formatting.
 function quickRallyCardMarkup() {
   var q = quickRally;
   var counts = qrCounts();
-  var whereLine = q.where ? (' \u00B7 ' + escapeHtml(q.where)) : '';
+  var total = q.invited.length;
+  // Meta line: date · time · where · link · "You started"
+  var metaParts = [];
+  if (q.date) metaParts.push(qrFormatDate(q.date));
+  if (q.time) metaParts.push(qrFormatTime(q.time));
+  if (q.where) metaParts.push(escapeHtml(q.where));
+  var metaHtml = metaParts.join(' \u00B7 ');
+  if (q.link) {
+    // Safe-ish: only render the link as an anchor if it looks like a URL.
+    var safeLink = q.link.replace(/"/g, '%22');
+    metaHtml += (metaHtml ? ' \u00B7 ' : '') +
+      '<a class="qr-meta-link" href="' + safeLink + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">link \u2197</a>';
+  }
+  metaHtml += (metaHtml ? ' \u00B7 ' : '') + 'You started';
   var html = '<div class="card card-pad qr-card-inner">';
   html += '<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">';
-  html += '<div><p class="rally-title-text">\u26a1 ' + escapeHtml(q.what) + '</p>';
-  html += '<p class="rally-meta">' + escapeHtml(q.when) + whereLine + ' \u00B7 You started</p></div>';
+  html += '<div style="flex:1;min-width:0"><p class="rally-title-text">\u26a1 ' + escapeHtml(q.what) + '</p>';
+  html += '<p class="rally-meta">' + metaHtml + '</p></div>';
   html += '<span class="badge qr-badge">Quick</span></div>';
   html += '<hr class="dot-divider">';
-  // Live tally
-  html += '<div class="qr-tally">';
-  html += '<div class="qr-tally-item"><strong>' + counts.in + '</strong>in</div>';
-  html += '<div class="qr-tally-item is-maybe"><strong>' + counts.maybe + '</strong>maybe</div>';
-  html += '<div class="qr-tally-item is-out"><strong>' + counts.out + '</strong>can\u2019t</div>';
-  html += '<div class="qr-tally-item"><strong>' + counts.pending + '</strong>no reply</div>';
+  // v0.9.1 Option-B tally: one sentence + thin progress bar
+  var inN = counts.in;
+  var maybeText = counts.maybe > 0 ? (counts.maybe + ' maybe') : '';
+  var outText = counts.out > 0 ? (counts.out + ' can\u2019t') : '';
+  var pendingText = counts.pending > 0 ? (counts.pending + ' no reply') : '';
+  var secondary = [maybeText, outText, pendingText].filter(function(t) { return t; }).join(' \u00B7 ');
+  html += '<p class="qr-tally-line"><strong>' + inN + ' of ' + total + ' in</strong>';
+  if (secondary) html += '<span class="qr-tally-secondary">\u00B7 ' + secondary + '</span>';
+  html += '</p>';
+  // Progress bar: in / maybe / out / no-reply segments, widths in percent
+  html += '<div class="qr-tally-bar">';
+  if (total > 0) {
+    var pctIn = (counts.in / total) * 100;
+    var pctMaybe = (counts.maybe / total) * 100;
+    var pctOut = (counts.out / total) * 100;
+    if (pctIn > 0)    html += '<div class="qr-tally-bar-seg qr-tally-bar-in" style="width:' + pctIn + '%"></div>';
+    if (pctMaybe > 0) html += '<div class="qr-tally-bar-seg qr-tally-bar-maybe" style="width:' + pctMaybe + '%"></div>';
+    if (pctOut > 0)   html += '<div class="qr-tally-bar-seg qr-tally-bar-out" style="width:' + pctOut + '%"></div>';
+    // The remainder (no-reply) is left as the bar's grey background.
+  }
   html += '</div>';
+  // Expand + edit row
+  html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px">';
   html += '<span class="qr-expand" onclick="toggleQRRoster(event)">See who\u2019s in \u2193</span>';
+  html += '<span class="qr-edit-link" onclick="event.stopPropagation();openQuickRallyEdit()">Edit</span>';
+  html += '</div>';
   // Expandable roster
   html += '<div class="qr-roster" id="qr-roster">';
   q.invited.forEach(function(name) {
