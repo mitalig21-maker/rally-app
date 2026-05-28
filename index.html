@@ -501,7 +501,9 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 
 /* ═══ v1.1 — RALLY → STATUS CONVERSION ═══ */
 /* FROM RALLY badge on a converted status card */
-.status-from-rally-badge{display:inline-block;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:var(--green);color:var(--white);padding:2px 7px;border-radius:3px;margin-left:6px;vertical-align:middle}
+/* v1.4 — from-Rally cards get a distinct deep-green left border + faint tint instead of a
+   text badge (the badge competed with the date chip for space and got clipped). */
+.status-card.is-from-rally{border-left:4px solid #0F2A1D;background:linear-gradient(to right, rgba(15,42,29,0.04), var(--white) 64px)}
 /* Attendee avatar cluster — overlapping circles for multi-person converted statuses */
 .status-attendee-cluster{display:inline-flex;align-items:center;flex-shrink:0;cursor:pointer}
 .status-attendee-cluster .status-card-author{margin-right:-8px;border:2px solid var(--white);box-sizing:content-box;width:26px;height:26px}
@@ -531,6 +533,17 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .rsvp-dev-btn{background:var(--cream);border:1px solid var(--border);border-radius:50px;padding:4px 11px;font-family:var(--body);font-size:11px;color:var(--text-muted);cursor:pointer;text-transform:capitalize}
 .rsvp-dev-btn.on{background:var(--green);color:var(--white);border-color:var(--green);font-weight:600}
 /* ═══ end v1.2 CSS ═══ */
+
+/* ═══ v1.4 — IN-APP CONFIRM DIALOG (on-brand, replaces native window.confirm) ═══ */
+.app-confirm-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:300;opacity:0;transition:opacity 0.2s ease;pointer-events:none}
+.app-confirm-backdrop.open{opacity:1;pointer-events:auto}
+.app-confirm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.94);width:calc(100% - 72px);max-width:320px;background:var(--cream);border-radius:18px;z-index:301;padding:24px 22px 16px;box-shadow:0 12px 40px rgba(0,0,0,0.25);opacity:0;transition:opacity 0.18s ease, transform 0.18s ease;pointer-events:none}
+.app-confirm.open{opacity:1;transform:translate(-50%,-50%) scale(1);pointer-events:auto}
+.app-confirm-msg{font-family:var(--body);font-size:15px;line-height:1.5;color:var(--text);margin-bottom:20px;text-align:center}
+.app-confirm-actions{display:flex;gap:10px}
+.app-confirm-cancel{flex:1;background:none;border:1px solid var(--border);border-radius:50px;padding:11px;font-family:var(--headline);font-size:12px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:var(--text-muted);cursor:pointer}
+.app-confirm-ok{flex:1;background:var(--green);border:none;border-radius:50px;padding:11px;font-family:var(--headline);font-size:12px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:var(--white);cursor:pointer}
+/* ═══ end v1.4 CSS ═══ */
 
 /* Inline danger button used inside Edit screens to scope deletes */
 .btn-text-danger{width:100%;background:none;border:none;font-family:var(--body);font-size:13px;color:#B91C1C;text-decoration:underline;cursor:pointer;padding:6px}
@@ -988,7 +1001,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         </div>
       </div>
     </div>
-    <div class="version-marker">Rally · v1.3</div>
+    <div class="version-marker">Rally · v1.4</div>
   </div>
   <button class="fab-quick" onclick="openQuickRally()">
     ⚡ Quick Rally
@@ -2479,6 +2492,16 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 </div>
 
 
+<!-- ══ v1.4 — IN-APP CONFIRM DIALOG (on-brand, replaces window.confirm) ══ -->
+<div class="app-confirm-backdrop" id="app-confirm-backdrop"></div>
+<div class="app-confirm" id="app-confirm" role="dialog" aria-label="Confirm">
+  <p class="app-confirm-msg" id="app-confirm-msg"></p>
+  <div class="app-confirm-actions">
+    <button class="app-confirm-cancel" id="app-confirm-cancel">Cancel</button>
+    <button class="app-confirm-ok" id="app-confirm-ok">Confirm</button>
+  </div>
+</div>
+
 <!-- ══ v1.1 — RALLY ACTION MENU (overflow) ══ -->
 <div class="action-menu-backdrop" id="rally-action-backdrop" onclick="closeRallyActionMenu()"></div>
 <div class="action-menu" id="rally-action-menu" role="dialog" aria-label="Rally options">
@@ -2493,6 +2516,11 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     <span class="ami-icon">📣</span>
     <span><span id="rally-publish-label">Publish to Feed</span>
       <span class="ami-sub" id="rally-publish-sub">Share this plan as an open invite to your friends</span></span>
+  </button>
+  <button class="action-menu-item" id="rally-unpublish-item" onclick="unpublishRallyFromFeed()" style="display:none">
+    <span class="ami-icon">🚫</span>
+    <span><span style="color:#B91C1C">Remove from Feed</span>
+      <span class="ami-sub">Pull this open invite off your Feed</span></span>
   </button>
 </div>
 
@@ -2627,6 +2655,13 @@ function go(id) {
   if (id === 'screen-ballot') { renderBallot(currentBallotLeg); }
   if (id === 'screen-notif-inbox') { renderNotifInbox(); }
   if (id === 'screen-locked') { renderRsvpDevControls(); }
+  if (id === 'screen-edit-rally') {
+    // v1.4 — the edit calendar never rendered on open (only on month-nav), leaving a blank
+    // grid. Render it on entry, defaulting to the current month like the create flow.
+    editCalYear = new Date().getFullYear();
+    editCalMonth = new Date().getMonth();
+    renderCalEdit();
+  }
   if (id === 'screen-home') { updateBrunchCardSummary(); refreshActiveRallyCard(); }
   if (id === 'screen-feed') { renderFeed(); startFeedTicker(); }
   else { stopFeedTicker(); }
@@ -5099,22 +5134,20 @@ function deleteFutureFromEdit() {
 }
 
 // v1.0e — delete-with-confirm. Used by Edit screens. Safety: only the author can delete.
+// v1.4 — uses the on-brand in-app confirm dialog (async callback) instead of window.confirm.
 function confirmDeleteStatus(statusId) {
   var s = feedStatuses.find(function(x) { return x.id === statusId; });
   if (!s) return;
   if (s.author.name !== STATUS_ME.name) return;   // safety: only mine
-  var ok = (typeof window !== 'undefined' && typeof window.confirm === 'function')
-    ? window.confirm('Delete this status? This can\u2019t be undone.')
-    : true;
-  if (!ok) return;
-  var i = feedStatuses.findIndex(function(x) { return x.id === statusId; });
-  if (i !== -1) feedStatuses.splice(i, 1);
-  editingStatusId = null;
-  // v1.0g: if the sheet was open for the deleted status, close it.
-  if (sheetStatusId === statusId) closeCommentsSheet();
-  renderFeed();
-  go('screen-feed');
-  showToast('Status deleted');
+  showConfirm('Delete this status? This can\u2019t be undone.', function() {
+    var i = feedStatuses.findIndex(function(x) { return x.id === statusId; });
+    if (i !== -1) feedStatuses.splice(i, 1);
+    editingStatusId = null;
+    if (sheetStatusId === statusId) closeCommentsSheet();
+    renderFeed();
+    go('screen-feed');
+    showToast('Status deleted');
+  }, { okLabel: 'Delete', danger: true });
 }
 
 // v1.0e — countdown ticker. While the Feed screen is visible, re-render every 30s so live
@@ -5192,7 +5225,8 @@ function renderStatusCard(s, now) {
   var cls = 'status-card' +
     (renderingAsLive ? ' is-live' : '') +
     (!renderingAsLive ? ' is-future' : '') +
-    (isPromoted ? ' is-promoted' : '');
+    (isPromoted ? ' is-promoted' : '') +
+    (s.fromRally ? ' is-from-rally' : '');
   var avatarStyle = 'background:' + s.author.bg + ';color:' + s.author.fg;
   // Chip (top-right of top row).
   var chip;
@@ -5260,10 +5294,9 @@ function renderStatusCard(s, now) {
         '">Edit</button>' +
       '</div>'
     : '';
-  // v1.3 — converted-from-Rally cards show an attendee avatar cluster (circles only, no
-  // name string — the names truncated badly and pushed the badge out). Tapping the cluster
-  // reveals the names via a toast. The FROM RALLY badge sits in the name slot directly so it
-  // is never clipped by name-string ellipsis.
+  // v1.4 — from-Rally cards are differentiated by a distinct border color (.is-from-rally),
+  // not a text badge — the badge competed for space with the date chip and got clipped.
+  // Cluster is circles only; tap to reveal names.
   var avatarBlock, nameBlock;
   if (s.fromRally && s.attendees && s.attendees.length) {
     var clusterAvatars = s.attendees.map(function(att) {
@@ -5272,9 +5305,7 @@ function renderStatusCard(s, now) {
     }).join('');
     avatarBlock = '<div class="status-attendee-cluster" onclick="showRallyAttendeeNames(\'' + s.id + '\')">' +
       clusterAvatars + '</div>';
-    // No name string — just the badge. Badge lives directly in the meta slot so it can't be
-    // clipped by the name paragraph's ellipsis.
-    nameBlock = '<span class="status-from-rally-badge">From Rally</span>';
+    nameBlock = '';   // no name string, no badge — border color carries the distinction
   } else {
     avatarBlock = '<div class="status-card-author" style="' + avatarStyle + '">' +
       escapeHtml(s.author.initial) + '</div>';
@@ -5679,8 +5710,11 @@ function openRallyActionMenu() {
   var label = document.getElementById('rally-publish-label');
   var sub = document.getElementById('rally-publish-sub');
   var item = document.getElementById('rally-publish-item');
+  var unpublishItem = document.getElementById('rally-unpublish-item');
   var me = rallyAttendeeByName('You');
   var iAmIn = me && me.rsvp === 'in';
+  // The "Remove from Feed" option only appears once published.
+  if (unpublishItem) unpublishItem.style.display = lockedRally.published ? '' : 'none';
   if (lockedRally.published) {
     if (label) label.textContent = 'View on Feed';
     if (sub) sub.textContent = 'Already shared as an open invite';
@@ -5796,18 +5830,33 @@ function viewPublishedOnFeed() {
   go('screen-feed');
 }
 
-// v1.3 — confirm step before a consent adds someone's name to the published card. Sharing
-// to your own friends is a deliberate decision, not a side effect of opening a notification.
+// v1.4 — pull the published open invite off the Feed. Removes the status, resets publish
+// state so it can be published fresh later, and clears the consent list.
+function unpublishRallyFromFeed() {
+  if (!lockedRally.published) return;
+  var sid = lockedRally.publishedStatusId;
+  var i = feedStatuses.findIndex(function(x) { return x.id === sid; });
+  if (i !== -1) feedStatuses.splice(i, 1);
+  lockedRally.published = false;
+  lockedRally.publishedStatusId = null;
+  lockedRally.consented = [];
+  closeRallyActionMenu();
+  renderFeed();
+  showToast('Removed from your Feed');
+}
+
+// v1.4 — confirm step before a consent adds someone's name. Uses the on-brand in-app
+// confirm dialog (replaces native window.confirm). Async via callback.
 function confirmRallyConsent(name) {
   var att = rallyAttendeeByName(name);
   if (!att) return;
   if (att.rsvp !== 'in') { showToast(name + ' isn\u2019t In on this plan'); return; }
-  var ok = (typeof window !== 'undefined' && typeof window.confirm === 'function')
-    ? window.confirm('Share this plan to ' + name + '\u2019s friends? ' + name +
-        '\u2019s name will appear on the open invite.')
-    : true;
-  if (!ok) return;
-  rallyConsentJoin(name);
+  showConfirm(
+    'Share this plan to ' + name + '\u2019s friends? ' + name +
+      '\u2019s name will appear on the open invite.',
+    function() { rallyConsentJoin(name); },
+    { okLabel: 'Share' }
+  );
 }
 
 // v1.3 — Edit Rally from the overflow menu. Routes to the existing edit-rally flow.
@@ -6934,6 +6983,47 @@ function showToast(msg) {
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
 }
+
+// v1.4 — on-brand confirm dialog replacing native window.confirm. Async via callback.
+// showConfirm(message, onConfirm [, opts]) — opts.okLabel / opts.danger optional.
+var _confirmOnYes = null;
+function showConfirm(message, onConfirm, opts) {
+  opts = opts || {};
+  _confirmOnYes = (typeof onConfirm === 'function') ? onConfirm : null;
+  var msgEl = document.getElementById('app-confirm-msg');
+  var okEl = document.getElementById('app-confirm-ok');
+  var bd = document.getElementById('app-confirm-backdrop');
+  var box = document.getElementById('app-confirm');
+  if (msgEl) msgEl.textContent = message;
+  if (okEl) {
+    okEl.textContent = opts.okLabel || 'Confirm';
+    okEl.style.background = opts.danger ? '#B91C1C' : 'var(--green)';
+  }
+  if (bd) bd.classList.add('open');
+  if (box) box.classList.add('open');
+}
+function _closeConfirm() {
+  var bd = document.getElementById('app-confirm-backdrop');
+  var box = document.getElementById('app-confirm');
+  if (bd) bd.classList.remove('open');
+  if (box) box.classList.remove('open');
+  _confirmOnYes = null;
+}
+// Wire the confirm dialog buttons once the DOM is ready.
+(function wireConfirmDialog() {
+  function bind() {
+    var ok = document.getElementById('app-confirm-ok');
+    var cancel = document.getElementById('app-confirm-cancel');
+    var bd = document.getElementById('app-confirm-backdrop');
+    if (ok) ok.onclick = function() { var cb = _confirmOnYes; _closeConfirm(); if (cb) cb(); };
+    if (cancel) cancel.onclick = _closeConfirm;
+    if (bd) bd.onclick = _closeConfirm;
+  }
+  if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind);
+    else bind();
+  }
+})();
 
 // FRIEND SEARCH
 function searchFriends(val) {
