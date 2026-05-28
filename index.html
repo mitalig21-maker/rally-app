@@ -503,7 +503,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 /* FROM RALLY badge on a converted status card */
 .status-from-rally-badge{display:inline-block;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:var(--green);color:var(--white);padding:2px 7px;border-radius:3px;margin-left:6px;vertical-align:middle}
 /* Attendee avatar cluster — overlapping circles for multi-person converted statuses */
-.status-attendee-cluster{display:inline-flex;align-items:center;flex-shrink:0}
+.status-attendee-cluster{display:inline-flex;align-items:center;flex-shrink:0;cursor:pointer}
 .status-attendee-cluster .status-card-author{margin-right:-8px;border:2px solid var(--white);box-sizing:content-box;width:26px;height:26px}
 .status-attendee-cluster .status-card-author:last-child{margin-right:0}
 /* Overflow (⋯) menu trigger on the locked screen */
@@ -988,7 +988,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         </div>
       </div>
     </div>
-    <div class="version-marker">Rally · v1.2</div>
+    <div class="version-marker">Rally · v1.3</div>
   </div>
   <button class="fab-quick" onclick="openQuickRally()">
     ⚡ Quick Rally
@@ -1633,7 +1633,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
       <p style="font-size:12px;color:var(--text-muted);margin-top:3px">Saturday, Apr 12 · 7:30pm · 4 going</p>
     </div>
     <div class="locked-venue">
-      <button class="locked-overflow" onclick="openRallyActionMenu()" aria-label="More options">\u22ef</button>
+      <button class="locked-overflow" onclick="openRallyActionMenu()" aria-label="More options">⋯</button>
       <p class="locked-eyebrow">You're going to</p>
       <p class="locked-name">Lilia</p>
       <p class="locked-meta">Williamsburg · $$$ · Italian · 7:30pm</p>
@@ -2484,8 +2484,13 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 <div class="action-menu" id="rally-action-menu" role="dialog" aria-label="Rally options">
   <div class="action-menu-handle"></div>
   <div class="action-menu-title">Dinner West Village · Lilia</div>
+  <button class="action-menu-item" id="rally-edit-item" onclick="editRallyFromMenu()">
+    <span class="ami-icon">✏️</span>
+    <span><span>Edit Rally</span>
+      <span class="ami-sub">Change the venue, time, or details</span></span>
+  </button>
   <button class="action-menu-item" id="rally-publish-item" onclick="publishRallyToFeed()">
-    <span class="ami-icon">\ud83d\udce3</span>
+    <span class="ami-icon">📣</span>
     <span><span id="rally-publish-label">Publish to Feed</span>
       <span class="ami-sub" id="rally-publish-sub">Share this plan as an open invite to your friends</span></span>
   </button>
@@ -3853,10 +3858,10 @@ function openNotification(notifId) {
       }
     }
   } else if (ntf.type === 'rallyConsent') {
-    // v1.1 — tapping a consent prompt simulates that attendee opting in: their name joins
-    // the published card's cluster, then we land on the Feed to show the growth.
-    if (ntf.rallyConsentName) rallyConsentJoin(ntf.rallyConsentName);
+    // v1.3 — tapping a consent prompt no longer auto-adds the person. Confirm first, so
+    // putting your name in front of your friends is a deliberate yes, not a side effect.
     go('screen-feed');
+    if (ntf.rallyConsentName) confirmRallyConsent(ntf.rallyConsentName);
   } else {
     go(dest);
   }
@@ -5255,17 +5260,21 @@ function renderStatusCard(s, now) {
         '">Edit</button>' +
       '</div>'
     : '';
-  // v1.1 — converted-from-Rally cards show an attendee avatar cluster + a "Mita, Soumil & X"
-  // name string + a FROM RALLY badge. Normal cards show the single author avatar + name.
+  // v1.3 — converted-from-Rally cards show an attendee avatar cluster (circles only, no
+  // name string — the names truncated badly and pushed the badge out). Tapping the cluster
+  // reveals the names via a toast. The FROM RALLY badge sits in the name slot directly so it
+  // is never clipped by name-string ellipsis.
   var avatarBlock, nameBlock;
   if (s.fromRally && s.attendees && s.attendees.length) {
     var clusterAvatars = s.attendees.map(function(att) {
       return '<div class="status-card-author" style="background:' + att.bg + ';color:' + att.fg + '">' +
         escapeHtml(att.initial) + '</div>';
     }).join('');
-    avatarBlock = '<div class="status-attendee-cluster">' + clusterAvatars + '</div>';
-    nameBlock = escapeHtml(formatAttendeeNames(s.attendees)) +
-      '<span class="status-from-rally-badge">From Rally</span>';
+    avatarBlock = '<div class="status-attendee-cluster" onclick="showRallyAttendeeNames(\'' + s.id + '\')">' +
+      clusterAvatars + '</div>';
+    // No name string — just the badge. Badge lives directly in the meta slot so it can't be
+    // clipped by the name paragraph's ellipsis.
+    nameBlock = '<span class="status-from-rally-badge">From Rally</span>';
   } else {
     avatarBlock = '<div class="status-card-author" style="' + avatarStyle + '">' +
       escapeHtml(s.author.initial) + '</div>';
@@ -5300,6 +5309,14 @@ function formatAttendeeNames(attendees) {
   if (names.length === 2) return names[0] + ' & ' + names[1];
   if (names.length === 3) return names[0] + ', ' + names[1] + ' & ' + names[2];
   return names[0] + ', ' + names[1] + ' & ' + (names.length - 2) + ' others';
+}
+
+// v1.3 — tapping the attendee cluster on a from-Rally card reveals who's on it (the name
+// string was removed from the card face per Mita; this surfaces it on demand).
+function showRallyAttendeeNames(statusId) {
+  var s = feedStatuses.find(function(x) { return x.id === statusId; });
+  if (!s || !s.attendees || !s.attendees.length) return;
+  showToast(formatAttendeeNames(s.attendees));
 }
 
 // Toggle the viewer's star on a status — one boolean per viewer (D-022).
@@ -5777,6 +5794,30 @@ function changeRallyRsvp(name, rsvp) {
 function viewPublishedOnFeed() {
   closeRallyActionMenu();
   go('screen-feed');
+}
+
+// v1.3 — confirm step before a consent adds someone's name to the published card. Sharing
+// to your own friends is a deliberate decision, not a side effect of opening a notification.
+function confirmRallyConsent(name) {
+  var att = rallyAttendeeByName(name);
+  if (!att) return;
+  if (att.rsvp !== 'in') { showToast(name + ' isn\u2019t In on this plan'); return; }
+  var ok = (typeof window !== 'undefined' && typeof window.confirm === 'function')
+    ? window.confirm('Share this plan to ' + name + '\u2019s friends? ' + name +
+        '\u2019s name will appear on the open invite.')
+    : true;
+  if (!ok) return;
+  rallyConsentJoin(name);
+}
+
+// v1.3 — Edit Rally from the overflow menu. Routes to the existing edit-rally flow.
+function editRallyFromMenu() {
+  closeRallyActionMenu();
+  if (document.getElementById('screen-edit-rally')) {
+    go('screen-edit-rally');
+  } else {
+    showToast('Edit Rally');
+  }
 }
 
 // v1.2 — dev control row on the locked screen to flip RSVPs (demonstrates the gate, since
