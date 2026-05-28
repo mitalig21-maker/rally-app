@@ -499,6 +499,39 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .sheet-comment-heart.hearted{color:#DC2626;font-weight:600}
 /* ═══ end v1.0g CSS ═══ */
 
+/* ═══ v1.1 — RALLY → STATUS CONVERSION ═══ */
+/* FROM RALLY badge on a converted status card */
+.status-from-rally-badge{display:inline-block;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:var(--green);color:var(--white);padding:2px 7px;border-radius:3px;margin-left:6px;vertical-align:middle}
+/* Attendee avatar cluster — overlapping circles for multi-person converted statuses */
+.status-attendee-cluster{display:inline-flex;align-items:center;flex-shrink:0}
+.status-attendee-cluster .status-card-author{margin-right:-8px;border:2px solid var(--white);box-sizing:content-box;width:26px;height:26px}
+.status-attendee-cluster .status-card-author:last-child{margin-right:0}
+/* Overflow (⋯) menu trigger on the locked screen */
+.locked-overflow{position:absolute;top:14px;right:16px;background:rgba(255,255,255,0.15);border:none;color:var(--white);width:34px;height:34px;border-radius:50%;font-size:18px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center}
+/* Bottom-sheet action menu (reused styling for the overflow menu) */
+.action-menu-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:210;opacity:0;transition:opacity 0.2s ease;pointer-events:none}
+.action-menu-backdrop.open{opacity:1;pointer-events:auto}
+.action-menu{position:fixed;left:0;right:0;bottom:0;background:var(--cream);border-radius:18px 18px 0 0;z-index:211;transform:translateY(100%);transition:transform 0.25s ease;box-shadow:0 -4px 24px rgba(0,0,0,0.18);padding-bottom:calc(8px + var(--safe-bottom))}
+.action-menu.open{transform:translateY(0)}
+.action-menu-handle{display:flex;justify-content:center;padding:9px 0 4px}
+.action-menu-handle::before{content:"";display:block;width:36px;height:4px;background:var(--border);border-radius:2px}
+.action-menu-title{font-family:var(--body);font-size:12px;color:var(--text-muted);text-align:center;padding:4px 20px 10px;border-bottom:1px dotted var(--border-dot)}
+.action-menu-item{display:flex;align-items:center;gap:12px;width:100%;background:none;border:none;padding:16px 22px;font-family:var(--body);font-size:15px;color:var(--text);cursor:pointer;text-align:left}
+.action-menu-item:active{background:var(--white)}
+.action-menu-item .ami-icon{font-size:18px;flex-shrink:0}
+.action-menu-item .ami-sub{display:block;font-size:11px;color:var(--text-muted);margin-top:2px}
+.action-menu-item.disabled{color:var(--text-muted);cursor:default}
+.action-menu-item.disabled:active{background:none}
+/* ═══ end v1.1 CSS ═══ */
+
+/* ═══ v1.2 — RSVP dev controls (demo only) ═══ */
+.rsvp-dev-attendee{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:5px 0}
+.rsvp-dev-name{font-family:var(--body);font-size:13px;font-weight:600;color:var(--text)}
+.rsvp-dev-opts{display:inline-flex;gap:5px}
+.rsvp-dev-btn{background:var(--cream);border:1px solid var(--border);border-radius:50px;padding:4px 11px;font-family:var(--body);font-size:11px;color:var(--text-muted);cursor:pointer;text-transform:capitalize}
+.rsvp-dev-btn.on{background:var(--green);color:var(--white);border-color:var(--green);font-weight:600}
+/* ═══ end v1.2 CSS ═══ */
+
 /* Inline danger button used inside Edit screens to scope deletes */
 .btn-text-danger{width:100%;background:none;border:none;font-family:var(--body);font-size:13px;color:#B91C1C;text-decoration:underline;cursor:pointer;padding:6px}
 
@@ -955,7 +988,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         </div>
       </div>
     </div>
-    <div class="version-marker">Rally · v1.0g.2</div>
+    <div class="version-marker">Rally · v1.2</div>
   </div>
   <button class="fab-quick" onclick="openQuickRally()">
     ⚡ Quick Rally
@@ -1600,6 +1633,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
       <p style="font-size:12px;color:var(--text-muted);margin-top:3px">Saturday, Apr 12 · 7:30pm · 4 going</p>
     </div>
     <div class="locked-venue">
+      <button class="locked-overflow" onclick="openRallyActionMenu()" aria-label="More options">\u22ef</button>
       <p class="locked-eyebrow">You're going to</p>
       <p class="locked-name">Lilia</p>
       <p class="locked-meta">Williamsburg · $$$ · Italian · 7:30pm</p>
@@ -1615,6 +1649,10 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     <div style="padding:14px 20px;display:flex;gap:8px">
       <button class="btn-outline" style="font-size:12px;flex:1">Share live location</button>
       <button class="btn-outline" style="font-size:12px;flex:1" onclick="go('screen-chat')">💬 Chat</button>
+    </div>
+    <div id="rsvp-dev-wrap" style="margin:0 20px 14px;padding:12px 14px;background:var(--white);border:1px dashed var(--border);border-radius:var(--radius-sm)">
+      <p style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;font-family:var(--headline)">Demo · simulate RSVP changes</p>
+      <div id="rsvp-dev-row"></div>
     </div>
     <div style="padding:0 20px 14px">
       <p class="section-label" style="margin-bottom:8px">📸 Memories</p>
@@ -2441,6 +2479,18 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 </div>
 
 
+<!-- ══ v1.1 — RALLY ACTION MENU (overflow) ══ -->
+<div class="action-menu-backdrop" id="rally-action-backdrop" onclick="closeRallyActionMenu()"></div>
+<div class="action-menu" id="rally-action-menu" role="dialog" aria-label="Rally options">
+  <div class="action-menu-handle"></div>
+  <div class="action-menu-title">Dinner West Village · Lilia</div>
+  <button class="action-menu-item" id="rally-publish-item" onclick="publishRallyToFeed()">
+    <span class="ami-icon">\ud83d\udce3</span>
+    <span><span id="rally-publish-label">Publish to Feed</span>
+      <span class="ami-sub" id="rally-publish-sub">Share this plan as an open invite to your friends</span></span>
+  </button>
+</div>
+
 <!-- ══ v1.0g — COMMENTS BOTTOM SHEET ══ -->
 <div class="comments-sheet-backdrop" id="comments-sheet-backdrop" onclick="closeCommentsSheet()"></div>
 <div class="comments-sheet" id="comments-sheet" role="dialog" aria-label="Comments">
@@ -2571,6 +2621,7 @@ function go(id) {
   if (id === 'screen-start-3') { initRallyPartsForFinalize(); }
   if (id === 'screen-ballot') { renderBallot(currentBallotLeg); }
   if (id === 'screen-notif-inbox') { renderNotifInbox(); }
+  if (id === 'screen-locked') { renderRsvpDevControls(); }
   if (id === 'screen-home') { updateBrunchCardSummary(); refreshActiveRallyCard(); }
   if (id === 'screen-feed') { renderFeed(); startFeedTicker(); }
   else { stopFeedTicker(); }
@@ -3725,7 +3776,8 @@ var NOTIF_TYPES = {
   locked:      { label: 'Plan locked',      icon: '\uD83D\uDCCD', destination: 'screen-locked' },
   ticket:      { label: 'Ticket reminder',  icon: '\uD83C\uDFAB', destination: 'screen-home' },
   reminder:    { label: 'Reminder',         icon: '\u23F0', destination: 'screen-home' },
-  suggestion:  { label: 'New suggestion added', icon: '\uD83D\uDCCD', destination: 'screen-ballot' }
+  suggestion:  { label: 'New suggestion added', icon: '\uD83D\uDCCD', destination: 'screen-ballot' },
+  rallyConsent:{ label: 'Open invite',          icon: '\uD83D\uDCE3', destination: 'screen-feed' }
 };
 
 var notifications = [];      // each: {id, type, title, text, time, read, legIndex}
@@ -3745,7 +3797,8 @@ function addNotification(type, title, text, opts) {
     text: text || '',
     time: opts.time || 'Just now',
     read: false,
-    legIndex: (typeof opts.legIndex === 'number') ? opts.legIndex : null
+    legIndex: (typeof opts.legIndex === 'number') ? opts.legIndex : null,
+    rallyConsentName: opts.rallyConsentName || null
   };
   notifications.unshift(ntf);   // newest first
   updateNotifBadge();
@@ -3799,6 +3852,11 @@ function openNotification(notifId) {
         openRevotePopup(legToOpen, info ? info.optionId : null);
       }
     }
+  } else if (ntf.type === 'rallyConsent') {
+    // v1.1 — tapping a consent prompt simulates that attendee opting in: their name joins
+    // the published card's cluster, then we land on the Feed to show the growth.
+    if (ntf.rallyConsentName) rallyConsentJoin(ntf.rallyConsentName);
+    go('screen-feed');
   } else {
     go(dest);
   }
@@ -5197,13 +5255,29 @@ function renderStatusCard(s, now) {
         '">Edit</button>' +
       '</div>'
     : '';
+  // v1.1 — converted-from-Rally cards show an attendee avatar cluster + a "Mita, Soumil & X"
+  // name string + a FROM RALLY badge. Normal cards show the single author avatar + name.
+  var avatarBlock, nameBlock;
+  if (s.fromRally && s.attendees && s.attendees.length) {
+    var clusterAvatars = s.attendees.map(function(att) {
+      return '<div class="status-card-author" style="background:' + att.bg + ';color:' + att.fg + '">' +
+        escapeHtml(att.initial) + '</div>';
+    }).join('');
+    avatarBlock = '<div class="status-attendee-cluster">' + clusterAvatars + '</div>';
+    nameBlock = escapeHtml(formatAttendeeNames(s.attendees)) +
+      '<span class="status-from-rally-badge">From Rally</span>';
+  } else {
+    avatarBlock = '<div class="status-card-author" style="' + avatarStyle + '">' +
+      escapeHtml(s.author.initial) + '</div>';
+    nameBlock = escapeHtml(s.author.name) + promotedBadge;
+  }
   return '<div class="status-card-wrap" data-status-id="' + s.id + '">' +
     swipeAction +
     '<div class="' + cls + '" id="' + s.id + '">' +
       '<div class="status-card-top">' +
-        '<div class="status-card-author" style="' + avatarStyle + '">' + escapeHtml(s.author.initial) + '</div>' +
+        avatarBlock +
         '<div class="status-card-author-meta">' +
-          '<p class="status-card-author-name">' + escapeHtml(s.author.name) + promotedBadge + '</p>' +
+          '<p class="status-card-author-name">' + nameBlock + '</p>' +
         '</div>' +
         chip +
       '</div>' +
@@ -5216,6 +5290,16 @@ function renderStatusCard(s, now) {
       commentPreview +
     '</div>' +
   '</div>';
+}
+
+// "Mita" / "Mita & Soumil" / "Mita, Soumil & Romit" / "Mita, Soumil & 2 others"
+function formatAttendeeNames(attendees) {
+  var names = attendees.map(function(a) { return a.name; });
+  if (names.length === 0) return '';
+  if (names.length === 1) return names[0];
+  if (names.length === 2) return names[0] + ' & ' + names[1];
+  if (names.length === 3) return names[0] + ', ' + names[1] + ' & ' + names[2];
+  return names[0] + ', ' + names[1] + ' & ' + (names.length - 2) + ' others';
 }
 
 // Toggle the viewer's star on a status — one boolean per viewer (D-022).
@@ -5513,6 +5597,205 @@ function resetAllSwipes() {
 }
 
 // ═══ end v1.0a / v1.0b / v1.0f / v1.0g — FEED / STATUS ═══
+
+// ═══ v1.1 — RALLY → STATUS CONVERSION ═══
+// A confirmed Rally can be published to the Feed as an open invite. Publishing is opt-in
+// and per-person: when you publish, the plan goes to YOUR friends' feeds with your name on
+// it. Everyone else in the Rally is notified and can choose to share it to their own network
+// too — if they consent, their name joins the card; if not, it never appears. (D-025.)
+//
+// PROTOTYPE NOTE: real cross-device push doesn't exist on a single device, so "other people
+// consenting" is simulated via the notification inbox — each invitee gets a consent prompt
+// that, when tapped, adds them to the published card's attendee cluster. This demonstrates
+// the async opt-in + "card grows as people join" mechanic from Mita's-eye view of her Feed.
+
+// The confirmed Rally the locked screen represents. Static demo data (matches screen-locked).
+// In Phase 2 this is threaded from the real voting/lock pipeline.
+var lockedRally = {
+  id: 'rally-locked-demo',
+  title: 'Dinner West Village',
+  venue: 'Lilia',
+  vibe: 'Italian \u00b7 Williamsburg',
+  date: null,            // set at publish time (tomorrow, demo)
+  timeStart: '19:30',
+  timeEnd: '21:30',
+  // The Rally's invitees. rsvp gates everything: only 'in' people can consent/appear.
+  // 'maybe' | 'out' | null (not yet responded) are never in the picture for publishing.
+  attendees: [
+    { name: 'You',    initial: 'M', bg: '#E8F0EC', fg: '#1B3A2D', isMe: true, rsvp: 'in' },
+    { name: 'Soumil', initial: 'S', bg: '#FEF3C7', fg: '#92400E', rsvp: 'in' },
+    { name: 'Romit',  initial: 'R', bg: '#FCE7F3', fg: '#9D174D', rsvp: 'in' }
+  ],
+  published: false,          // becomes true once published; prevents double-publish
+  publishedStatusId: null,   // the feed status id created on publish
+  consented: []              // names of attendees who've consented so far (must also be 'in')
+};
+
+// v1.2 — an attendee can appear on the published card only if BOTH gates pass:
+//   (1) RSVP gate: their rsvp is 'in' (maybe/out/unresponded are not in the picture)
+//   (2) consent gate: they opted in to publishing
+// The publisher passes both implicitly at publish time. This helper is the single source
+// of truth for the card's attendee cluster — recomputed on any RSVP/consent change.
+function rallyAttendeeByName(name) {
+  for (var i = 0; i < lockedRally.attendees.length; i++) {
+    if (lockedRally.attendees[i].name === name) return lockedRally.attendees[i];
+  }
+  return null;
+}
+function eligibleClusterAttendees() {
+  return lockedRally.consented
+    .map(rallyAttendeeByName)
+    .filter(function(att) { return att && att.rsvp === 'in'; })
+    .map(function(att) { return { name: att.name, initial: att.initial, bg: att.bg, fg: att.fg }; });
+}
+// Recompute the published card's cluster from the eligible set, then re-render.
+function syncPublishedCluster() {
+  if (!lockedRally.published || !lockedRally.publishedStatusId) return;
+  var s = feedStatuses.find(function(x) { return x.id === lockedRally.publishedStatusId; });
+  if (!s) return;
+  s.attendees = eligibleClusterAttendees();
+  renderFeed();
+}
+
+function openRallyActionMenu() {
+  // Reflect published state in the menu before opening.
+  var label = document.getElementById('rally-publish-label');
+  var sub = document.getElementById('rally-publish-sub');
+  var item = document.getElementById('rally-publish-item');
+  var me = rallyAttendeeByName('You');
+  var iAmIn = me && me.rsvp === 'in';
+  if (lockedRally.published) {
+    if (label) label.textContent = 'View on Feed';
+    if (sub) sub.textContent = 'Already shared as an open invite';
+    if (item) { item.classList.remove('disabled'); item.setAttribute('onclick', 'viewPublishedOnFeed()'); }
+  } else if (!iAmIn) {
+    // RSVP gate on the publisher: you can't publish a plan you're not In on.
+    if (label) label.textContent = 'Publish to Feed';
+    if (sub) sub.textContent = 'RSVP \u201cIn\u201d to share this as an open invite';
+    if (item) { item.classList.add('disabled'); item.setAttribute('onclick', ''); }
+  } else {
+    if (label) label.textContent = 'Publish to Feed';
+    if (sub) sub.textContent = 'Share this plan as an open invite to your friends';
+    if (item) { item.classList.remove('disabled'); item.setAttribute('onclick', 'publishRallyToFeed()'); }
+  }
+  var bd = document.getElementById('rally-action-backdrop');
+  var menu = document.getElementById('rally-action-menu');
+  if (bd) bd.classList.add('open');
+  if (menu) menu.classList.add('open');
+}
+
+function closeRallyActionMenu() {
+  var bd = document.getElementById('rally-action-backdrop');
+  var menu = document.getElementById('rally-action-menu');
+  if (bd) bd.classList.remove('open');
+  if (menu) menu.classList.remove('open');
+}
+
+// Publish the confirmed Rally to the Feed. Creates ONE future status whose attendee cluster
+// starts with just the publisher (You). No double-publish — guarded by lockedRally.published.
+// Only 'in' attendees are notified (maybe/out/unresponded are not in the picture).
+function publishRallyToFeed() {
+  if (lockedRally.published) { viewPublishedOnFeed(); return; }
+  var me = rallyAttendeeByName('You');
+  if (!me || me.rsvp !== 'in') { showToast('RSVP \u201cIn\u201d first to publish'); return; }
+  // Date: demo as tomorrow so it lands in "Coming up".
+  var d = new Date();
+  d.setDate(d.getDate() + 1);
+  var iso = d.getFullYear() + '-' +
+    ('0' + (d.getMonth() + 1)).slice(-2) + '-' +
+    ('0' + d.getDate()).slice(-2);
+  lockedRally.date = iso;
+  // Publisher (You) is the first consenter.
+  lockedRally.consented = ['You'];
+  var status = {
+    id: 'st-' + (statusIdSeq++),
+    kind: 'future',
+    author: { kind: 'friend', name: me.name, initial: me.initial, bg: me.bg, fg: me.fg },
+    venue: lockedRally.venue,
+    vibe: lockedRally.vibe,
+    date: lockedRally.date,
+    timeStart: lockedRally.timeStart,
+    timeEnd: lockedRally.timeEnd,
+    postedAt: Date.now(),
+    stars: [],
+    comments: [],
+    // v1.1 — converted-from-Rally marker + the live attendee cluster (consenters only).
+    fromRally: true,
+    rallyId: lockedRally.id,
+    rallyTitle: lockedRally.title,
+    attendees: []   // computed below from the eligible set
+  };
+  feedStatuses.push(status);
+  lockedRally.published = true;
+  lockedRally.publishedStatusId = status.id;
+  syncPublishedCluster();   // seeds the cluster with the eligible consenters (just You)
+  closeRallyActionMenu();
+  // Notify only the 'in' attendees (simulated push → consent prompt in the inbox).
+  lockedRally.attendees.forEach(function(att) {
+    if (att.isMe) return;
+    if (att.rsvp !== 'in') return;   // RSVP gate — maybe/out/unresponded aren't notified
+    addNotification('rallyConsent',
+      att.name + ', join the open invite?',
+      'You published "' + lockedRally.title + '" to your Feed. Tap to share it with ' +
+        att.name + '\u2019s friends too \u2014 their name joins the card.',
+      { rallyConsentName: att.name });
+  });
+  renderFeed();
+  go('screen-feed');
+  showToast('Published to your Feed \ud83d\udce3');
+}
+
+// Simulate an attendee consenting (tapped from their inbox prompt). Adds them to the cluster
+// only if they're 'in' — the RSVP gate is enforced here too, not just at notify time.
+function rallyConsentJoin(name) {
+  if (!lockedRally.published || !lockedRally.publishedStatusId) return;
+  var att = rallyAttendeeByName(name);
+  if (!att) return;
+  if (att.rsvp !== 'in') { showToast(name + ' isn\u2019t In on this plan'); return; }
+  if (lockedRally.consented.indexOf(name) === -1) lockedRally.consented.push(name);
+  syncPublishedCluster();
+  showToast(name + ' joined the open invite \ud83c\udf89');
+}
+
+// v1.2 — change an attendee's RSVP. If they drop from 'in', they come off the card
+// immediately (and lose consent — per the model, they're no longer in the picture, so
+// re-joining requires going 'in' AND consenting again). Dev control on the locked screen
+// exercises this since real multi-user RSVP changes can't happen on one device.
+function changeRallyRsvp(name, rsvp) {
+  var att = rallyAttendeeByName(name);
+  if (!att) return;
+  att.rsvp = rsvp;
+  if (rsvp !== 'in') {
+    // Dropping out of 'in' revokes consent — not in the picture anymore.
+    var ci = lockedRally.consented.indexOf(name);
+    if (ci !== -1) lockedRally.consented.splice(ci, 1);
+  }
+  syncPublishedCluster();
+  renderRsvpDevControls();
+}
+
+function viewPublishedOnFeed() {
+  closeRallyActionMenu();
+  go('screen-feed');
+}
+
+// v1.2 — dev control row on the locked screen to flip RSVPs (demonstrates the gate, since
+// real cross-device RSVP changes don't exist on a single device). Renders into #rsvp-dev-row.
+function renderRsvpDevControls() {
+  var host = document.getElementById('rsvp-dev-row');
+  if (!host) return;
+  host.innerHTML = lockedRally.attendees.map(function(att) {
+    var opts = ['in', 'maybe', 'out'].map(function(r) {
+      var on = att.rsvp === r;
+      return '<button class="rsvp-dev-btn' + (on ? ' on' : '') + '" onclick="changeRallyRsvp(\'' +
+        att.name + '\',\'' + r + '\')">' + r + '</button>';
+    }).join('');
+    return '<div class="rsvp-dev-attendee"><span class="rsvp-dev-name">' +
+      escapeHtml(att.name) + '</span><span class="rsvp-dev-opts">' + opts + '</span></div>';
+  }).join('');
+}
+
+// ═══ end v1.1 / v1.2 ═══
 
 // ═══ v0.9 — QUICK RALLY (v0.9.1 update) ═══
 // A Quick Rally is a fast in-the-moment plan: the sender names what/where/when and
