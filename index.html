@@ -426,8 +426,8 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 /* The swipe wrapper holds the card + the revealed actions behind it. Swipe-left on the
    card translates it horizontally to expose actions on the right side of the wrapper. */
 .status-card-wrap{position:relative;margin:0 20px;overflow:hidden;border-radius:var(--radius)}
-.status-card-actions{position:absolute;top:0;right:0;bottom:0;display:flex;align-items:stretch}
-.status-card-actions button{background:var(--text);color:var(--white);border:none;font-family:var(--body);font-size:13px;font-weight:600;padding:0 22px;cursor:pointer}
+.status-card-actions{position:absolute;top:0;right:0;bottom:0;width:92px;display:flex;align-items:center;justify-content:center;background:var(--cream);padding:6px 8px}
+.status-card-actions button{width:100%;height:100%;border-radius:14px;background:var(--green);color:var(--white);border:none;font-family:var(--body);font-size:13px;font-weight:600;cursor:pointer}
 .status-card-actions .action-edit{background:#1B3A2D}
 .status-card-actions .action-delete{background:#B91C1C}
 .status-card{position:relative;background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;transition:transform 0.18s ease;touch-action:pan-y;user-select:none}
@@ -484,8 +484,8 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 
 /* Comment row inside the sheet — swipeable for delete */
 .sheet-comment-wrap{position:relative;overflow:hidden;border-radius:8px;margin-bottom:6px}
-.sheet-comment-actions{position:absolute;top:0;right:0;bottom:0;display:flex;align-items:stretch}
-.sheet-comment-actions button{background:#B91C1C;color:var(--white);border:none;font-family:var(--body);font-size:12px;font-weight:600;padding:0 16px;cursor:pointer}
+.sheet-comment-actions{position:absolute;top:0;right:0;bottom:0;width:80px;display:flex;align-items:center;justify-content:center;background:var(--cream);padding:5px 7px}
+.sheet-comment-actions button{width:100%;height:100%;border-radius:12px;background:#B91C1C;color:var(--white);border:none;font-family:var(--body);font-size:12px;font-weight:600;cursor:pointer}
 .sheet-comment{position:relative;display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:var(--cream);transition:transform 0.18s ease;touch-action:pan-y}
 .sheet-comment.swiping{transition:none}
 .sheet-comment-avatar{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;background:var(--green-pale);color:var(--green);flex-shrink:0;margin-top:1px}
@@ -510,6 +510,11 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .status-attendee-cluster .status-card-author:last-child{margin-right:0}
 /* Overflow (⋯) menu trigger on the locked screen */
 .locked-overflow{position:absolute;top:14px;right:16px;background:rgba(255,255,255,0.15);border:none;color:var(--white);width:34px;height:34px;border-radius:50%;font-size:18px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center}
+/* v1.5 — overflow lives on the page header row, NOT inside the green venue card */
+.locked-header-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:12px 20px 12px;border-bottom:1px dotted var(--border-dot)}
+.locked-header-text{flex:1;min-width:0}
+.locked-overflow-page{background:none;border:none;color:var(--text);width:36px;height:36px;border-radius:50%;font-size:22px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:-2px}
+.locked-overflow-page:active{background:rgba(0,0,0,0.05)}
 /* Bottom-sheet action menu (reused styling for the overflow menu) */
 .action-menu-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:210;opacity:0;transition:opacity 0.2s ease;pointer-events:none}
 .action-menu-backdrop.open{opacity:1;pointer-events:auto}
@@ -1001,7 +1006,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         </div>
       </div>
     </div>
-    <div class="version-marker">Rally · v1.4</div>
+    <div class="version-marker">Rally · v1.5</div>
   </div>
   <button class="fab-quick" onclick="openQuickRally()">
     ⚡ Quick Rally
@@ -1641,12 +1646,14 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 <div class="screen" id="screen-locked">
   <div class="topbar"><button class="btn-back" onclick="go('screen-home')">← Back</button><span class="badge badge-tonight">Tonight</span><div style="width:60px"></div></div>
   <div class="scroll-content">
-    <div style="padding:12px 20px 12px;border-bottom:1px dotted var(--border-dot)">
-      <h2 class="headline-lg" style="font-size:20px">Dinner West Village</h2>
-      <p style="font-size:12px;color:var(--text-muted);margin-top:3px">Saturday, Apr 12 · 7:30pm · 4 going</p>
+    <div class="locked-header-row">
+      <div class="locked-header-text">
+        <h2 class="headline-lg" style="font-size:20px">Dinner West Village</h2>
+        <p style="font-size:12px;color:var(--text-muted);margin-top:3px">Saturday, Apr 12 · 7:30pm · 4 going</p>
+      </div>
+      <button class="locked-overflow-page" onclick="openRallyActionMenu()" aria-label="More options">⋯</button>
     </div>
     <div class="locked-venue">
-      <button class="locked-overflow" onclick="openRallyActionMenu()" aria-label="More options">⋯</button>
       <p class="locked-eyebrow">You're going to</p>
       <p class="locked-name">Lilia</p>
       <p class="locked-meta">Williamsburg · $$$ · Italian · 7:30pm</p>
@@ -5553,7 +5560,7 @@ function deleteComment(statusId, commentIdx) {
 //
 // We use a delegated approach attached to the Feed list + sheet list, registered once.
 var SWIPE_THRESHOLD = 60;       // px to commit to revealed state
-var SWIPE_MAX_REVEAL = 110;     // px max translate while dragging
+var SWIPE_MAX_REVEAL = 92;      // px max translate while dragging — matches action panel width
 var swipeState = null;          // { foregroundEl, startX, currentX, isOpen, maxReveal }
 
 function setupSwipeOnce() {
@@ -5584,9 +5591,16 @@ function onSwipeStart(e) {
   } else {
     return;
   }
-  // Ignore swipes that start on buttons/links inside the foreground — those want tap behavior.
-  if (e.target.closest('button, a')) return;
-  // Read current openness from the existing transform
+  // v1.5 — DO NOT bail on buttons. Previously, starting a gesture on the comment icon
+  // (which lives right where fingers naturally land for a left-swipe) caused the gesture
+  // handler to ignore the swipe and let the natural tap fire — opening the comments sheet
+  // when the user intended to swipe. Instead we always capture state and track whether the
+  // gesture started on an interactive element so we can decide what to do at end:
+  //   - moved past threshold → real swipe → snap + suppress synthetic click
+  //   - no motion, started on a button/link → let natural click fire
+  //   - no motion, started on card body → open comments for the card
+  //   - no motion, swipe was already open → close it
+  var startedOnInteractive = !!(e.target.closest('button, a'));
   var currentTx = readTranslateX(foreground);
   swipeState = {
     foregroundEl: foreground,
@@ -5595,7 +5609,8 @@ function onSwipeStart(e) {
     startOffset: currentTx,
     isOpen: currentTx <= -10,
     maxReveal: maxReveal,
-    moved: false
+    moved: false,
+    startedOnInteractive: startedOnInteractive
   };
 }
 
@@ -5617,15 +5632,55 @@ function onSwipeMove(e) {
 function onSwipeEnd() {
   if (!swipeState) return;
   var el = swipeState.foregroundEl;
+  var moved = swipeState.moved;
+  var startedOnInteractive = swipeState.startedOnInteractive;
+  var wasOpen = swipeState.isOpen;
+  var isCard = el.classList.contains('status-card');
   el.classList.remove('swiping');
   var currentTx = readTranslateX(el);
-  // Snap: if past threshold or already mostly open, snap to maxReveal; else snap closed.
-  if (currentTx < -SWIPE_THRESHOLD) {
+  // Snap: if moved past threshold, open; otherwise (including pure taps), close. A tap on
+  // a card whose swipe was already open will land here without motion and snap closed.
+  if (moved && currentTx < -SWIPE_THRESHOLD) {
     el.style.transform = 'translateX(-' + swipeState.maxReveal + 'px)';
   } else {
     el.style.transform = 'translateX(0)';
   }
+  if (moved) {
+    // Real swipe — suppress the synthetic click on touchend so buttons inside the
+    // foreground (e.g. comment icon, race flag, location link) don't fire.
+    suppressNextClick();
+  } else if (wasOpen) {
+    // Tap when already open — closed by the snap above; suppress the synthetic click so
+    // we don't fall through into the card-body-tap branch via some other path.
+    suppressNextClick();
+  } else if (!startedOnInteractive && isCard) {
+    // Tap on the card body (not on a button/link) — open the comments sheet for that card.
+    var wrap = el.closest('.status-card-wrap');
+    if (wrap) {
+      var sid = wrap.getAttribute('data-status-id');
+      if (sid) openCommentsSheet(sid);
+    }
+  }
+  // else: tap on a button/link while closed → let the natural click fire normally.
   swipeState = null;
+}
+
+// v1.5 — after a real swipe, the touchend produces a synthetic click on the element that
+// was under the finger at touchstart. Without suppression, that click hits whatever button
+// happened to be there (often the comment icon) and fires its onclick. We register a
+// one-time capture-phase click killer and clear it after 120ms in case no click fires.
+function suppressNextClick() {
+  var killTimer;
+  var killClick = function(ce) {
+    ce.preventDefault();
+    ce.stopPropagation();
+    document.removeEventListener('click', killClick, true);
+    clearTimeout(killTimer);
+  };
+  document.addEventListener('click', killClick, true);
+  killTimer = setTimeout(function() {
+    document.removeEventListener('click', killClick, true);
+  }, 120);
 }
 
 function readTranslateX(el) {
