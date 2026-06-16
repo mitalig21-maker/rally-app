@@ -644,6 +644,28 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .recap-stat-num{font-family:var(--headline);font-size:24px;font-weight:700;color:var(--green);letter-spacing:-0.5px;line-height:1}
 .recap-stat-label{font-family:var(--headline);font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-light)}
 .recap-stat-divider{width:1px;height:32px;background:var(--border)}
+/* profile recap redesign (v1.5b) */
+.prc-band{background:var(--green);padding:calc(22px + var(--safe-top)) 22px 20px}
+.prc-band-top{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.prc-avatar{width:44px;height:44px;border-radius:50%;background:var(--cream);display:flex;align-items:center;justify-content:center;font-family:var(--headline);font-size:17px;font-weight:600;color:var(--green);flex-shrink:0}
+.prc-name{font-family:var(--headline);font-size:18px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--cream);margin:0}
+.prc-name-sub{font-size:11px;color:#9DBBAC;margin:1px 0 0}
+.prc-stats{display:flex;align-items:flex-end;justify-content:space-between}
+.prc-eyebrow{font-family:var(--headline);font-size:9px;font-weight:600;letter-spacing:1.8px;text-transform:uppercase;color:#9DBBAC;margin:0 0 5px}
+.prc-num{font-family:var(--headline);font-weight:600;letter-spacing:-0.3px;line-height:1;color:var(--cream);margin:0}
+.prc-stat-sub{font-size:11px;color:#9DBBAC;margin:5px 0 0}
+.prc-streak{text-align:right;border-left:1px solid rgba(245,240,232,0.2);padding-left:16px}
+.prc-body{padding:18px 22px 4px}
+.prc-sec-label{font-family:var(--headline);font-size:9px;font-weight:600;letter-spacing:1.8px;text-transform:uppercase;color:var(--text-light);margin:0 0 10px}
+.prc-companion{display:flex;align-items:center;gap:12px;padding-bottom:16px;border-bottom:1px dotted var(--border-dot)}
+.prc-comp-avatar{width:38px;height:38px;border-radius:50%;background:var(--green-pale);display:flex;align-items:center;justify-content:center;font-family:var(--headline);font-size:14px;font-weight:600;color:var(--green);flex-shrink:0}
+.prc-comp-name{font-family:var(--headline);font-size:18px;font-weight:600;color:var(--text);flex:1;margin:0}
+.prc-comp-count{font-size:12px;color:var(--text-muted)}
+.prc-comp-count b{font-family:var(--headline);font-weight:600;color:var(--green);font-size:16px;letter-spacing:-0.3px}
+.prc-fact{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px dotted var(--border-dot)}
+.prc-fact:last-child{border-bottom:none}
+.prc-fact-val{font-family:var(--headline);font-size:15px;font-weight:600;color:var(--green)}
+.prc-fact-desc{font-size:12px;color:var(--text-muted)}
 
 .plan-parts-section{margin-top:18px;padding-top:18px;border-top:1px dotted var(--border-dot)}
 .part-card{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--white);border:1px solid var(--border);border-left:3px solid var(--green);border-radius:var(--radius-sm)}
@@ -1006,7 +1028,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         </div>
       </div>
     </div>
-    <div class="version-marker">Rally · v1.5</div>
+    <div class="version-marker">Rally · v1.5b</div>
   </div>
   <button class="fab-quick" onclick="openQuickRally()">
     ⚡ Quick Rally
@@ -2009,59 +2031,39 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 <!-- ══ PROFILE ══ -->
 <div class="screen" id="screen-profile">
   <div class="scroll-content">
-    <div class="profile-hero">
-      <div class="profile-avatar-lg" id="profile-avatar-lg">M</div>
-      <p class="profile-name" id="profile-name-display">Mita</p>
-      <p class="profile-handle">+1 (917) 555-0142</p>
+    <div class="prc-band">
+      <div class="prc-band-top">
+        <div class="prc-avatar" id="profile-avatar-lg">M</div>
+        <div>
+          <p class="prc-name" id="profile-name-display">Mita</p>
+          <p class="prc-name-sub">Your Rally year so far</p>
+        </div>
+      </div>
+      <div class="prc-stats">
+        <div>
+          <p class="prc-eyebrow">Reliability</p>
+          <p class="prc-num" style="font-size:34px">92%</p>
+          <p class="prc-stat-sub">19 of 24 rallies — you rarely flake</p>
+        </div>
+        <div class="prc-streak">
+          <p class="prc-eyebrow">Streak</p>
+          <p class="prc-num" style="font-size:26px">4<span style="font-size:13px"> wks</span></p>
+          <p class="prc-stat-sub" style="font-size:10px">in a row</p>
+        </div>
+      </div>
     </div>
-    <div class="profile-recap">
-      <p class="recap-eyebrow">Your Rally year so far</p>
-      <div class="recap-headline">
-        <h2 class="recap-headline-text" id="recap-headline-text">You're a Thursday person.</h2>
-        <p class="recap-headline-sub" id="recap-headline-sub">Most rallies you say yes to land on a Thursday.</p>
+    <div class="prc-body">
+      <p class="prc-sec-label">Most rallies with</p>
+      <div class="prc-companion">
+        <div class="prc-comp-avatar">A</div>
+        <p class="prc-comp-name">Aaheli</p>
+        <span class="prc-comp-count"><b>17</b> rallies</span>
       </div>
-      <div class="recap-section">
-        <p class="recap-section-label">The rhythm</p>
-        <p class="recap-section-sub">Rallies per week, last 8 weeks</p>
-        <div class="rhythm-chart">
-          <div class="rhythm-col"><span class="rhythm-dot filled"></span><span class="rhythm-dot filled"></span><span class="rhythm-dot"></span><span class="rhythm-dot"></span></div>
-          <div class="rhythm-col"><span class="rhythm-dot filled"></span><span class="rhythm-dot"></span><span class="rhythm-dot"></span><span class="rhythm-dot"></span></div>
-          <div class="rhythm-col"><span class="rhythm-dot filled"></span><span class="rhythm-dot filled"></span><span class="rhythm-dot filled"></span><span class="rhythm-dot"></span></div>
-          <div class="rhythm-col"><span class="rhythm-dot filled"></span><span class="rhythm-dot filled"></span><span class="rhythm-dot"></span><span class="rhythm-dot"></span></div>
-          <div class="rhythm-col"><span class="rhythm-dot filled"></span><span class="rhythm-dot filled"></span><span class="rhythm-dot filled"></span><span class="rhythm-dot filled"></span></div>
-          <div class="rhythm-col"><span class="rhythm-dot filled"></span><span class="rhythm-dot filled"></span><span class="rhythm-dot"></span><span class="rhythm-dot"></span></div>
-          <div class="rhythm-col"><span class="rhythm-dot filled"></span><span class="rhythm-dot"></span><span class="rhythm-dot"></span><span class="rhythm-dot"></span></div>
-          <div class="rhythm-col"><span class="rhythm-dot filled"></span><span class="rhythm-dot filled"></span><span class="rhythm-dot filled"></span><span class="rhythm-dot filled"></span></div>
-        </div>
-        <div class="rhythm-axis"><span style="text-align:left">8 weeks ago</span><span style="text-align:right">this week</span></div>
-      </div>
-      <div class="recap-section">
-        <p class="recap-section-label">Where you end up</p>
-        <p class="recap-section-sub">Top neighborhoods, by frequency</p>
-        <div class="neighborhood-bars">
-          <div class="neighborhood-row">
-            <div class="neighborhood-row-top"><span class="neighborhood-name">West Village</span><span class="neighborhood-count">9 rallies · 38%</span></div>
-            <div class="neighborhood-bar"><div class="neighborhood-bar-fill" style="width:100%"></div></div>
-          </div>
-          <div class="neighborhood-row">
-            <div class="neighborhood-row-top"><span class="neighborhood-name">East Village</span><span class="neighborhood-count">6 rallies · 25%</span></div>
-            <div class="neighborhood-bar"><div class="neighborhood-bar-fill" style="width:67%"></div></div>
-          </div>
-          <div class="neighborhood-row">
-            <div class="neighborhood-row-top"><span class="neighborhood-name">Lower East Side</span><span class="neighborhood-count">4 rallies · 17%</span></div>
-            <div class="neighborhood-bar"><div class="neighborhood-bar-fill" style="width:44%"></div></div>
-          </div>
-        </div>
-      </div>
-      <div class="recap-section">
-        <div class="recap-stats">
-          <div class="recap-stat"><span class="recap-stat-num">24</span><span class="recap-stat-label">Rallies</span></div>
-          <div class="recap-stat-divider"></div>
-          <div class="recap-stat"><span class="recap-stat-num">19</span><span class="recap-stat-label">Attended</span></div>
-          <div class="recap-stat-divider"></div>
-          <div class="recap-stat"><span class="recap-stat-num">92%</span><span class="recap-stat-label">Reliability</span></div>
-        </div>
-      </div>
+      <p class="prc-sec-label" style="margin-top:18px">Fun facts</p>
+      <div class="prc-fact"><span class="prc-fact-val">Dinner</span><span class="prc-fact-desc">go-to rally type</span></div>
+      <div class="prc-fact"><span class="prc-fact-val">After 8PM</span><span class="prc-fact-desc">night owl</span></div>
+      <div class="prc-fact"><span class="prc-fact-val">Thursdays</span><span class="prc-fact-desc">busiest day</span></div>
+      <div class="prc-fact"><span class="prc-fact-val">West Village</span><span class="prc-fact-desc">home turf</span></div>
     </div>
     <div style="padding-top:14px">
       <button class="menu-item" onclick="go('screen-prefs')">
@@ -2656,7 +2658,6 @@ function go(id) {
       if (btns && !card.dataset.confirmed) btns.style.display = 'flex';
     }
   }
-  if (id === 'screen-profile') { rotateRecapHeadline(); }
   if (id === 'screen-start-2') { initRallyDateTimeDefaults(); }
   if (id === 'screen-start-3') { initRallyPartsForFinalize(); }
   if (id === 'screen-ballot') { renderBallot(currentBallotLeg); }
@@ -2714,21 +2715,6 @@ function saveNameAndGo(dest) {
     document.getElementById('profile-avatar-lg').textContent = n[0].toUpperCase();
   }
   go(dest);
-}
-
-const recapHeadlines = [
-  { headline: "You're a Thursday person.", sub: "Most rallies you say yes to land on a Thursday." },
-  { headline: "Soumil is your closest accomplice.", sub: "Eleven rallies together and counting." },
-  { headline: "West Village is your home turf.", sub: "More rallies end up here than anywhere else." },
-  { headline: "You show up.", sub: "Ninety-two percent reliability across twenty-four rallies." },
-  { headline: "Your nights start at eight.", sub: "Most plans you join kick off after dark." }
-];
-function rotateRecapHeadline() {
-  const pick = recapHeadlines[Math.floor(Math.random() * recapHeadlines.length)];
-  const headlineEl = document.getElementById('recap-headline-text');
-  const subEl = document.getElementById('recap-headline-sub');
-  if (headlineEl) headlineEl.textContent = pick.headline;
-  if (subEl) subEl.textContent = pick.sub;
 }
 
 // -- PLAN TYPE --
