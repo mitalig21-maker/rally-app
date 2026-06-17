@@ -657,15 +657,15 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
 .prc-streak{text-align:right;border-left:1px solid rgba(245,240,232,0.2);padding-left:16px}
 .prc-body{padding:18px 22px 4px}
 .prc-sec-label{font-family:var(--headline);font-size:9px;font-weight:600;letter-spacing:1.8px;text-transform:uppercase;color:var(--text-light);margin:0 0 10px}
-.prc-companion{display:flex;align-items:center;gap:12px;padding-bottom:16px;border-bottom:1px dotted var(--border-dot)}
+.prc-companion{display:flex;align-items:center;gap:12px;padding-bottom:16px;border-bottom:2px dotted rgba(0,0,0,0.28)}
 .prc-comp-avatar{width:38px;height:38px;border-radius:50%;background:var(--green-pale);display:flex;align-items:center;justify-content:center;font-family:var(--headline);font-size:14px;font-weight:600;color:var(--green);flex-shrink:0}
 .prc-comp-name{font-family:var(--headline);font-size:18px;font-weight:600;color:var(--text);flex:1;margin:0}
 .prc-comp-count{font-size:12px;color:var(--text-muted)}
 .prc-comp-count b{font-family:var(--headline);font-weight:600;color:var(--green);font-size:16px;letter-spacing:-0.3px}
-.prc-fact{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px dotted var(--border-dot)}
-.prc-fact:last-child{border-bottom:none}
-.prc-fact-val{font-family:var(--headline);font-size:15px;font-weight:600;color:var(--green)}
+.prc-facts-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 14px}
+.prc-fact-val{font-family:var(--headline);font-size:15px;font-weight:600;color:var(--green);display:block}
 .prc-fact-desc{font-size:12px;color:var(--text-muted)}
+.prc-divider{border-bottom:2px dotted rgba(0,0,0,0.28);margin-top:18px}
 
 .plan-parts-section{margin-top:18px;padding-top:18px;border-top:1px dotted var(--border-dot)}
 .part-card{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--white);border:1px solid var(--border);border-left:3px solid var(--green);border-radius:var(--radius-sm)}
@@ -1028,7 +1028,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         </div>
       </div>
     </div>
-    <div class="version-marker">Rally · v1.5b</div>
+    <div class="version-marker">Rally · v1.5c</div>
   </div>
   <button class="fab-quick" onclick="openQuickRally()">
     ⚡ Quick Rally
@@ -2060,10 +2060,13 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         <span class="prc-comp-count"><b>17</b> rallies</span>
       </div>
       <p class="prc-sec-label" style="margin-top:18px">Fun facts</p>
-      <div class="prc-fact"><span class="prc-fact-val">Dinner</span><span class="prc-fact-desc">go-to rally type</span></div>
-      <div class="prc-fact"><span class="prc-fact-val">After 8PM</span><span class="prc-fact-desc">night owl</span></div>
-      <div class="prc-fact"><span class="prc-fact-val">Thursdays</span><span class="prc-fact-desc">busiest day</span></div>
-      <div class="prc-fact"><span class="prc-fact-val">West Village</span><span class="prc-fact-desc">home turf</span></div>
+      <div class="prc-facts-grid">
+        <div><span class="prc-fact-val">Dinner</span><span class="prc-fact-desc">go-to rally type</span></div>
+        <div><span class="prc-fact-val">After 8PM</span><span class="prc-fact-desc">night owl</span></div>
+        <div><span class="prc-fact-val">Thursdays</span><span class="prc-fact-desc">busiest day</span></div>
+        <div><span class="prc-fact-val">West Village</span><span class="prc-fact-desc">home turf</span></div>
+      </div>
+      <div class="prc-divider"></div>
     </div>
     <div style="padding-top:14px">
       <button class="menu-item" onclick="go('screen-prefs')">
