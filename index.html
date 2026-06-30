@@ -1028,7 +1028,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         </div>
       </div>
     </div>
-    <div class="version-marker">Rally · v1.5c</div>
+    <div class="version-marker">Rally · v1.6</div>
   </div>
   <button class="fab-quick" onclick="openQuickRally()">
     ⚡ Quick Rally
@@ -1670,15 +1670,15 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
   <div class="scroll-content">
     <div class="locked-header-row">
       <div class="locked-header-text">
-        <h2 class="headline-lg" style="font-size:20px">Dinner West Village</h2>
-        <p style="font-size:12px;color:var(--text-muted);margin-top:3px">Saturday, Apr 12 · 7:30pm · 4 going</p>
+        <h2 class="headline-lg" style="font-size:20px" id="locked-title">Dinner West Village</h2>
+        <p style="font-size:12px;color:var(--text-muted);margin-top:3px" id="locked-headmeta">Saturday, Apr 12 · 7:30pm · 4 going</p>
       </div>
       <button class="locked-overflow-page" onclick="openRallyActionMenu()" aria-label="More options">⋯</button>
     </div>
     <div class="locked-venue">
       <p class="locked-eyebrow">You're going to</p>
-      <p class="locked-name">Lilia</p>
-      <p class="locked-meta">Williamsburg · $$$ · Italian · 7:30pm</p>
+      <p class="locked-name" id="locked-venue-name">Lilia</p>
+      <p class="locked-meta" id="locked-venue-meta">Williamsburg · $$$ · Italian · 7:30pm</p>
       <div class="locked-actions">
         <button class="locked-btn locked-btn-white" onclick="window.open('https://maps.google.com/?q=Lilia+Williamsburg+Brooklyn','_blank')">Get directions</button>
         <button class="locked-btn locked-btn-outline" onclick="window.open('https://yelp.com/search?find_desc=Lilia&find_loc=Williamsburg','_blank')">View on Yelp</button>
@@ -2170,6 +2170,8 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
   <div class="scroll-content" style="padding:14px 20px">
     <p class="section-label" style="margin-bottom:8px">Rally name</p>
     <input class="input-field" id="edit-rally-title" type="text" placeholder="e.g. Bars Friday" style="margin-bottom:14px">
+    <p class="section-label" style="margin-bottom:8px">Venue</p>
+    <input class="input-field" id="edit-rally-venue" type="text" placeholder="e.g. Lilia" style="margin-bottom:14px">
     <p class="section-label" style="margin-bottom:8px">Update time</p>
     <input type="hidden" id="edit-time-input" value="20:00">
     <select class="select-field" id="edit-time-select" onchange="document.getElementById('edit-time-input').value=this.value" style="margin-bottom:6px;font-size:16px">
@@ -2206,7 +2208,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     </div>
     <p class="section-label" style="margin-bottom:8px">Invite more people</p>
     <input class="input-field" type="text" placeholder="Search by name or phone" style="margin-bottom:20px">
-    <button class="btn-primary" onclick="go('screen-home');showToast('Rally updated! Friends notified')">Save changes</button>
+    <button class="btn-primary" onclick="saveRallyEdit()">Save changes</button>
   </div>
 </div>
 
@@ -2665,13 +2667,17 @@ function go(id) {
   if (id === 'screen-start-3') { initRallyPartsForFinalize(); }
   if (id === 'screen-ballot') { renderBallot(currentBallotLeg); }
   if (id === 'screen-notif-inbox') { renderNotifInbox(); }
-  if (id === 'screen-locked') { renderRsvpDevControls(); }
+  if (id === 'screen-locked') { renderLockedScreen(); renderRsvpDevControls(); }
   if (id === 'screen-edit-rally') {
-    // v1.4 — the edit calendar never rendered on open (only on month-nav), leaving a blank
-    // grid. Render it on entry, defaulting to the current month like the create flow.
-    editCalYear = new Date().getFullYear();
-    editCalMonth = new Date().getMonth();
-    renderCalEdit();
+    if (editMode === 'locked') {
+      prefillEditRally();
+    } else {
+      // v1.4 — the edit calendar never rendered on open (only on month-nav), leaving a blank
+      // grid. Render it on entry, defaulting to the current month like the create flow.
+      editCalYear = new Date().getFullYear();
+      editCalMonth = new Date().getMonth();
+      renderCalEdit();
+    }
   }
   if (id === 'screen-home') { updateBrunchCardSummary(); refreshActiveRallyCard(); }
   if (id === 'screen-feed') { renderFeed(); startFeedTicker(); }
@@ -5749,6 +5755,106 @@ function syncPublishedCluster() {
   renderFeed();
 }
 
+// ── v1.6 Adaptive Edit Rally ──────────────────────────────────────────────
+// editMode 'locked' = editing the confirmed lockedRally (single-date, venue, write-back);
+// 'open' = legacy multi-date edit shape for not-yet-locked Rallies.
+var editMode = 'open';
+
+function fmtTime12(hhmm) {
+  if (!hhmm) return '';
+  var p = hhmm.split(':');
+  var h = parseInt(p[0], 10);
+  var m = p[1] || '00';
+  var ap = h >= 12 ? 'pm' : 'am';
+  var h12 = h % 12; if (h12 === 0) h12 = 12;
+  return h12 + (m === '00' ? '' : ':' + m) + ap;
+}
+function fmtLockedDate(iso) {
+  if (!iso) return '';
+  var p = iso.split('-');
+  var dt = new Date(parseInt(p[0], 10), parseInt(p[1], 10) - 1, parseInt(p[2], 10));
+  var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  var mons = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  return days[dt.getDay()] + ', ' + mons[dt.getMonth()] + ' ' + dt.getDate();
+}
+function ensureLockedDate() {
+  if (lockedRally.date) return;
+  // default to the next Saturday so the locked screen always shows a date pre-publish
+  var d = new Date();
+  var add = (6 - d.getDay() + 7) % 7; if (add === 0) add = 7;
+  d.setDate(d.getDate() + add);
+  lockedRally.date = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+function lockedGoingCount() {
+  return lockedRally.attendees.filter(function(a) { return a.rsvp === 'in'; }).length;
+}
+function renderLockedScreen() {
+  ensureLockedDate();
+  var t = document.getElementById('locked-title');
+  var hm = document.getElementById('locked-headmeta');
+  var vn = document.getElementById('locked-venue-name');
+  var vm = document.getElementById('locked-venue-meta');
+  if (t) t.textContent = lockedRally.title;
+  if (hm) hm.textContent = fmtLockedDate(lockedRally.date) + ' · ' + fmtTime12(lockedRally.timeStart) + ' · ' + lockedGoingCount() + ' going';
+  if (vn) vn.textContent = lockedRally.venue;
+  if (vm) vm.textContent = lockedRally.vibe + ' · ' + fmtTime12(lockedRally.timeStart);
+}
+// D-025 edit-resync: push edited plan details onto the published Feed status.
+function syncPublishedRallyDetails() {
+  if (!lockedRally.published || !lockedRally.publishedStatusId) return;
+  var s = feedStatuses.find(function(x) { return x.id === lockedRally.publishedStatusId; });
+  if (!s) return;
+  s.venue = lockedRally.venue;
+  s.vibe = lockedRally.vibe;
+  s.date = lockedRally.date;
+  s.timeStart = lockedRally.timeStart;
+  s.timeEnd = lockedRally.timeEnd;
+  s.rallyTitle = lockedRally.title;
+  renderFeed();
+}
+function prefillEditRally() {
+  if (editMode !== 'locked') return;
+  ensureLockedDate();
+  var titleEl = document.getElementById('edit-rally-title');
+  var venueEl = document.getElementById('edit-rally-venue');
+  var timeSel = document.getElementById('edit-time-select');
+  var timeInp = document.getElementById('edit-time-input');
+  if (titleEl) titleEl.value = lockedRally.title;
+  if (venueEl) venueEl.value = lockedRally.venue;
+  if (timeSel) timeSel.value = lockedRally.timeStart;
+  if (timeInp) timeInp.value = lockedRally.timeStart;
+  // preselect the single locked date (cal keys use 0-based month: Y-M-D)
+  var p = lockedRally.date.split('-');
+  editCalYear = parseInt(p[0], 10);
+  editCalMonth = parseInt(p[1], 10) - 1;
+  editSelectedDates = new Set([editCalYear + '-' + editCalMonth + '-' + parseInt(p[2], 10)]);
+  renderCalEdit();
+}
+function saveRallyEdit() {
+  if (editMode !== 'locked') {
+    go('screen-home');
+    showToast('Rally updated! Friends notified');
+    return;
+  }
+  var titleEl = document.getElementById('edit-rally-title');
+  var venueEl = document.getElementById('edit-rally-venue');
+  var timeInp = document.getElementById('edit-time-input');
+  if (titleEl && titleEl.value.trim()) lockedRally.title = titleEl.value.trim();
+  if (venueEl && venueEl.value.trim()) lockedRally.venue = venueEl.value.trim();
+  if (timeInp && timeInp.value) lockedRally.timeStart = timeInp.value;
+  var keys = Array.from(editSelectedDates);
+  if (keys.length) {
+    var kp = keys[keys.length - 1].split('-');   // Y-M(0-based)-D
+    lockedRally.date = kp[0] + '-' + String(parseInt(kp[1], 10) + 1).padStart(2, '0') + '-' + String(parseInt(kp[2], 10)).padStart(2, '0');
+  }
+  renderLockedScreen();
+  syncPublishedRallyDetails();
+  addNotification('locked', 'Plan updated',
+    '"' + lockedRally.title + '" is now ' + fmtLockedDate(lockedRally.date) + ' at ' + fmtTime12(lockedRally.timeStart) + ' · ' + lockedRally.venue);
+  go('screen-locked');
+  showToast('Rally updated · friends notified');
+}
+
 function openRallyActionMenu() {
   // Reflect published state in the menu before opening.
   var label = document.getElementById('rally-publish-label');
@@ -5906,6 +6012,7 @@ function confirmRallyConsent(name) {
 // v1.3 — Edit Rally from the overflow menu. Routes to the existing edit-rally flow.
 function editRallyFromMenu() {
   closeRallyActionMenu();
+  editMode = 'locked';
   if (document.getElementById('screen-edit-rally')) {
     go('screen-edit-rally');
   } else {
@@ -6537,6 +6644,12 @@ function renderCalEdit() {
     if (!isPast) {
       (function(k, b) {
         b.onclick = function() {
+          if (editMode === 'locked') {
+            editSelectedDates.clear();
+            editSelectedDates.add(k);
+            renderCalEdit();
+            return;
+          }
           if (editSelectedDates.has(k)) {
             editSelectedDates.delete(k);
             b.classList.remove('selected');
