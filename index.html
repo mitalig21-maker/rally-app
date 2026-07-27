@@ -953,7 +953,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
     <div class="rally-card" data-cat="tonight" onclick="go('screen-locked')">
       <div class="card card-pad">
         <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
-          <div><p class="rally-title-text">Dinner in the West Village</p><p class="rally-meta">Saturday, Apr 12 · 7:30pm · Lilia</p></div>
+          <div><p class="rally-title-text" id="home-rally-title">Dinner in the West Village</p><p class="rally-meta" id="home-rally-meta">Saturday, Apr 12 · 7:30pm · Lilia</p></div>
           <span class="badge badge-tonight">Tonight</span>
         </div>
         <hr class="dot-divider">
@@ -1028,7 +1028,7 @@ body{font-family:var(--body);background:var(--cream);color:var(--text);max-width
         </div>
       </div>
     </div>
-    <div class="version-marker">Rally · v1.6</div>
+    <div class="version-marker">Rally · v1.6a</div>
   </div>
   <button class="fab-quick" onclick="openQuickRally()">
     ⚡ Quick Rally
@@ -2679,7 +2679,7 @@ function go(id) {
       renderCalEdit();
     }
   }
-  if (id === 'screen-home') { updateBrunchCardSummary(); refreshActiveRallyCard(); }
+  if (id === 'screen-home') { updateBrunchCardSummary(); refreshActiveRallyCard(); updateHomeRallyCard(); }
   if (id === 'screen-feed') { renderFeed(); startFeedTicker(); }
   else { stopFeedTicker(); }
 }
@@ -5798,6 +5798,15 @@ function renderLockedScreen() {
   if (hm) hm.textContent = fmtLockedDate(lockedRally.date) + ' · ' + fmtTime12(lockedRally.timeStart) + ' · ' + lockedGoingCount() + ' going';
   if (vn) vn.textContent = lockedRally.venue;
   if (vm) vm.textContent = lockedRally.vibe + ' · ' + fmtTime12(lockedRally.timeStart);
+  updateHomeRallyCard();
+}
+// Keep the home/Plans "Tonight" card in sync with lockedRally (title + meta line).
+function updateHomeRallyCard() {
+  ensureLockedDate();
+  var ht = document.getElementById('home-rally-title');
+  var hm = document.getElementById('home-rally-meta');
+  if (ht) ht.textContent = lockedRally.title;
+  if (hm) hm.textContent = fmtLockedDate(lockedRally.date) + ' · ' + fmtTime12(lockedRally.timeStart) + ' · ' + lockedRally.venue;
 }
 // D-025 edit-resync: push edited plan details onto the published Feed status.
 function syncPublishedRallyDetails() {
